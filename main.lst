@@ -25,64 +25,102 @@
   16               		.loc 1 10 0
   17               		.cfi_startproc
   18               	.LVL0:
-  19               	/* prologue: function */
-  20               	/* frame size = 0 */
-  21               	/* stack size = 0 */
-  22               	.L__stack_usage = 0
+  19 0000 CF93      		push r28
+  20               	.LCFI0:
+  21               		.cfi_def_cfa_offset 4
+  22               		.cfi_offset 28, -3
+  23 0002 DF93      		push r29
+  24               	.LCFI1:
+  25               		.cfi_def_cfa_offset 5
+  26               		.cfi_offset 29, -4
+  27 0004 00D0      		rcall .
+  28 0006 1F92      		push __zero_reg__
+  29               	.LCFI2:
+  30               		.cfi_def_cfa_offset 9
+  31 0008 CDB7      		in r28,__SP_L__
+  32 000a DEB7      		in r29,__SP_H__
+  33               	.LCFI3:
+  34               		.cfi_def_cfa_register 28
+  35               	/* prologue: function */
+  36               	/* frame size = 4 */
+  37               	/* stack size = 6 */
+  38               	.L__stack_usage = 6
   11:main.c        **** 	usart_init_roomba();
-  23               		.loc 1 11 0
-  24 0000 0E94 0000 		call usart_init_roomba
-  25               	.LVL1:
+  39               		.loc 1 11 0
+  40 000c 0E94 0000 		call usart_init_roomba
+  41               	.LVL1:
   12:main.c        **** 	initializeRoomba();
-  26               		.loc 1 12 0
-  27 0004 0E94 0000 		call initializeRoomba
-  28               	.LVL2:
-  29               	.L3:
-  30               	.LBB2:
+  42               		.loc 1 12 0
+  43 0010 0E94 0000 		call initializeRoomba
+  44               	.LVL2:
   13:main.c        **** 	
   14:main.c        **** 	int16_t velocity_right = 0;
+  45               		.loc 1 14 0
+  46 0014 1A82      		std Y+2,__zero_reg__
+  47 0016 1982      		std Y+1,__zero_reg__
   15:main.c        **** 	int16_t velocity_left = 0;
-  16:main.c        **** 	
-  17:main.c        **** 	while (1) {	
-  18:main.c        **** 		remoteSignal signal = getRemoteSignal();
-  31               		.loc 1 18 0
-  32 0008 0E94 0000 		call getRemoteSignal
-  33               	.LVL3:
-  19:main.c        **** 		
-  20:main.c        **** 		if (signal != RNOTHINGPRESSED) {
-  34               		.loc 1 20 0
-  35 000c 8530      		cpi r24,lo8(5)
-  36 000e 01F0      		breq .L3
-  21:main.c        **** 			getCommand(signal, velocity_right, velocity_left);
-  37               		.loc 1 21 0
-  38 0010 40E0      		ldi r20,0
-  39 0012 50E0      		ldi r21,0
-  40 0014 60E0      		ldi r22,0
-  41 0016 70E0      		ldi r23,0
-  42 0018 0E94 0000 		call getCommand
-  43               	.LVL4:
-  44 001c 00C0      		rjmp .L3
-  45               	.LBE2:
-  46               		.cfi_endproc
-  47               	.LFE0:
-  49               	.Letext0:
-  50               		.file 2 "/usr/lib/avr/include/stdint.h"
-  51               		.file 3 "remotecontrol.h"
-  52               		.file 4 "usart.h"
-  53               		.file 5 "roomba.h"
-  54               		.file 6 "drivecontrol.h"
+  48               		.loc 1 15 0
+  49 0018 1C82      		std Y+4,__zero_reg__
+  50 001a 1B82      		std Y+3,__zero_reg__
+  51               	.L3:
+  52               	.LBB2:
+  16:main.c        **** 
+  17:main.c        **** 		
+  18:main.c        **** 	while (1) {	
+  19:main.c        **** 		remoteSignal signal = getRemoteSignal();
+  53               		.loc 1 19 0
+  54 001c 0E94 0000 		call getRemoteSignal
+  55               	.LVL3:
+  20:main.c        **** 		
+  21:main.c        **** 		if (signal != RNOTHINGPRESSED) {
+  56               		.loc 1 21 0
+  57 0020 8530      		cpi r24,lo8(5)
+  58 0022 01F0      		breq .L2
+  22:main.c        **** 			getCommand(signal, &velocity_right, &velocity_left);
+  59               		.loc 1 22 0
+  60 0024 AE01      		movw r20,r28
+  61 0026 4D5F      		subi r20,-3
+  62 0028 5F4F      		sbci r21,-1
+  63 002a BE01      		movw r22,r28
+  64 002c 6F5F      		subi r22,-1
+  65 002e 7F4F      		sbci r23,-1
+  66 0030 0E94 0000 		call getCommand
+  67               	.LVL4:
+  68               	.L2:
+  23:main.c        **** 		}
+  24:main.c        **** 		my_msleep(200);
+  69               		.loc 1 24 0
+  70 0034 88EC      		ldi r24,lo8(-56)
+  71 0036 90E0      		ldi r25,0
+  72 0038 0E94 0000 		call my_msleep
+  73               	.LVL5:
+  74               	.LBE2:
+  25:main.c        **** 		
+  26:main.c        **** 	} 
+  75               		.loc 1 26 0
+  76 003c 00C0      		rjmp .L3
+  77               		.cfi_endproc
+  78               	.LFE0:
+  80               	.Letext0:
+  81               		.file 2 "/usr/lib/avr/include/stdint.h"
+  82               		.file 3 "remotecontrol.h"
+  83               		.file 4 "drivecontrol.h"
+  84               		.file 5 "tools.h"
+  85               		.file 6 "usart.h"
+  86               		.file 7 "roomba.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 main.c
-     /tmp/ccxvReHB.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/ccxvReHB.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/ccxvReHB.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/ccxvReHB.s:5      *ABS*:000000000000003b __RAMPZ__
-     /tmp/ccxvReHB.s:6      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/ccxvReHB.s:7      *ABS*:0000000000000001 __zero_reg__
-     /tmp/ccxvReHB.s:13     .text:0000000000000000 main
+     /tmp/ccrM85q9.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccrM85q9.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccrM85q9.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccrM85q9.s:5      *ABS*:000000000000003b __RAMPZ__
+     /tmp/ccrM85q9.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccrM85q9.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccrM85q9.s:13     .text:0000000000000000 main
 
 UNDEFINED SYMBOLS
 usart_init_roomba
 initializeRoomba
 getRemoteSignal
 getCommand
+my_msleep

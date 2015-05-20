@@ -9,16 +9,22 @@
 /**
  * \brief TODO
  */
-void getCommand(remoteSignal type, int16_t actVel_right, int16_t actVel_left) {
+void getCommand(remoteSignal type, int16_t * actVel_right,int16_t * actVel_left) {
 	if (type == RACCELERATE) {
-		drive_direction(actVel_right + ACC_BRAKE_CONSTANT, actVel_left + ACC_BRAKE_CONSTANT);
+		*actVel_right=*actVel_right + ACC_BRAKE_CONSTANT;
+		*actVel_left=*actVel_left + ACC_BRAKE_CONSTANT; 
 	} else if (type == RBRAKE) {
-		drive_direction(actVel_right - ACC_BRAKE_CONSTANT, actVel_left - ACC_BRAKE_CONSTANT);
+		*actVel_right=*actVel_right - ACC_BRAKE_CONSTANT;
+		*actVel_left=*actVel_left - ACC_BRAKE_CONSTANT; 
 	} else if (type == RLEFT) {
-		drive_direction(actVel_right + ACC_BRAKE_CONSTANT, actVel_left - ACC_BRAKE_CONSTANT);
+		*actVel_right=*actVel_right + ACC_BRAKE_CONSTANT;
+		*actVel_left=*actVel_left - ACC_BRAKE_CONSTANT;  
 	} else if (type == RRIGHT) {
-		drive_direction(actVel_right - ACC_BRAKE_CONSTANT, actVel_left + ACC_BRAKE_CONSTANT);
+		*actVel_right=*actVel_right - ACC_BRAKE_CONSTANT;
+		*actVel_left=*actVel_left + ACC_BRAKE_CONSTANT; 
 	}
+	
+	drive_direction(*actVel_right, *actVel_left);
 }
 
 /**
