@@ -78,27 +78,7 @@ void drive(int16_t velocity) {
 	send_byte_roomba(low);
 }
 
-/**
- * \brief Drive and have the posibility to drive a corner
- * 
- * \param velocity_right
- * \param velocity_left
- */
-void drive_direction(int16_t velocity_right, int16_t velocity_left) {
-	send_byte_roomba(145);
-	
-	uint8_t low = velocity_right;
-	uint8_t high = (velocity_right >> 8);
-	
-	send_byte_roomba(high);
-	send_byte_roomba(low);
-	
-	low = velocity_left;
-	high = (velocity_left >> 8);
-	
-	send_byte_roomba(high);
-	send_byte_roomba(low);
-}
+
 
 /**
  * Stop the roomba

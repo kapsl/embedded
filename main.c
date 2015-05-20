@@ -4,16 +4,21 @@
 #include "usart.h"
 #include <ctype.h>
 #include "roomba.h"
+#include "drivecontrol.c"
+#include "remotecontrol.c"
 
 int main(int argc, const char* argv[]) {
-	initializeButton();
-	usart_init();
 	usart_init_roomba();
 	initializeRoomba();
 	
+	int16_t velocity_right = 0;
+	int16_t velocity_left = 0;
+	
 	while (1) {	
-		if (read_button(HOUR)) {
-				drive_with_p_regler();
+		RemoteSignal remoteSignal = getRemoteSignal();
+		
+		if (remoteSignal != NOTHINGPRESSED) {
+			getCommand(remoteSignal, velocity_right, velocity_left);
 		}
 	} 
     

@@ -29,7 +29,6 @@ void set_Display(char *data);
 uint8_t read_button(uint8_t button);
 void read_values(uint8_t packetid, uint8_t * data, uint8_t length);
 void drive(int16_t velocity);
-void drive_direction(int16_t velocity_right, int16_t velocity_left);
 void stop(void);
 void drive_roomba(uint16_t distance, int16_t velocity);
 void drive_roomba_exact(uint16_t distance, int16_t velocity);
