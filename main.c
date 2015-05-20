@@ -4,8 +4,8 @@
 #include "usart.h"
 #include <ctype.h>
 #include "roomba.h"
-#include "drivecontrol.c"
-#include "remotecontrol.c"
+#include "drivecontrol.h"
+#include "remotecontrol.h"
 
 int main(int argc, const char* argv[]) {
 	usart_init_roomba();
@@ -15,10 +15,10 @@ int main(int argc, const char* argv[]) {
 	int16_t velocity_left = 0;
 	
 	while (1) {	
-		RemoteSignal remoteSignal = getRemoteSignal();
+		remoteSignal signal = getRemoteSignal();
 		
-		if (remoteSignal != NOTHINGPRESSED) {
-			getCommand(remoteSignal, velocity_right, velocity_left);
+		if (signal != RNOTHINGPRESSED) {
+			getCommand(signal, velocity_right, velocity_left);
 		}
 	} 
     

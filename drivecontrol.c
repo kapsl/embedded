@@ -3,18 +3,20 @@
 #include "usart.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "remotecontrol.h"
+#include "drivecontrol.h"
 
 /**
  * \brief TODO
  */
-void getCommand(Direction type, int16_t actVel_right, int16_t actVel_left) {
-	if (type == ACCELERATE) {
+void getCommand(remoteSignal type, int16_t actVel_right, int16_t actVel_left) {
+	if (type == RACCELERATE) {
 		drive_direction(actVel_right + ACC_BRAKE_CONSTANT, actVel_left + ACC_BRAKE_CONSTANT);
-	} else if (type == BRAKE) {
+	} else if (type == RBRAKE) {
 		drive_direction(actVel_right - ACC_BRAKE_CONSTANT, actVel_left - ACC_BRAKE_CONSTANT);
-	} else if (type == LEFT) {
+	} else if (type == RLEFT) {
 		drive_direction(actVel_right + ACC_BRAKE_CONSTANT, actVel_left - ACC_BRAKE_CONSTANT);
-	} else if (type == RIGHT) {
+	} else if (type == RRIGHT) {
 		drive_direction(actVel_right - ACC_BRAKE_CONSTANT, actVel_left + ACC_BRAKE_CONSTANT);
 	}
 }

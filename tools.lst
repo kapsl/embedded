@@ -323,16 +323,16 @@
  184               		.file 3 "/usr/lib/avr/include/stdint.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 tools.c
-     /tmp/ccHjZVJB.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/ccHjZVJB.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/ccHjZVJB.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/ccHjZVJB.s:5      *ABS*:000000000000003b __RAMPZ__
-     /tmp/ccHjZVJB.s:6      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/ccHjZVJB.s:7      *ABS*:0000000000000001 __zero_reg__
-     /tmp/ccHjZVJB.s:13     .text:0000000000000000 my_msleep
-     /tmp/ccHjZVJB.s:63     .text:000000000000001e initializeTimer
-     /tmp/ccHjZVJB.s:116    .text:0000000000000068 __vector_17
-     /tmp/ccHjZVJB.s:157    .text:0000000000000080 concat_bytes
+     /tmp/cclQ20cJ.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/cclQ20cJ.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/cclQ20cJ.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/cclQ20cJ.s:5      *ABS*:000000000000003b __RAMPZ__
+     /tmp/cclQ20cJ.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/cclQ20cJ.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/cclQ20cJ.s:13     .text:0000000000000000 my_msleep
+     /tmp/cclQ20cJ.s:63     .text:000000000000001e initializeTimer
+     /tmp/cclQ20cJ.s:116    .text:0000000000000068 __vector_17
+     /tmp/cclQ20cJ.s:157    .text:0000000000000080 concat_bytes
 
 UNDEFINED SYMBOLS
 __umulhisi3

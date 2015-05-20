@@ -3,19 +3,19 @@
 #include "usart.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "remotecontrol.h"
 
-RemoteSignal getRemoteSingnal(){ 
-
-	uint8_t data [1]; 
-
-	read_values(17, data[], 1); 
+remoteSignal getRemoteSignal(){ 
+	uint8_t data [2]; 
+	read_values(17, data, 1); 
+	
 	uint8_t rem = data[0];
 
 	if (rem == FORWARD){
-		return ACCELERATE; 
+		return RACCELERATE; 
 	}
 	else if (rem == BACKWARDS){
-		return BRAKE;
+		return RBRAKE;
 	}
 	else if (rem == LEFT){
 		return RLEFT; 

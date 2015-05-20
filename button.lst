@@ -152,14 +152,14 @@
  126               		.file 2 "/usr/lib/avr/include/stdint.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 button.c
-     /tmp/ccGdHz1I.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/ccGdHz1I.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/ccGdHz1I.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/ccGdHz1I.s:5      *ABS*:000000000000003b __RAMPZ__
-     /tmp/ccGdHz1I.s:6      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/ccGdHz1I.s:7      *ABS*:0000000000000001 __zero_reg__
-     /tmp/ccGdHz1I.s:13     .text:0000000000000000 initializeButton
-     /tmp/ccGdHz1I.s:34     .text:000000000000000c button_pressed
-     /tmp/ccGdHz1I.s:95     .text:0000000000000046 button_wait
+     /tmp/cczf21FG.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/cczf21FG.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/cczf21FG.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/cczf21FG.s:5      *ABS*:000000000000003b __RAMPZ__
+     /tmp/cczf21FG.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/cczf21FG.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/cczf21FG.s:13     .text:0000000000000000 initializeButton
+     /tmp/cczf21FG.s:34     .text:000000000000000c button_pressed
+     /tmp/cczf21FG.s:95     .text:0000000000000046 button_wait
 
 NO UNDEFINED SYMBOLS

@@ -1,0 +1,148 @@
+   1               		.file	"remotecontrol.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__RAMPZ__ = 0x3b
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.text
+   9               	.Ltext0:
+  10               		.cfi_sections	.debug_frame
+  11               	.global	getRemoteSignal
+  13               	getRemoteSignal:
+  14               	.LFB1:
+  15               		.file 1 "remotecontrol.c"
+   1:remotecontrol.c **** #include "roomba.h"
+   2:remotecontrol.c **** #include "tools.h"
+   3:remotecontrol.c **** #include "usart.h"
+   4:remotecontrol.c **** #include <stdio.h>
+   5:remotecontrol.c **** #include <stdlib.h>
+   6:remotecontrol.c **** #include "remotecontrol.h"
+   7:remotecontrol.c **** 
+   8:remotecontrol.c **** remoteSignal getRemoteSignal(){ 
+  16               		.loc 1 8 0
+  17               		.cfi_startproc
+  18 0000 CF93      		push r28
+  19               	.LCFI0:
+  20               		.cfi_def_cfa_offset 4
+  21               		.cfi_offset 28, -3
+  22 0002 DF93      		push r29
+  23               	.LCFI1:
+  24               		.cfi_def_cfa_offset 5
+  25               		.cfi_offset 29, -4
+  26 0004 1F92      		push __zero_reg__
+  27 0006 1F92      		push __zero_reg__
+  28               	.LCFI2:
+  29               		.cfi_def_cfa_offset 7
+  30 0008 CDB7      		in r28,__SP_L__
+  31 000a DEB7      		in r29,__SP_H__
+  32               	.LCFI3:
+  33               		.cfi_def_cfa_register 28
+  34               	/* prologue: function */
+  35               	/* frame size = 2 */
+  36               	/* stack size = 4 */
+  37               	.L__stack_usage = 4
+   9:remotecontrol.c **** 	uint8_t data [2]; 
+  10:remotecontrol.c **** 	read_values(17, data, 1); 
+  38               		.loc 1 10 0
+  39 000c 41E0      		ldi r20,lo8(1)
+  40 000e BE01      		movw r22,r28
+  41 0010 6F5F      		subi r22,-1
+  42 0012 7F4F      		sbci r23,-1
+  43 0014 81E1      		ldi r24,lo8(17)
+  44 0016 0E94 0000 		call read_values
+  45               	.LVL0:
+  11:remotecontrol.c **** 	
+  12:remotecontrol.c **** 	uint8_t rem = data[0];
+  46               		.loc 1 12 0
+  47 001a 8981      		ldd r24,Y+1
+  48               	.LVL1:
+  13:remotecontrol.c **** 
+  14:remotecontrol.c **** 	if (rem == FORWARD){
+  49               		.loc 1 14 0
+  50 001c 8B38      		cpi r24,lo8(-117)
+  51 001e 01F0      		breq .L3
+  15:remotecontrol.c **** 		return RACCELERATE; 
+  16:remotecontrol.c **** 	}
+  17:remotecontrol.c **** 	else if (rem == BACKWARDS){
+  52               		.loc 1 17 0
+  53 0020 8C38      		cpi r24,lo8(-116)
+  54 0022 01F0      		breq .L4
+  18:remotecontrol.c **** 		return RBRAKE;
+  19:remotecontrol.c **** 	}
+  20:remotecontrol.c **** 	else if (rem == LEFT){
+  55               		.loc 1 20 0
+  56 0024 8D38      		cpi r24,lo8(-115)
+  57 0026 01F0      		breq .L5
+  21:remotecontrol.c **** 		return RLEFT; 
+  22:remotecontrol.c **** 		}
+  23:remotecontrol.c **** 	else if (rem == RIGHT){
+  58               		.loc 1 23 0
+  59 0028 8F38      		cpi r24,lo8(-113)
+  60 002a 01F4      		brne .L6
+  24:remotecontrol.c **** 		return RRIGHT; 
+  61               		.loc 1 24 0
+  62 002c 83E0      		ldi r24,lo8(3)
+  63               	.LVL2:
+  64 002e 00C0      		rjmp .L2
+  65               	.LVL3:
+  66               	.L3:
+  15:remotecontrol.c **** 		return RACCELERATE; 
+  67               		.loc 1 15 0
+  68 0030 80E0      		ldi r24,0
+  69               	.LVL4:
+  70 0032 00C0      		rjmp .L2
+  71               	.LVL5:
+  72               	.L4:
+  18:remotecontrol.c **** 		return RBRAKE;
+  73               		.loc 1 18 0
+  74 0034 81E0      		ldi r24,lo8(1)
+  75               	.LVL6:
+  76 0036 00C0      		rjmp .L2
+  77               	.LVL7:
+  78               	.L5:
+  21:remotecontrol.c **** 		return RLEFT; 
+  79               		.loc 1 21 0
+  80 0038 82E0      		ldi r24,lo8(2)
+  81               	.LVL8:
+  82 003a 00C0      		rjmp .L2
+  83               	.LVL9:
+  84               	.L6:
+  25:remotecontrol.c **** 		}
+  26:remotecontrol.c **** 	else if (rem == LEFT){
+  27:remotecontrol.c **** 		return RLEFT; 
+  28:remotecontrol.c **** 		}
+  29:remotecontrol.c **** 	else {
+  30:remotecontrol.c **** 		return RNOTHINGPRESSED; 
+  85               		.loc 1 30 0
+  86 003c 85E0      		ldi r24,lo8(5)
+  87               	.LVL10:
+  88               	.L2:
+  89               	/* epilogue start */
+  31:remotecontrol.c **** 		}
+  32:remotecontrol.c **** 	}
+  90               		.loc 1 32 0
+  91 003e 0F90      		pop __tmp_reg__
+  92 0040 0F90      		pop __tmp_reg__
+  93 0042 DF91      		pop r29
+  94 0044 CF91      		pop r28
+  95               	.LVL11:
+  96 0046 0895      		ret
+  97               		.cfi_endproc
+  98               	.LFE1:
+ 100               	.Letext0:
+ 101               		.file 2 "/usr/lib/avr/include/stdint.h"
+ 102               		.file 3 "remotecontrol.h"
+ 103               		.file 4 "roomba.h"
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 remotecontrol.c
+     /tmp/ccQ3q0Fp.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccQ3q0Fp.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccQ3q0Fp.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccQ3q0Fp.s:5      *ABS*:000000000000003b __RAMPZ__
+     /tmp/ccQ3q0Fp.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccQ3q0Fp.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccQ3q0Fp.s:13     .text:0000000000000000 getRemoteSignal
+
+UNDEFINED SYMBOLS
+read_values

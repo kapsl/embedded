@@ -349,18 +349,18 @@
  270               		.file 2 "/usr/lib/avr/include/stdint.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 usart.c
-     /tmp/ccR1AoDQ.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/ccR1AoDQ.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/ccR1AoDQ.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/ccR1AoDQ.s:5      *ABS*:000000000000003b __RAMPZ__
-     /tmp/ccR1AoDQ.s:6      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/ccR1AoDQ.s:7      *ABS*:0000000000000001 __zero_reg__
-     /tmp/ccR1AoDQ.s:13     .text:0000000000000000 usart_init_roomba
-     /tmp/ccR1AoDQ.s:63     .text:000000000000003a send_byte_roomba
-     /tmp/ccR1AoDQ.s:88     .text:000000000000004a receive_byte_roomba
-     /tmp/ccR1AoDQ.s:113    .text:000000000000005a usart_init
-     /tmp/ccR1AoDQ.s:162    .text:0000000000000094 send_byte
-     /tmp/ccR1AoDQ.s:187    .text:00000000000000a4 receive_byte
-     /tmp/ccR1AoDQ.s:212    .text:00000000000000b4 sendString
+     /tmp/cc02gXCJ.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/cc02gXCJ.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/cc02gXCJ.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/cc02gXCJ.s:5      *ABS*:000000000000003b __RAMPZ__
+     /tmp/cc02gXCJ.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/cc02gXCJ.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/cc02gXCJ.s:13     .text:0000000000000000 usart_init_roomba
+     /tmp/cc02gXCJ.s:63     .text:000000000000003a send_byte_roomba
+     /tmp/cc02gXCJ.s:88     .text:000000000000004a receive_byte_roomba
+     /tmp/cc02gXCJ.s:113    .text:000000000000005a usart_init
+     /tmp/cc02gXCJ.s:162    .text:0000000000000094 send_byte
+     /tmp/cc02gXCJ.s:187    .text:00000000000000a4 receive_byte
+     /tmp/cc02gXCJ.s:212    .text:00000000000000b4 sendString
 
 NO UNDEFINED SYMBOLS

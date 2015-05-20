@@ -18,67 +18,71 @@
    4:main.c        **** #include "usart.h"
    5:main.c        **** #include <ctype.h>
    6:main.c        **** #include "roomba.h"
-   7:main.c        **** 
-   8:main.c        **** int main(int argc, const char* argv[]) {
-  16               		.loc 1 8 0
+   7:main.c        **** #include "drivecontrol.h"
+   8:main.c        **** #include "remotecontrol.h"
+   9:main.c        **** 
+  10:main.c        **** int main(int argc, const char* argv[]) {
+  16               		.loc 1 10 0
   17               		.cfi_startproc
   18               	.LVL0:
   19               	/* prologue: function */
   20               	/* frame size = 0 */
   21               	/* stack size = 0 */
   22               	.L__stack_usage = 0
-   9:main.c        **** 	initializeButton();
-  23               		.loc 1 9 0
-  24 0000 0E94 0000 		call initializeButton
-  25               	.LVL1:
-  10:main.c        **** 	usart_init();
-  26               		.loc 1 10 0
-  27 0004 0E94 0000 		call usart_init
-  28               	.LVL2:
   11:main.c        **** 	usart_init_roomba();
-  29               		.loc 1 11 0
-  30 0008 0E94 0000 		call usart_init_roomba
-  31               	.LVL3:
+  23               		.loc 1 11 0
+  24 0000 0E94 0000 		call usart_init_roomba
+  25               	.LVL1:
   12:main.c        **** 	initializeRoomba();
-  32               		.loc 1 12 0
-  33 000c 0E94 0000 		call initializeRoomba
-  34               	.LVL4:
-  35               	.L3:
+  26               		.loc 1 12 0
+  27 0004 0E94 0000 		call initializeRoomba
+  28               	.LVL2:
+  29               	.L3:
+  30               	.LBB2:
   13:main.c        **** 	
-  14:main.c        **** 	while (1) {	
-  15:main.c        **** 		if (read_button(HOUR)) {
-  36               		.loc 1 15 0
-  37 0010 80E1      		ldi r24,lo8(16)
-  38 0012 0E94 0000 		call read_button
-  39               	.LVL5:
-  40 0016 8823      		tst r24
-  41 0018 01F0      		breq .L3
-  16:main.c        **** 				drive_with_p_regler();
-  42               		.loc 1 16 0
-  43 001a 0E94 0000 		call drive_with_p_regler
-  44               	.LVL6:
-  45 001e 00C0      		rjmp .L3
+  14:main.c        **** 	int16_t velocity_right = 0;
+  15:main.c        **** 	int16_t velocity_left = 0;
+  16:main.c        **** 	
+  17:main.c        **** 	while (1) {	
+  18:main.c        **** 		remoteSignal signal = getRemoteSignal();
+  31               		.loc 1 18 0
+  32 0008 0E94 0000 		call getRemoteSignal
+  33               	.LVL3:
+  19:main.c        **** 		
+  20:main.c        **** 		if (signal != RNOTHINGPRESSED) {
+  34               		.loc 1 20 0
+  35 000c 8530      		cpi r24,lo8(5)
+  36 000e 01F0      		breq .L3
+  21:main.c        **** 			getCommand(signal, velocity_right, velocity_left);
+  37               		.loc 1 21 0
+  38 0010 40E0      		ldi r20,0
+  39 0012 50E0      		ldi r21,0
+  40 0014 60E0      		ldi r22,0
+  41 0016 70E0      		ldi r23,0
+  42 0018 0E94 0000 		call getCommand
+  43               	.LVL4:
+  44 001c 00C0      		rjmp .L3
+  45               	.LBE2:
   46               		.cfi_endproc
   47               	.LFE0:
   49               	.Letext0:
-  50               		.file 2 "button.h"
-  51               		.file 3 "usart.h"
-  52               		.file 4 "roomba.h"
-  53               		.file 5 "/usr/lib/avr/include/stdint.h"
+  50               		.file 2 "/usr/lib/avr/include/stdint.h"
+  51               		.file 3 "remotecontrol.h"
+  52               		.file 4 "usart.h"
+  53               		.file 5 "roomba.h"
+  54               		.file 6 "drivecontrol.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 main.c
-     /tmp/cc1UaQBd.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/cc1UaQBd.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/cc1UaQBd.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/cc1UaQBd.s:5      *ABS*:000000000000003b __RAMPZ__
-     /tmp/cc1UaQBd.s:6      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/cc1UaQBd.s:7      *ABS*:0000000000000001 __zero_reg__
-     /tmp/cc1UaQBd.s:13     .text:0000000000000000 main
+     /tmp/ccxvReHB.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccxvReHB.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccxvReHB.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccxvReHB.s:5      *ABS*:000000000000003b __RAMPZ__
+     /tmp/ccxvReHB.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccxvReHB.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccxvReHB.s:13     .text:0000000000000000 main
 
 UNDEFINED SYMBOLS
-initializeButton
-usart_init
 usart_init_roomba
 initializeRoomba
-read_button
-drive_with_p_regler
+getRemoteSignal
+getCommand
