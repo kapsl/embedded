@@ -1,0 +1,84 @@
+   1               		.file	"main.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__RAMPZ__ = 0x3b
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.text
+   9               	.Ltext0:
+  10               		.cfi_sections	.debug_frame
+  11               	.global	main
+  13               	main:
+  14               	.LFB0:
+  15               		.file 1 "main.c"
+   1:main.c        **** #include <avr/io.h>
+   2:main.c        **** #include "tools.h"
+   3:main.c        **** #include "button.h"
+   4:main.c        **** #include "usart.h"
+   5:main.c        **** #include <ctype.h>
+   6:main.c        **** #include "roomba.h"
+   7:main.c        **** 
+   8:main.c        **** int main(int argc, const char* argv[]) {
+  16               		.loc 1 8 0
+  17               		.cfi_startproc
+  18               	.LVL0:
+  19               	/* prologue: function */
+  20               	/* frame size = 0 */
+  21               	/* stack size = 0 */
+  22               	.L__stack_usage = 0
+   9:main.c        **** 	initializeButton();
+  23               		.loc 1 9 0
+  24 0000 0E94 0000 		call initializeButton
+  25               	.LVL1:
+  10:main.c        **** 	usart_init();
+  26               		.loc 1 10 0
+  27 0004 0E94 0000 		call usart_init
+  28               	.LVL2:
+  11:main.c        **** 	usart_init_roomba();
+  29               		.loc 1 11 0
+  30 0008 0E94 0000 		call usart_init_roomba
+  31               	.LVL3:
+  12:main.c        **** 	initializeRoomba();
+  32               		.loc 1 12 0
+  33 000c 0E94 0000 		call initializeRoomba
+  34               	.LVL4:
+  35               	.L3:
+  13:main.c        **** 	
+  14:main.c        **** 	while (1) {	
+  15:main.c        **** 		if (read_button(HOUR)) {
+  36               		.loc 1 15 0
+  37 0010 80E1      		ldi r24,lo8(16)
+  38 0012 0E94 0000 		call read_button
+  39               	.LVL5:
+  40 0016 8823      		tst r24
+  41 0018 01F0      		breq .L3
+  16:main.c        **** 				drive_with_p_regler();
+  42               		.loc 1 16 0
+  43 001a 0E94 0000 		call drive_with_p_regler
+  44               	.LVL6:
+  45 001e 00C0      		rjmp .L3
+  46               		.cfi_endproc
+  47               	.LFE0:
+  49               	.Letext0:
+  50               		.file 2 "button.h"
+  51               		.file 3 "usart.h"
+  52               		.file 4 "roomba.h"
+  53               		.file 5 "/usr/lib/avr/include/stdint.h"
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 main.c
+     /tmp/cc1UaQBd.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/cc1UaQBd.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/cc1UaQBd.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/cc1UaQBd.s:5      *ABS*:000000000000003b __RAMPZ__
+     /tmp/cc1UaQBd.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/cc1UaQBd.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/cc1UaQBd.s:13     .text:0000000000000000 main
+
+UNDEFINED SYMBOLS
+initializeButton
+usart_init
+usart_init_roomba
+initializeRoomba
+read_button
+drive_with_p_regler

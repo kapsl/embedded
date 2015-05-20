@@ -1,0 +1,2547 @@
+   1               		.file	"roomba.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__RAMPZ__ = 0x3b
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.text
+   9               	.Ltext0:
+  10               		.cfi_sections	.debug_frame
+  11               	.global	initializeRoomba
+  13               	initializeRoomba:
+  14               	.LFB1:
+  15               		.file 1 "roomba.c"
+   1:roomba.c      **** #include "roomba.h"
+   2:roomba.c      **** #include "tools.h"
+   3:roomba.c      **** #include "usart.h"
+   4:roomba.c      **** #include <stdio.h>
+   5:roomba.c      **** #include <stdlib.h>
+   6:roomba.c      **** 
+   7:roomba.c      **** void initializeRoomba(void) {
+  16               		.loc 1 7 0
+  17               		.cfi_startproc
+  18               	/* prologue: function */
+  19               	/* frame size = 0 */
+  20               	/* stack size = 0 */
+  21               	.L__stack_usage = 0
+   8:roomba.c      **** 	// Start command
+   9:roomba.c      **** 	send_byte_roomba(128);
+  22               		.loc 1 9 0
+  23 0000 80E8      		ldi r24,lo8(-128)
+  24 0002 0E94 0000 		call send_byte_roomba
+  25               	.LVL0:
+  10:roomba.c      **** 		
+  11:roomba.c      **** 	// Save mode
+  12:roomba.c      **** 	send_byte_roomba(131);
+  26               		.loc 1 12 0
+  27 0006 83E8      		ldi r24,lo8(-125)
+  28 0008 0E94 0000 		call send_byte_roomba
+  29               	.LVL1:
+  30 000c 0895      		ret
+  31               		.cfi_endproc
+  32               	.LFE1:
+  34               	.global	set_Display
+  36               	set_Display:
+  37               	.LFB2:
+  13:roomba.c      **** }
+  14:roomba.c      **** 
+  15:roomba.c      **** void set_Display(char *data) {
+  38               		.loc 1 15 0
+  39               		.cfi_startproc
+  40               	.LVL2:
+  41 000e 0F93      		push r16
+  42               	.LCFI0:
+  43               		.cfi_def_cfa_offset 4
+  44               		.cfi_offset 16, -3
+  45 0010 1F93      		push r17
+  46               	.LCFI1:
+  47               		.cfi_def_cfa_offset 5
+  48               		.cfi_offset 17, -4
+  49 0012 CF93      		push r28
+  50               	.LCFI2:
+  51               		.cfi_def_cfa_offset 6
+  52               		.cfi_offset 28, -5
+  53 0014 DF93      		push r29
+  54               	.LCFI3:
+  55               		.cfi_def_cfa_offset 7
+  56               		.cfi_offset 29, -6
+  57               	/* prologue: function */
+  58               	/* frame size = 0 */
+  59               	/* stack size = 4 */
+  60               	.L__stack_usage = 4
+  61 0016 082F      		mov r16,r24
+  62 0018 192F      		mov r17,r25
+  16:roomba.c      **** 	send_byte_roomba(164);
+  63               		.loc 1 16 0
+  64 001a 84EA      		ldi r24,lo8(-92)
+  65               	.LVL3:
+  66 001c 0E94 0000 		call send_byte_roomba
+  67               	.LVL4:
+  68 0020 C02F      		mov r28,r16
+  69 0022 D12F      		mov r29,r17
+  17:roomba.c      **** 	
+  18:roomba.c      **** 	uint8_t a = 0;
+  70               		.loc 1 18 0
+  71 0024 10E0      		ldi r17,0
+  72               	.LVL5:
+  73               	.L4:
+  19:roomba.c      **** 	while (a < 4) {
+  20:roomba.c      **** 		send_byte_roomba(data[a]);
+  74               		.loc 1 20 0
+  75 0026 8991      		ld r24,Y+
+  76 0028 0E94 0000 		call send_byte_roomba
+  77               	.LVL6:
+  21:roomba.c      **** 		a++;
+  78               		.loc 1 21 0
+  79 002c 1F5F      		subi r17,lo8(-(1))
+  80               	.LVL7:
+  19:roomba.c      **** 	while (a < 4) {
+  81               		.loc 1 19 0
+  82 002e 1430      		cpi r17,lo8(4)
+  83 0030 01F4      		brne .L4
+  84               	/* epilogue start */
+  22:roomba.c      **** 	}
+  23:roomba.c      **** }
+  85               		.loc 1 23 0
+  86 0032 DF91      		pop r29
+  87 0034 CF91      		pop r28
+  88 0036 1F91      		pop r17
+  89               	.LVL8:
+  90 0038 0F91      		pop r16
+  91 003a 0895      		ret
+  92               		.cfi_endproc
+  93               	.LFE2:
+  95               	.global	read_button
+  97               	read_button:
+  98               	.LFB3:
+  24:roomba.c      **** 
+  25:roomba.c      **** /**
+  26:roomba.c      ****  * \brief Find out if a button on the roomba was pressed
+  27:roomba.c      ****  * 
+  28:roomba.c      ****  * \param button a constant fromm roomba.h e.g HOUR
+  29:roomba.c      ****  * \return 0 if button was not pressed, 1 instead
+  30:roomba.c      ****  */
+  31:roomba.c      **** uint8_t read_button(uint8_t button) {
+  99               		.loc 1 31 0
+ 100               		.cfi_startproc
+ 101               	.LVL9:
+ 102 003c CF93      		push r28
+ 103               	.LCFI4:
+ 104               		.cfi_def_cfa_offset 4
+ 105               		.cfi_offset 28, -3
+ 106               	/* prologue: function */
+ 107               	/* frame size = 0 */
+ 108               	/* stack size = 1 */
+ 109               	.L__stack_usage = 1
+ 110 003e C82F      		mov r28,r24
+  32:roomba.c      **** 	// Get sensor packets
+  33:roomba.c      **** 	send_byte_roomba(142);
+ 111               		.loc 1 33 0
+ 112 0040 8EE8      		ldi r24,lo8(-114)
+ 113               	.LVL10:
+ 114 0042 0E94 0000 		call send_byte_roomba
+ 115               	.LVL11:
+  34:roomba.c      **** 	
+  35:roomba.c      **** 	// Buttons
+  36:roomba.c      **** 	send_byte_roomba(18); 
+ 116               		.loc 1 36 0
+ 117 0046 82E1      		ldi r24,lo8(18)
+ 118 0048 0E94 0000 		call send_byte_roomba
+ 119               	.LVL12:
+  37:roomba.c      **** 	
+  38:roomba.c      **** 	uint8_t result = receive_byte_roomba();
+ 120               		.loc 1 38 0
+ 121 004c 0E94 0000 		call receive_byte_roomba
+ 122               	.LVL13:
+  39:roomba.c      **** 	
+  40:roomba.c      **** 	if ((result & button) == button) {
+ 123               		.loc 1 40 0
+ 124 0050 982F      		mov r25,r24
+ 125 0052 9C23      		and r25,r28
+ 126 0054 81E0      		ldi r24,lo8(1)
+ 127               	.LVL14:
+ 128 0056 C913      		cpse r28,r25
+ 129 0058 80E0      		ldi r24,0
+ 130               	.L6:
+ 131               	/* epilogue start */
+  41:roomba.c      **** 		return 1;
+  42:roomba.c      **** 	}
+  43:roomba.c      **** 	
+  44:roomba.c      **** 	return 0;
+  45:roomba.c      **** }
+ 132               		.loc 1 45 0
+ 133 005a CF91      		pop r28
+ 134               	.LVL15:
+ 135 005c 0895      		ret
+ 136               		.cfi_endproc
+ 137               	.LFE3:
+ 139               	.global	read_values
+ 141               	read_values:
+ 142               	.LFB4:
+  46:roomba.c      **** 
+  47:roomba.c      **** /**
+  48:roomba.c      ****  * \brief Read a sensor value
+  49:roomba.c      ****  * 
+  50:roomba.c      ****  * \param packetid the packetid corresponding to the sensor
+  51:roomba.c      ****  * \param data an array where the returned bytes are stored
+  52:roomba.c      ****  * \param length how many bytes should be retrieved
+  53:roomba.c      ****  */
+  54:roomba.c      **** void read_values(uint8_t packetid, uint8_t * data, uint8_t length) {
+ 143               		.loc 1 54 0
+ 144               		.cfi_startproc
+ 145               	.LVL16:
+ 146 005e FF92      		push r15
+ 147               	.LCFI5:
+ 148               		.cfi_def_cfa_offset 4
+ 149               		.cfi_offset 15, -3
+ 150 0060 0F93      		push r16
+ 151               	.LCFI6:
+ 152               		.cfi_def_cfa_offset 5
+ 153               		.cfi_offset 16, -4
+ 154 0062 1F93      		push r17
+ 155               	.LCFI7:
+ 156               		.cfi_def_cfa_offset 6
+ 157               		.cfi_offset 17, -5
+ 158 0064 CF93      		push r28
+ 159               	.LCFI8:
+ 160               		.cfi_def_cfa_offset 7
+ 161               		.cfi_offset 28, -6
+ 162 0066 DF93      		push r29
+ 163               	.LCFI9:
+ 164               		.cfi_def_cfa_offset 8
+ 165               		.cfi_offset 29, -7
+ 166               	/* prologue: function */
+ 167               	/* frame size = 0 */
+ 168               	/* stack size = 5 */
+ 169               	.L__stack_usage = 5
+ 170 0068 C82F      		mov r28,r24
+ 171 006a F62E      		mov r15,r22
+ 172 006c 172F      		mov r17,r23
+ 173 006e 042F      		mov r16,r20
+  55:roomba.c      **** 	send_byte_roomba(142);
+ 174               		.loc 1 55 0
+ 175 0070 8EE8      		ldi r24,lo8(-114)
+ 176               	.LVL17:
+ 177 0072 0E94 0000 		call send_byte_roomba
+ 178               	.LVL18:
+  56:roomba.c      **** 	send_byte_roomba(packetid);
+ 179               		.loc 1 56 0
+ 180 0076 8C2F      		mov r24,r28
+ 181 0078 0E94 0000 		call send_byte_roomba
+ 182               	.LVL19:
+ 183               	.LBB2:
+  57:roomba.c      **** 	
+  58:roomba.c      **** 	for (uint8_t a = 0; a < length; a++) {
+ 184               		.loc 1 58 0
+ 185 007c 0023      		tst r16
+ 186 007e 01F0      		breq .L7
+ 187 0080 CF2D      		mov r28,r15
+ 188               	.LVL20:
+ 189 0082 D12F      		mov r29,r17
+ 190 0084 10E0      		ldi r17,0
+ 191               	.LVL21:
+ 192               	.L9:
+  59:roomba.c      **** 		data[a] = receive_byte_roomba();
+ 193               		.loc 1 59 0 discriminator 2
+ 194 0086 0E94 0000 		call receive_byte_roomba
+ 195               	.LVL22:
+ 196 008a 8993      		st Y+,r24
+  58:roomba.c      **** 	for (uint8_t a = 0; a < length; a++) {
+ 197               		.loc 1 58 0 discriminator 2
+ 198 008c 1F5F      		subi r17,lo8(-(1))
+ 199               	.LVL23:
+ 200 008e 1013      		cpse r17,r16
+ 201 0090 00C0      		rjmp .L9
+ 202               	.LVL24:
+ 203               	.L7:
+ 204               	/* epilogue start */
+ 205               	.LBE2:
+  60:roomba.c      **** 	}
+  61:roomba.c      **** }
+ 206               		.loc 1 61 0
+ 207 0092 DF91      		pop r29
+ 208 0094 CF91      		pop r28
+ 209 0096 1F91      		pop r17
+ 210 0098 0F91      		pop r16
+ 211               	.LVL25:
+ 212 009a FF90      		pop r15
+ 213 009c 0895      		ret
+ 214               		.cfi_endproc
+ 215               	.LFE4:
+ 217               	.global	drive
+ 219               	drive:
+ 220               	.LFB5:
+  62:roomba.c      **** 
+  63:roomba.c      **** /**
+  64:roomba.c      ****  * \brief Let the roomba drive
+  65:roomba.c      ****  * 
+  66:roomba.c      ****  * \param velocity the velocity in mm/s. If negative --> backwards
+  67:roomba.c      ****  */
+  68:roomba.c      **** void drive(int16_t velocity) {
+ 221               		.loc 1 68 0
+ 222               		.cfi_startproc
+ 223               	.LVL26:
+ 224 009e CF93      		push r28
+ 225               	.LCFI10:
+ 226               		.cfi_def_cfa_offset 4
+ 227               		.cfi_offset 28, -3
+ 228 00a0 DF93      		push r29
+ 229               	.LCFI11:
+ 230               		.cfi_def_cfa_offset 5
+ 231               		.cfi_offset 29, -4
+ 232               	/* prologue: function */
+ 233               	/* frame size = 0 */
+ 234               	/* stack size = 2 */
+ 235               	.L__stack_usage = 2
+ 236 00a2 C82F      		mov r28,r24
+ 237 00a4 D92F      		mov r29,r25
+  69:roomba.c      **** 	send_byte_roomba(145);
+ 238               		.loc 1 69 0
+ 239 00a6 81E9      		ldi r24,lo8(-111)
+ 240               	.LVL27:
+ 241 00a8 0E94 0000 		call send_byte_roomba
+ 242               	.LVL28:
+  70:roomba.c      **** 	
+  71:roomba.c      **** 	uint8_t low = velocity;
+  72:roomba.c      **** 	uint8_t high = (velocity >> 8);
+  73:roomba.c      **** 	
+  74:roomba.c      **** 	send_byte_roomba(high);
+ 243               		.loc 1 74 0
+ 244 00ac 8D2F      		mov r24,r29
+ 245 00ae 0E94 0000 		call send_byte_roomba
+ 246               	.LVL29:
+  75:roomba.c      **** 	send_byte_roomba(low);
+ 247               		.loc 1 75 0
+ 248 00b2 8C2F      		mov r24,r28
+ 249 00b4 0E94 0000 		call send_byte_roomba
+ 250               	.LVL30:
+  76:roomba.c      **** 	
+  77:roomba.c      **** 	send_byte_roomba(high);
+ 251               		.loc 1 77 0
+ 252 00b8 8D2F      		mov r24,r29
+ 253 00ba 0E94 0000 		call send_byte_roomba
+ 254               	.LVL31:
+  78:roomba.c      **** 	send_byte_roomba(low);
+ 255               		.loc 1 78 0
+ 256 00be 8C2F      		mov r24,r28
+ 257 00c0 0E94 0000 		call send_byte_roomba
+ 258               	.LVL32:
+ 259               	/* epilogue start */
+  79:roomba.c      **** }
+ 260               		.loc 1 79 0
+ 261 00c4 DF91      		pop r29
+ 262               	.LVL33:
+ 263 00c6 CF91      		pop r28
+ 264               	.LVL34:
+ 265 00c8 0895      		ret
+ 266               		.cfi_endproc
+ 267               	.LFE5:
+ 269               	.global	drive_direction
+ 271               	drive_direction:
+ 272               	.LFB6:
+  80:roomba.c      **** 
+  81:roomba.c      **** /**
+  82:roomba.c      ****  * \brief Drive and have the posibility to drive a corner
+  83:roomba.c      ****  * 
+  84:roomba.c      ****  * \param velocity_right
+  85:roomba.c      ****  * \param velocity_left
+  86:roomba.c      ****  */
+  87:roomba.c      **** void drive_direction(int16_t velocity_right, int16_t velocity_left) {
+ 273               		.loc 1 87 0
+ 274               		.cfi_startproc
+ 275               	.LVL35:
+ 276 00ca 0F93      		push r16
+ 277               	.LCFI12:
+ 278               		.cfi_def_cfa_offset 4
+ 279               		.cfi_offset 16, -3
+ 280 00cc 1F93      		push r17
+ 281               	.LCFI13:
+ 282               		.cfi_def_cfa_offset 5
+ 283               		.cfi_offset 17, -4
+ 284 00ce CF93      		push r28
+ 285               	.LCFI14:
+ 286               		.cfi_def_cfa_offset 6
+ 287               		.cfi_offset 28, -5
+ 288 00d0 DF93      		push r29
+ 289               	.LCFI15:
+ 290               		.cfi_def_cfa_offset 7
+ 291               		.cfi_offset 29, -6
+ 292               	/* prologue: function */
+ 293               	/* frame size = 0 */
+ 294               	/* stack size = 4 */
+ 295               	.L__stack_usage = 4
+ 296 00d2 182F      		mov r17,r24
+ 297 00d4 092F      		mov r16,r25
+ 298 00d6 C62F      		mov r28,r22
+ 299 00d8 D72F      		mov r29,r23
+  88:roomba.c      **** 	send_byte_roomba(145);
+ 300               		.loc 1 88 0
+ 301 00da 81E9      		ldi r24,lo8(-111)
+ 302               	.LVL36:
+ 303 00dc 0E94 0000 		call send_byte_roomba
+ 304               	.LVL37:
+  89:roomba.c      **** 	
+  90:roomba.c      **** 	uint8_t low = velocity_right;
+  91:roomba.c      **** 	uint8_t high = (velocity_right >> 8);
+  92:roomba.c      **** 	
+  93:roomba.c      **** 	send_byte_roomba(high);
+ 305               		.loc 1 93 0
+ 306 00e0 802F      		mov r24,r16
+ 307 00e2 0E94 0000 		call send_byte_roomba
+ 308               	.LVL38:
+  94:roomba.c      **** 	send_byte_roomba(low);
+ 309               		.loc 1 94 0
+ 310 00e6 812F      		mov r24,r17
+ 311 00e8 0E94 0000 		call send_byte_roomba
+ 312               	.LVL39:
+  95:roomba.c      **** 	
+  96:roomba.c      **** 	low = velocity_left;
+  97:roomba.c      **** 	high = (velocity_left >> 8);
+  98:roomba.c      **** 	
+  99:roomba.c      **** 	send_byte_roomba(high);
+ 313               		.loc 1 99 0
+ 314 00ec 8D2F      		mov r24,r29
+ 315 00ee 0E94 0000 		call send_byte_roomba
+ 316               	.LVL40:
+ 100:roomba.c      **** 	send_byte_roomba(low);
+ 317               		.loc 1 100 0
+ 318 00f2 8C2F      		mov r24,r28
+ 319 00f4 0E94 0000 		call send_byte_roomba
+ 320               	.LVL41:
+ 321               	/* epilogue start */
+ 101:roomba.c      **** }
+ 322               		.loc 1 101 0
+ 323 00f8 DF91      		pop r29
+ 324               	.LVL42:
+ 325 00fa CF91      		pop r28
+ 326               	.LVL43:
+ 327 00fc 1F91      		pop r17
+ 328 00fe 0F91      		pop r16
+ 329 0100 0895      		ret
+ 330               		.cfi_endproc
+ 331               	.LFE6:
+ 333               	.global	stop
+ 335               	stop:
+ 336               	.LFB7:
+ 102:roomba.c      **** 
+ 103:roomba.c      **** /**
+ 104:roomba.c      ****  * Stop the roomba
+ 105:roomba.c      ****  */
+ 106:roomba.c      **** void stop() {
+ 337               		.loc 1 106 0
+ 338               		.cfi_startproc
+ 339               	/* prologue: function */
+ 340               	/* frame size = 0 */
+ 341               	/* stack size = 0 */
+ 342               	.L__stack_usage = 0
+ 107:roomba.c      **** 	drive(0);
+ 343               		.loc 1 107 0
+ 344 0102 80E0      		ldi r24,0
+ 345 0104 90E0      		ldi r25,0
+ 346 0106 0E94 0000 		call drive
+ 347               	.LVL44:
+ 348 010a 0895      		ret
+ 349               		.cfi_endproc
+ 350               	.LFE7:
+ 352               	.global	getTicks
+ 354               	getTicks:
+ 355               	.LFB10:
+ 108:roomba.c      **** }
+ 109:roomba.c      **** 
+ 110:roomba.c      **** /**
+ 111:roomba.c      ****  * \brief Drive the roomba
+ 112:roomba.c      ****  * 
+ 113:roomba.c      ****  * \param distance so far
+ 114:roomba.c      ****  * \param velocity with this velocity
+ 115:roomba.c      ****  */
+ 116:roomba.c      **** void drive_roomba(uint16_t distance, int16_t velocity) {
+ 117:roomba.c      **** 	// Start tick
+ 118:roomba.c      **** 	char buff[50];
+ 119:roomba.c      **** 	uint16_t start_value = getTicks();
+ 120:roomba.c      **** 	sprintf(buff, "Ticks-Start: %u\r\n", start_value);
+ 121:roomba.c      **** 	sendString(buff);
+ 122:roomba.c      **** 	
+ 123:roomba.c      **** 	drive(velocity);
+ 124:roomba.c      **** 	
+ 125:roomba.c      **** 	uint16_t sleep = distance / abs(velocity);
+ 126:roomba.c      **** 	my_msleep(sleep * 1000);
+ 127:roomba.c      **** 	
+ 128:roomba.c      **** 	stop();
+ 129:roomba.c      **** 	
+ 130:roomba.c      **** 	uint16_t end_value = getTicks();
+ 131:roomba.c      **** 	sprintf(buff, "Ticks-End: %u\r\n", end_value);
+ 132:roomba.c      **** 	sendString(buff);
+ 133:roomba.c      **** 	sprintf(buff, "Ticks: %u\r\n", (end_value - start_value));
+ 134:roomba.c      **** 	sendString(buff);
+ 135:roomba.c      **** 	
+ 136:roomba.c      **** 	// 1m = 2262 Ticks
+ 137:roomba.c      **** }
+ 138:roomba.c      **** 
+ 139:roomba.c      **** /**
+ 140:roomba.c      ****  * \brief Does the same like drive_roomba but more exact with counting ticks
+ 141:roomba.c      ****  */
+ 142:roomba.c      **** void drive_roomba_exact(uint16_t distance, int16_t velocity) {
+ 143:roomba.c      **** 	uint16_t start_value = getTicks();
+ 144:roomba.c      **** 	
+ 145:roomba.c      **** 	drive(velocity);
+ 146:roomba.c      **** 	
+ 147:roomba.c      **** 	char buff[50];
+ 148:roomba.c      **** 	sprintf(buff, "Ticks-Start: %u\r\n", start_value);
+ 149:roomba.c      **** 	sendString(buff);
+ 150:roomba.c      **** 	
+ 151:roomba.c      **** 	uint16_t maxTicks = (uint16_t) (distance * 2.262);
+ 152:roomba.c      **** 	sprintf(buff, "Max: %u\r\n", maxTicks);
+ 153:roomba.c      **** 	sendString(buff);
+ 154:roomba.c      **** 	
+ 155:roomba.c      **** 	my_msleep(200);
+ 156:roomba.c      **** 	
+ 157:roomba.c      **** 	while (1) {
+ 158:roomba.c      **** 		uint16_t ticks = getTicks();
+ 159:roomba.c      **** 		uint16_t distanceTicks;
+ 160:roomba.c      **** 		
+ 161:roomba.c      **** 		// Overflow
+ 162:roomba.c      **** 		if (ticks < start_value && velocity > 0) {
+ 163:roomba.c      **** 			distanceTicks = 65535 - start_value + ticks;
+ 164:roomba.c      **** 		} else if (ticks > start_value && velocity < 0) {
+ 165:roomba.c      **** 			distanceTicks = start_value + (65535 - ticks);
+ 166:roomba.c      **** 		} else {
+ 167:roomba.c      **** 			distanceTicks = abs(ticks - start_value);
+ 168:roomba.c      **** 		}
+ 169:roomba.c      **** 		
+ 170:roomba.c      **** 		if (distanceTicks > maxTicks) {
+ 171:roomba.c      **** 			break;
+ 172:roomba.c      **** 		}
+ 173:roomba.c      **** 	}
+ 174:roomba.c      **** 	
+ 175:roomba.c      **** 	stop();
+ 176:roomba.c      **** }
+ 177:roomba.c      **** 
+ 178:roomba.c      **** /**
+ 179:roomba.c      ****  * \brief Get the actual tick count for the left wheel
+ 180:roomba.c      ****  * 			(at the moment enough, as long as we only drive straight)
+ 181:roomba.c      ****  */
+ 182:roomba.c      **** uint16_t getTicks() {
+ 356               		.loc 1 182 0
+ 357               		.cfi_startproc
+ 358 010c CF93      		push r28
+ 359               	.LCFI16:
+ 360               		.cfi_def_cfa_offset 4
+ 361               		.cfi_offset 28, -3
+ 362 010e DF93      		push r29
+ 363               	.LCFI17:
+ 364               		.cfi_def_cfa_offset 5
+ 365               		.cfi_offset 29, -4
+ 366 0110 1F92      		push __zero_reg__
+ 367 0112 1F92      		push __zero_reg__
+ 368               	.LCFI18:
+ 369               		.cfi_def_cfa_offset 7
+ 370 0114 CDB7      		in r28,__SP_L__
+ 371 0116 DEB7      		in r29,__SP_H__
+ 372               	.LCFI19:
+ 373               		.cfi_def_cfa_register 28
+ 374               	/* prologue: function */
+ 375               	/* frame size = 2 */
+ 376               	/* stack size = 4 */
+ 377               	.L__stack_usage = 4
+ 183:roomba.c      **** 	uint8_t data[2];
+ 184:roomba.c      **** 	read_values(43, data, 2);
+ 378               		.loc 1 184 0
+ 379 0118 42E0      		ldi r20,lo8(2)
+ 380 011a BE01      		movw r22,r28
+ 381 011c 6F5F      		subi r22,-1
+ 382 011e 7F4F      		sbci r23,-1
+ 383 0120 8BE2      		ldi r24,lo8(43)
+ 384 0122 0E94 0000 		call read_values
+ 385               	.LVL45:
+ 185:roomba.c      **** 	
+ 186:roomba.c      **** 	return concat_bytes(data);
+ 386               		.loc 1 186 0
+ 387 0126 CE01      		movw r24,r28
+ 388 0128 0196      		adiw r24,1
+ 389 012a 0E94 0000 		call concat_bytes
+ 390               	.LVL46:
+ 391               	/* epilogue start */
+ 187:roomba.c      **** }
+ 392               		.loc 1 187 0
+ 393 012e 0F90      		pop __tmp_reg__
+ 394 0130 0F90      		pop __tmp_reg__
+ 395 0132 DF91      		pop r29
+ 396 0134 CF91      		pop r28
+ 397 0136 0895      		ret
+ 398               		.cfi_endproc
+ 399               	.LFE10:
+ 401               		.section	.rodata.str1.1,"aMS",@progbits,1
+ 402               	.LC1:
+ 403 0000 5469 636B 		.string	"Ticks-Start: %u\r\n"
+ 403      732D 5374 
+ 403      6172 743A 
+ 403      2025 750D 
+ 403      0A00 
+ 404               	.LC2:
+ 405 0012 5469 636B 		.string	"Ticks-End: %u\r\n"
+ 405      732D 456E 
+ 405      643A 2025 
+ 405      750D 0A00 
+ 406               	.LC3:
+ 407 0022 5469 636B 		.string	"Ticks: %u\r\n"
+ 407      733A 2025 
+ 407      750D 0A00 
+ 408               		.text
+ 409               	.global	drive_roomba
+ 411               	drive_roomba:
+ 412               	.LFB8:
+ 116:roomba.c      **** void drive_roomba(uint16_t distance, int16_t velocity) {
+ 413               		.loc 1 116 0
+ 414               		.cfi_startproc
+ 415               	.LVL47:
+ 416 0138 AF92      		push r10
+ 417               	.LCFI20:
+ 418               		.cfi_def_cfa_offset 4
+ 419               		.cfi_offset 10, -3
+ 420 013a BF92      		push r11
+ 421               	.LCFI21:
+ 422               		.cfi_def_cfa_offset 5
+ 423               		.cfi_offset 11, -4
+ 424 013c CF92      		push r12
+ 425               	.LCFI22:
+ 426               		.cfi_def_cfa_offset 6
+ 427               		.cfi_offset 12, -5
+ 428 013e DF92      		push r13
+ 429               	.LCFI23:
+ 430               		.cfi_def_cfa_offset 7
+ 431               		.cfi_offset 13, -6
+ 432 0140 EF92      		push r14
+ 433               	.LCFI24:
+ 434               		.cfi_def_cfa_offset 8
+ 435               		.cfi_offset 14, -7
+ 436 0142 FF92      		push r15
+ 437               	.LCFI25:
+ 438               		.cfi_def_cfa_offset 9
+ 439               		.cfi_offset 15, -8
+ 440 0144 0F93      		push r16
+ 441               	.LCFI26:
+ 442               		.cfi_def_cfa_offset 10
+ 443               		.cfi_offset 16, -9
+ 444 0146 1F93      		push r17
+ 445               	.LCFI27:
+ 446               		.cfi_def_cfa_offset 11
+ 447               		.cfi_offset 17, -10
+ 448 0148 CF93      		push r28
+ 449               	.LCFI28:
+ 450               		.cfi_def_cfa_offset 12
+ 451               		.cfi_offset 28, -11
+ 452 014a DF93      		push r29
+ 453               	.LCFI29:
+ 454               		.cfi_def_cfa_offset 13
+ 455               		.cfi_offset 29, -12
+ 456 014c CDB7      		in r28,__SP_L__
+ 457 014e DEB7      		in r29,__SP_H__
+ 458               	.LCFI30:
+ 459               		.cfi_def_cfa_register 28
+ 460 0150 E297      		sbiw r28,50
+ 461               	.LCFI31:
+ 462               		.cfi_def_cfa_offset 63
+ 463 0152 0FB6      		in __tmp_reg__,__SREG__
+ 464 0154 F894      		cli
+ 465 0156 DEBF      		out __SP_H__,r29
+ 466 0158 0FBE      		out __SREG__,__tmp_reg__
+ 467 015a CDBF      		out __SP_L__,r28
+ 468               	/* prologue: function */
+ 469               	/* frame size = 50 */
+ 470               	/* stack size = 60 */
+ 471               	.L__stack_usage = 60
+ 472 015c 5C01      		movw r10,r24
+ 473 015e 6B01      		movw r12,r22
+ 119:roomba.c      **** 	uint16_t start_value = getTicks();
+ 474               		.loc 1 119 0
+ 475 0160 0E94 0000 		call getTicks
+ 476               	.LVL48:
+ 477 0164 7C01      		movw r14,r24
+ 478               	.LVL49:
+ 120:roomba.c      **** 	sprintf(buff, "Ticks-Start: %u\r\n", start_value);
+ 479               		.loc 1 120 0
+ 480 0166 FF92      		push r15
+ 481 0168 8F93      		push r24
+ 482 016a 80E0      		ldi r24,lo8(.LC1)
+ 483 016c 90E0      		ldi r25,hi8(.LC1)
+ 484 016e 9F93      		push r25
+ 485 0170 8F93      		push r24
+ 486 0172 8E01      		movw r16,r28
+ 487 0174 0F5F      		subi r16,-1
+ 488 0176 1F4F      		sbci r17,-1
+ 489 0178 1F93      		push r17
+ 490 017a 0F93      		push r16
+ 491 017c 0E94 0000 		call sprintf
+ 492               	.LVL50:
+ 121:roomba.c      **** 	sendString(buff);
+ 493               		.loc 1 121 0
+ 494 0180 C801      		movw r24,r16
+ 495 0182 0E94 0000 		call sendString
+ 496               	.LVL51:
+ 123:roomba.c      **** 	drive(velocity);
+ 497               		.loc 1 123 0
+ 498 0186 C601      		movw r24,r12
+ 499 0188 0E94 0000 		call drive
+ 500               	.LVL52:
+ 125:roomba.c      **** 	uint16_t sleep = distance / abs(velocity);
+ 501               		.loc 1 125 0
+ 502 018c B601      		movw r22,r12
+ 503 018e DD20      		tst r13
+ 504 0190 04F4      		brge .L15
+ 505 0192 6627      		clr r22
+ 506 0194 7727      		clr r23
+ 507 0196 6C19      		sub r22,r12
+ 508 0198 7D09      		sbc r23,r13
+ 509               	.L15:
+ 510 019a C501      		movw r24,r10
+ 511 019c 0E94 0000 		call __udivmodhi4
+ 126:roomba.c      **** 	my_msleep(sleep * 1000);
+ 512               		.loc 1 126 0
+ 513 01a0 88EE      		ldi r24,lo8(-24)
+ 514 01a2 93E0      		ldi r25,lo8(3)
+ 515 01a4 9C01      		movw r18,r24
+ 516 01a6 629F      		mul r22,r18
+ 517 01a8 C001      		movw r24,r0
+ 518 01aa 639F      		mul r22,r19
+ 519 01ac 900D      		add r25,r0
+ 520 01ae 729F      		mul r23,r18
+ 521 01b0 900D      		add r25,r0
+ 522 01b2 1124      		clr r1
+ 523 01b4 0E94 0000 		call my_msleep
+ 524               	.LVL53:
+ 128:roomba.c      **** 	stop();
+ 525               		.loc 1 128 0
+ 526 01b8 0E94 0000 		call stop
+ 527               	.LVL54:
+ 130:roomba.c      **** 	uint16_t end_value = getTicks();
+ 528               		.loc 1 130 0
+ 529 01bc 0E94 0000 		call getTicks
+ 530               	.LVL55:
+ 531 01c0 6C01      		movw r12,r24
+ 532               	.LVL56:
+ 131:roomba.c      **** 	sprintf(buff, "Ticks-End: %u\r\n", end_value);
+ 533               		.loc 1 131 0
+ 534 01c2 DF92      		push r13
+ 535 01c4 8F93      		push r24
+ 536 01c6 80E0      		ldi r24,lo8(.LC2)
+ 537 01c8 90E0      		ldi r25,hi8(.LC2)
+ 538 01ca 9F93      		push r25
+ 539 01cc 8F93      		push r24
+ 540 01ce 8E01      		movw r16,r28
+ 541 01d0 0F5F      		subi r16,-1
+ 542 01d2 1F4F      		sbci r17,-1
+ 543 01d4 1F93      		push r17
+ 544 01d6 0F93      		push r16
+ 545 01d8 0E94 0000 		call sprintf
+ 546               	.LVL57:
+ 132:roomba.c      **** 	sendString(buff);
+ 547               		.loc 1 132 0
+ 548 01dc C801      		movw r24,r16
+ 549 01de 0E94 0000 		call sendString
+ 550               	.LVL58:
+ 133:roomba.c      **** 	sprintf(buff, "Ticks: %u\r\n", (end_value - start_value));
+ 551               		.loc 1 133 0
+ 552 01e2 CE18      		sub r12,r14
+ 553 01e4 DF08      		sbc r13,r15
+ 554               	.LVL59:
+ 555 01e6 DF92      		push r13
+ 556 01e8 CF92      		push r12
+ 557 01ea 80E0      		ldi r24,lo8(.LC3)
+ 558 01ec 90E0      		ldi r25,hi8(.LC3)
+ 559 01ee 9F93      		push r25
+ 560 01f0 8F93      		push r24
+ 561 01f2 1F93      		push r17
+ 562 01f4 0F93      		push r16
+ 563 01f6 0E94 0000 		call sprintf
+ 564               	.LVL60:
+ 134:roomba.c      **** 	sendString(buff);
+ 565               		.loc 1 134 0
+ 566 01fa C801      		movw r24,r16
+ 567 01fc 0E94 0000 		call sendString
+ 568               	.LVL61:
+ 569 0200 0FB6      		in __tmp_reg__,__SREG__
+ 570 0202 F894      		cli
+ 571 0204 DEBF      		out __SP_H__,r29
+ 572 0206 0FBE      		out __SREG__,__tmp_reg__
+ 573 0208 CDBF      		out __SP_L__,r28
+ 574               	/* epilogue start */
+ 137:roomba.c      **** }
+ 575               		.loc 1 137 0
+ 576 020a E296      		adiw r28,50
+ 577 020c 0FB6      		in __tmp_reg__,__SREG__
+ 578 020e F894      		cli
+ 579 0210 DEBF      		out __SP_H__,r29
+ 580 0212 0FBE      		out __SREG__,__tmp_reg__
+ 581 0214 CDBF      		out __SP_L__,r28
+ 582 0216 DF91      		pop r29
+ 583 0218 CF91      		pop r28
+ 584 021a 1F91      		pop r17
+ 585 021c 0F91      		pop r16
+ 586 021e FF90      		pop r15
+ 587 0220 EF90      		pop r14
+ 588               	.LVL62:
+ 589 0222 DF90      		pop r13
+ 590 0224 CF90      		pop r12
+ 591 0226 BF90      		pop r11
+ 592 0228 AF90      		pop r10
+ 593               	.LVL63:
+ 594 022a 0895      		ret
+ 595               		.cfi_endproc
+ 596               	.LFE8:
+ 598               	.global	__floatunsisf
+ 599               	.global	__mulsf3
+ 600               	.global	__fixunssfsi
+ 601               		.section	.rodata.str1.1
+ 602               	.LC4:
+ 603 002e 4D61 783A 		.string	"Max: %u\r\n"
+ 603      2025 750D 
+ 603      0A00 
+ 604               		.text
+ 605               	.global	drive_roomba_exact
+ 607               	drive_roomba_exact:
+ 608               	.LFB9:
+ 142:roomba.c      **** void drive_roomba_exact(uint16_t distance, int16_t velocity) {
+ 609               		.loc 1 142 0
+ 610               		.cfi_startproc
+ 611               	.LVL64:
+ 612 022c 8F92      		push r8
+ 613               	.LCFI32:
+ 614               		.cfi_def_cfa_offset 4
+ 615               		.cfi_offset 8, -3
+ 616 022e 9F92      		push r9
+ 617               	.LCFI33:
+ 618               		.cfi_def_cfa_offset 5
+ 619               		.cfi_offset 9, -4
+ 620 0230 AF92      		push r10
+ 621               	.LCFI34:
+ 622               		.cfi_def_cfa_offset 6
+ 623               		.cfi_offset 10, -5
+ 624 0232 BF92      		push r11
+ 625               	.LCFI35:
+ 626               		.cfi_def_cfa_offset 7
+ 627               		.cfi_offset 11, -6
+ 628 0234 CF92      		push r12
+ 629               	.LCFI36:
+ 630               		.cfi_def_cfa_offset 8
+ 631               		.cfi_offset 12, -7
+ 632 0236 DF92      		push r13
+ 633               	.LCFI37:
+ 634               		.cfi_def_cfa_offset 9
+ 635               		.cfi_offset 13, -8
+ 636 0238 EF92      		push r14
+ 637               	.LCFI38:
+ 638               		.cfi_def_cfa_offset 10
+ 639               		.cfi_offset 14, -9
+ 640 023a FF92      		push r15
+ 641               	.LCFI39:
+ 642               		.cfi_def_cfa_offset 11
+ 643               		.cfi_offset 15, -10
+ 644 023c 0F93      		push r16
+ 645               	.LCFI40:
+ 646               		.cfi_def_cfa_offset 12
+ 647               		.cfi_offset 16, -11
+ 648 023e 1F93      		push r17
+ 649               	.LCFI41:
+ 650               		.cfi_def_cfa_offset 13
+ 651               		.cfi_offset 17, -12
+ 652 0240 CF93      		push r28
+ 653               	.LCFI42:
+ 654               		.cfi_def_cfa_offset 14
+ 655               		.cfi_offset 28, -13
+ 656 0242 DF93      		push r29
+ 657               	.LCFI43:
+ 658               		.cfi_def_cfa_offset 15
+ 659               		.cfi_offset 29, -14
+ 660 0244 CDB7      		in r28,__SP_L__
+ 661 0246 DEB7      		in r29,__SP_H__
+ 662               	.LCFI44:
+ 663               		.cfi_def_cfa_register 28
+ 664 0248 E297      		sbiw r28,50
+ 665               	.LCFI45:
+ 666               		.cfi_def_cfa_offset 65
+ 667 024a 0FB6      		in __tmp_reg__,__SREG__
+ 668 024c F894      		cli
+ 669 024e DEBF      		out __SP_H__,r29
+ 670 0250 0FBE      		out __SREG__,__tmp_reg__
+ 671 0252 CDBF      		out __SP_L__,r28
+ 672               	/* prologue: function */
+ 673               	/* frame size = 50 */
+ 674               	/* stack size = 62 */
+ 675               	.L__stack_usage = 62
+ 676 0254 5C01      		movw r10,r24
+ 677 0256 7B01      		movw r14,r22
+ 143:roomba.c      **** 	uint16_t start_value = getTicks();
+ 678               		.loc 1 143 0
+ 679 0258 0E94 0000 		call getTicks
+ 680               	.LVL65:
+ 681 025c 8C01      		movw r16,r24
+ 682               	.LVL66:
+ 145:roomba.c      **** 	drive(velocity);
+ 683               		.loc 1 145 0
+ 684 025e C701      		movw r24,r14
+ 685 0260 0E94 0000 		call drive
+ 686               	.LVL67:
+ 148:roomba.c      **** 	sprintf(buff, "Ticks-Start: %u\r\n", start_value);
+ 687               		.loc 1 148 0
+ 688 0264 1F93      		push r17
+ 689 0266 0F93      		push r16
+ 690 0268 20E0      		ldi r18,lo8(.LC1)
+ 691 026a 30E0      		ldi r19,hi8(.LC1)
+ 692 026c 3F93      		push r19
+ 693 026e 2F93      		push r18
+ 694 0270 9E01      		movw r18,r28
+ 695 0272 2F5F      		subi r18,-1
+ 696 0274 3F4F      		sbci r19,-1
+ 697 0276 6901      		movw r12,r18
+ 698 0278 DF92      		push r13
+ 699 027a 2F93      		push r18
+ 700 027c 0E94 0000 		call sprintf
+ 701               	.LVL68:
+ 149:roomba.c      **** 	sendString(buff);
+ 702               		.loc 1 149 0
+ 703 0280 C601      		movw r24,r12
+ 704 0282 0E94 0000 		call sendString
+ 705               	.LVL69:
+ 151:roomba.c      **** 	uint16_t maxTicks = (uint16_t) (distance * 2.262);
+ 706               		.loc 1 151 0
+ 707 0286 B501      		movw r22,r10
+ 708 0288 80E0      		ldi r24,0
+ 709 028a 90E0      		ldi r25,0
+ 710 028c 0E94 0000 		call __floatunsisf
+ 711               	.LVL70:
+ 712 0290 2CE9      		ldi r18,lo8(-100)
+ 713 0292 34EC      		ldi r19,lo8(-60)
+ 714 0294 40E1      		ldi r20,lo8(16)
+ 715 0296 50E4      		ldi r21,lo8(64)
+ 716 0298 0E94 0000 		call __mulsf3
+ 717               	.LVL71:
+ 718 029c 0E94 0000 		call __fixunssfsi
+ 719               	.LVL72:
+ 720 02a0 A62E      		mov r10,r22
+ 721               	.LVL73:
+ 722 02a2 B72E      		mov r11,r23
+ 723               	.LVL74:
+ 152:roomba.c      **** 	sprintf(buff, "Max: %u\r\n", maxTicks);
+ 724               		.loc 1 152 0
+ 725 02a4 7F93      		push r23
+ 726 02a6 6F93      		push r22
+ 727 02a8 80E0      		ldi r24,lo8(.LC4)
+ 728 02aa 90E0      		ldi r25,hi8(.LC4)
+ 729               	.LVL75:
+ 730 02ac 9F93      		push r25
+ 731 02ae 8F93      		push r24
+ 732 02b0 DF92      		push r13
+ 733 02b2 CF92      		push r12
+ 734 02b4 0E94 0000 		call sprintf
+ 735               	.LVL76:
+ 153:roomba.c      **** 	sendString(buff);
+ 736               		.loc 1 153 0
+ 737 02b8 C601      		movw r24,r12
+ 738 02ba 0E94 0000 		call sendString
+ 739               	.LVL77:
+ 155:roomba.c      **** 	my_msleep(200);
+ 740               		.loc 1 155 0
+ 741 02be 88EC      		ldi r24,lo8(-56)
+ 742 02c0 90E0      		ldi r25,0
+ 743 02c2 0E94 0000 		call my_msleep
+ 744               	.LVL78:
+ 745 02c6 0FB6      		in __tmp_reg__,__SREG__
+ 746 02c8 F894      		cli
+ 747 02ca DEBF      		out __SP_H__,r29
+ 748 02cc 0FBE      		out __SREG__,__tmp_reg__
+ 749 02ce CDBF      		out __SP_L__,r28
+ 750               	.LBB3:
+ 165:roomba.c      **** 			distanceTicks = start_value + (65535 - ticks);
+ 751               		.loc 1 165 0
+ 752 02d0 4801      		movw r8,r16
+ 753 02d2 91E0      		ldi r25,1
+ 754 02d4 891A      		sub r8,r25
+ 755 02d6 9108      		sbc r9,__zero_reg__
+ 163:roomba.c      **** 			distanceTicks = 65535 - start_value + ticks;
+ 756               		.loc 1 163 0
+ 757 02d8 6801      		movw r12,r16
+ 758 02da C094      		com r12
+ 759 02dc D094      		com r13
+ 760               	.L22:
+ 158:roomba.c      **** 		uint16_t ticks = getTicks();
+ 761               		.loc 1 158 0
+ 762 02de 0E94 0000 		call getTicks
+ 763               	.LVL79:
+ 162:roomba.c      **** 		if (ticks < start_value && velocity > 0) {
+ 764               		.loc 1 162 0
+ 765 02e2 8017      		cp r24,r16
+ 766 02e4 9107      		cpc r25,r17
+ 767 02e6 00F4      		brsh .L17
+ 162:roomba.c      **** 		if (ticks < start_value && velocity > 0) {
+ 768               		.loc 1 162 0 is_stmt 0 discriminator 1
+ 769 02e8 1E14      		cp __zero_reg__,r14
+ 770 02ea 1F04      		cpc __zero_reg__,r15
+ 771 02ec 04F4      		brge .L17
+ 163:roomba.c      **** 			distanceTicks = 65535 - start_value + ticks;
+ 772               		.loc 1 163 0 is_stmt 1
+ 773 02ee 8C0D      		add r24,r12
+ 774 02f0 9D1D      		adc r25,r13
+ 775               	.LVL80:
+ 776 02f2 00C0      		rjmp .L18
+ 777               	.LVL81:
+ 778               	.L17:
+ 164:roomba.c      **** 		} else if (ticks > start_value && velocity < 0) {
+ 779               		.loc 1 164 0
+ 780 02f4 0817      		cp r16,r24
+ 781 02f6 1907      		cpc r17,r25
+ 782 02f8 00F4      		brsh .L19
+ 164:roomba.c      **** 		} else if (ticks > start_value && velocity < 0) {
+ 783               		.loc 1 164 0 is_stmt 0 discriminator 1
+ 784 02fa FF20      		tst r15
+ 785 02fc 04F4      		brge .L19
+ 165:roomba.c      **** 			distanceTicks = start_value + (65535 - ticks);
+ 786               		.loc 1 165 0 is_stmt 1
+ 787 02fe 9401      		movw r18,r8
+ 788 0300 281B      		sub r18,r24
+ 789 0302 390B      		sbc r19,r25
+ 790 0304 C901      		movw r24,r18
+ 791               	.LVL82:
+ 792 0306 00C0      		rjmp .L18
+ 793               	.LVL83:
+ 794               	.L19:
+ 167:roomba.c      **** 			distanceTicks = abs(ticks - start_value);
+ 795               		.loc 1 167 0
+ 796 0308 9C01      		movw r18,r24
+ 797 030a 201B      		sub r18,r16
+ 798 030c 310B      		sbc r19,r17
+ 799 030e C901      		movw r24,r18
+ 800               	.LVL84:
+ 801 0310 9923      		tst r25
+ 802 0312 04F4      		brge .L18
+ 803 0314 8827      		clr r24
+ 804 0316 9927      		clr r25
+ 805 0318 821B      		sub r24,r18
+ 806 031a 930B      		sbc r25,r19
+ 807               	.LVL85:
+ 808               	.L18:
+ 170:roomba.c      **** 		if (distanceTicks > maxTicks) {
+ 809               		.loc 1 170 0
+ 810 031c A816      		cp r10,r24
+ 811 031e B906      		cpc r11,r25
+ 812 0320 00F4      		brsh .L22
+ 813               	.LBE3:
+ 175:roomba.c      **** 	stop();
+ 814               		.loc 1 175 0
+ 815 0322 0E94 0000 		call stop
+ 816               	.LVL86:
+ 817               	/* epilogue start */
+ 176:roomba.c      **** }
+ 818               		.loc 1 176 0
+ 819 0326 E296      		adiw r28,50
+ 820 0328 0FB6      		in __tmp_reg__,__SREG__
+ 821 032a F894      		cli
+ 822 032c DEBF      		out __SP_H__,r29
+ 823 032e 0FBE      		out __SREG__,__tmp_reg__
+ 824 0330 CDBF      		out __SP_L__,r28
+ 825 0332 DF91      		pop r29
+ 826 0334 CF91      		pop r28
+ 827 0336 1F91      		pop r17
+ 828 0338 0F91      		pop r16
+ 829               	.LVL87:
+ 830 033a FF90      		pop r15
+ 831 033c EF90      		pop r14
+ 832               	.LVL88:
+ 833 033e DF90      		pop r13
+ 834 0340 CF90      		pop r12
+ 835               	.LVL89:
+ 836 0342 BF90      		pop r11
+ 837 0344 AF90      		pop r10
+ 838 0346 9F90      		pop r9
+ 839 0348 8F90      		pop r8
+ 840               	.LVL90:
+ 841 034a 0895      		ret
+ 842               		.cfi_endproc
+ 843               	.LFE9:
+ 845               	.global	receiveRemote
+ 847               	receiveRemote:
+ 848               	.LFB11:
+ 188:roomba.c      **** 
+ 189:roomba.c      **** /**
+ 190:roomba.c      ****  * \brief Receive a signal from the remote. Show the received
+ 191:roomba.c      ****  * 			value as hex on Display and drive corresponding
+ 192:roomba.c      ****  * 			to the steering buttons
+ 193:roomba.c      ****  */
+ 194:roomba.c      **** uint8_t receiveRemote() {
+ 849               		.loc 1 194 0
+ 850               		.cfi_startproc
+ 851 034c CF93      		push r28
+ 852               	.LCFI46:
+ 853               		.cfi_def_cfa_offset 4
+ 854               		.cfi_offset 28, -3
+ 855 034e DF93      		push r29
+ 856               	.LCFI47:
+ 857               		.cfi_def_cfa_offset 5
+ 858               		.cfi_offset 29, -4
+ 859 0350 1F92      		push __zero_reg__
+ 860 0352 1F92      		push __zero_reg__
+ 861               	.LCFI48:
+ 862               		.cfi_def_cfa_offset 7
+ 863 0354 CDB7      		in r28,__SP_L__
+ 864 0356 DEB7      		in r29,__SP_H__
+ 865               	.LCFI49:
+ 866               		.cfi_def_cfa_register 28
+ 867               	/* prologue: function */
+ 868               	/* frame size = 2 */
+ 869               	/* stack size = 4 */
+ 870               	.L__stack_usage = 4
+ 195:roomba.c      **** 	uint8_t data[2];
+ 196:roomba.c      **** 	read_values(17, data, 1);
+ 871               		.loc 1 196 0
+ 872 0358 41E0      		ldi r20,lo8(1)
+ 873 035a BE01      		movw r22,r28
+ 874 035c 6F5F      		subi r22,-1
+ 875 035e 7F4F      		sbci r23,-1
+ 876 0360 81E1      		ldi r24,lo8(17)
+ 877 0362 0E94 0000 		call read_values
+ 878               	.LVL91:
+ 197:roomba.c      **** 	
+ 198:roomba.c      **** 	//showRemoteSignalInDisplay(data[0]);
+ 199:roomba.c      **** 	
+ 200:roomba.c      **** 	return data[0];
+ 201:roomba.c      **** }
+ 879               		.loc 1 201 0
+ 880 0366 8981      		ldd r24,Y+1
+ 881               	/* epilogue start */
+ 882 0368 0F90      		pop __tmp_reg__
+ 883 036a 0F90      		pop __tmp_reg__
+ 884 036c DF91      		pop r29
+ 885 036e CF91      		pop r28
+ 886 0370 0895      		ret
+ 887               		.cfi_endproc
+ 888               	.LFE11:
+ 890               		.section	.rodata.str1.1
+ 891               	.LC5:
+ 892 0038 2534 7800 		.string	"%4x"
+ 893               		.text
+ 894               	.global	intToHex
+ 896               	intToHex:
+ 897               	.LFB13:
+ 202:roomba.c      **** 
+ 203:roomba.c      **** /**
+ 204:roomba.c      ****  * \brief Show the pressed remote button hex code on display
+ 205:roomba.c      ****  * 
+ 206:roomba.c      ****  * \param data the received button code
+ 207:roomba.c      ****  */
+ 208:roomba.c      **** void showRemoteSignalInDisplay(char *data) {
+ 209:roomba.c      **** 	if (data == 0) {
+ 210:roomba.c      **** 		char empty[4] = {' ', ' ', ' ', ' '};
+ 211:roomba.c      **** 		set_Display(empty);
+ 212:roomba.c      **** 		
+ 213:roomba.c      **** 		return;
+ 214:roomba.c      **** 	}
+ 215:roomba.c      **** 	
+ 216:roomba.c      **** 	char result[4];
+ 217:roomba.c      **** 	intToHex((uint16_t) data, result);
+ 218:roomba.c      **** 	
+ 219:roomba.c      **** 	set_Display(result);
+ 220:roomba.c      **** }
+ 221:roomba.c      **** 
+ 222:roomba.c      **** /**
+ 223:roomba.c      ****  * \brief Convert a integer to a hex value
+ 224:roomba.c      ****  */
+ 225:roomba.c      **** void intToHex(uint16_t hex, char *result) {
+ 898               		.loc 1 225 0
+ 899               		.cfi_startproc
+ 900               	.LVL92:
+ 901               	/* prologue: function */
+ 902               	/* frame size = 0 */
+ 903               	/* stack size = 0 */
+ 904               	.L__stack_usage = 0
+ 226:roomba.c      **** 	sprintf(result, "%4x", hex);
+ 905               		.loc 1 226 0
+ 906 0372 9F93      		push r25
+ 907               	.LCFI50:
+ 908               		.cfi_def_cfa_offset 4
+ 909 0374 8F93      		push r24
+ 910               	.LCFI51:
+ 911               		.cfi_def_cfa_offset 5
+ 912 0376 80E0      		ldi r24,lo8(.LC5)
+ 913 0378 90E0      		ldi r25,hi8(.LC5)
+ 914               	.LVL93:
+ 915 037a 9F93      		push r25
+ 916               	.LCFI52:
+ 917               		.cfi_def_cfa_offset 6
+ 918 037c 8F93      		push r24
+ 919               	.LCFI53:
+ 920               		.cfi_def_cfa_offset 7
+ 921 037e 7F93      		push r23
+ 922               	.LCFI54:
+ 923               		.cfi_def_cfa_offset 8
+ 924 0380 6F93      		push r22
+ 925               	.LCFI55:
+ 926               		.cfi_def_cfa_offset 9
+ 927 0382 0E94 0000 		call sprintf
+ 928               	.LVL94:
+ 929 0386 0F90      		pop __tmp_reg__
+ 930 0388 0F90      		pop __tmp_reg__
+ 931 038a 0F90      		pop __tmp_reg__
+ 932 038c 0F90      		pop __tmp_reg__
+ 933 038e 0F90      		pop __tmp_reg__
+ 934 0390 0F90      		pop __tmp_reg__
+ 935               	.LCFI56:
+ 936               		.cfi_def_cfa_offset 3
+ 937 0392 0895      		ret
+ 938               		.cfi_endproc
+ 939               	.LFE13:
+ 941               	.global	showRemoteSignalInDisplay
+ 943               	showRemoteSignalInDisplay:
+ 944               	.LFB12:
+ 208:roomba.c      **** void showRemoteSignalInDisplay(char *data) {
+ 945               		.loc 1 208 0
+ 946               		.cfi_startproc
+ 947               	.LVL95:
+ 948 0394 CF93      		push r28
+ 949               	.LCFI57:
+ 950               		.cfi_def_cfa_offset 4
+ 951               		.cfi_offset 28, -3
+ 952 0396 DF93      		push r29
+ 953               	.LCFI58:
+ 954               		.cfi_def_cfa_offset 5
+ 955               		.cfi_offset 29, -4
+ 956 0398 CDB7      		in r28,__SP_L__
+ 957 039a DEB7      		in r29,__SP_H__
+ 958               	.LCFI59:
+ 959               		.cfi_def_cfa_register 28
+ 960 039c 2897      		sbiw r28,8
+ 961               	.LCFI60:
+ 962               		.cfi_def_cfa_offset 13
+ 963 039e 0FB6      		in __tmp_reg__,__SREG__
+ 964 03a0 F894      		cli
+ 965 03a2 DEBF      		out __SP_H__,r29
+ 966 03a4 0FBE      		out __SREG__,__tmp_reg__
+ 967 03a6 CDBF      		out __SP_L__,r28
+ 968               	/* prologue: function */
+ 969               	/* frame size = 8 */
+ 970               	/* stack size = 10 */
+ 971               	.L__stack_usage = 10
+ 209:roomba.c      **** 	if (data == 0) {
+ 972               		.loc 1 209 0
+ 973 03a8 0097      		sbiw r24,0
+ 974 03aa 01F4      		brne .L26
+ 975               	.LBB4:
+ 210:roomba.c      **** 		char empty[4] = {' ', ' ', ' ', ' '};
+ 976               		.loc 1 210 0
+ 977 03ac 80E2      		ldi r24,lo8(32)
+ 978               	.LVL96:
+ 979 03ae 8D83      		std Y+5,r24
+ 980 03b0 8E83      		std Y+6,r24
+ 981 03b2 8F83      		std Y+7,r24
+ 982 03b4 8887      		std Y+8,r24
+ 211:roomba.c      **** 		set_Display(empty);
+ 983               		.loc 1 211 0
+ 984 03b6 CE01      		movw r24,r28
+ 985 03b8 0596      		adiw r24,5
+ 986 03ba 0E94 0000 		call set_Display
+ 987               	.LVL97:
+ 988 03be 00C0      		rjmp .L25
+ 989               	.LVL98:
+ 990               	.L26:
+ 991               	.LBE4:
+ 217:roomba.c      **** 	intToHex((uint16_t) data, result);
+ 992               		.loc 1 217 0
+ 993 03c0 BE01      		movw r22,r28
+ 994 03c2 6F5F      		subi r22,-1
+ 995 03c4 7F4F      		sbci r23,-1
+ 996 03c6 0E94 0000 		call intToHex
+ 997               	.LVL99:
+ 219:roomba.c      **** 	set_Display(result);
+ 998               		.loc 1 219 0
+ 999 03ca CE01      		movw r24,r28
+ 1000 03cc 0196      		adiw r24,1
+ 1001 03ce 0E94 0000 		call set_Display
+ 1002               	.LVL100:
+ 1003               	.L25:
+ 1004               	/* epilogue start */
+ 220:roomba.c      **** }
+ 1005               		.loc 1 220 0
+ 1006 03d2 2896      		adiw r28,8
+ 1007 03d4 0FB6      		in __tmp_reg__,__SREG__
+ 1008 03d6 F894      		cli
+ 1009 03d8 DEBF      		out __SP_H__,r29
+ 1010 03da 0FBE      		out __SREG__,__tmp_reg__
+ 1011 03dc CDBF      		out __SP_L__,r28
+ 1012 03de DF91      		pop r29
+ 1013 03e0 CF91      		pop r28
+ 1014 03e2 0895      		ret
+ 1015               		.cfi_endproc
+ 1016               	.LFE12:
+ 1018               	.global	driveWithRadius
+ 1020               	driveWithRadius:
+ 1021               	.LFB14:
+ 227:roomba.c      **** }
+ 228:roomba.c      **** 
+ 229:roomba.c      **** /**
+ 230:roomba.c      ****  * \brief Drive roomba with
+ 231:roomba.c      ****  * 
+ 232:roomba.c      ****  * \param velocity this velocity
+ 233:roomba.c      ****  * \param radius this radius (use DRIVE_STRAIGHT for straight, -1 for 
+ 234:roomba.c      ****  * 			clockwise 1 for anticlockwise)
+ 235:roomba.c      ****  */
+ 236:roomba.c      **** void driveWithRadius(uint16_t velocity, uint16_t radius) {
+ 1022               		.loc 1 236 0
+ 1023               		.cfi_startproc
+ 1024               	.LVL101:
+ 1025 03e4 0F93      		push r16
+ 1026               	.LCFI61:
+ 1027               		.cfi_def_cfa_offset 4
+ 1028               		.cfi_offset 16, -3
+ 1029 03e6 1F93      		push r17
+ 1030               	.LCFI62:
+ 1031               		.cfi_def_cfa_offset 5
+ 1032               		.cfi_offset 17, -4
+ 1033 03e8 CF93      		push r28
+ 1034               	.LCFI63:
+ 1035               		.cfi_def_cfa_offset 6
+ 1036               		.cfi_offset 28, -5
+ 1037 03ea DF93      		push r29
+ 1038               	.LCFI64:
+ 1039               		.cfi_def_cfa_offset 7
+ 1040               		.cfi_offset 29, -6
+ 1041               	/* prologue: function */
+ 1042               	/* frame size = 0 */
+ 1043               	/* stack size = 4 */
+ 1044               	.L__stack_usage = 4
+ 1045 03ec 182F      		mov r17,r24
+ 1046 03ee 092F      		mov r16,r25
+ 1047 03f0 C62F      		mov r28,r22
+ 1048 03f2 D72F      		mov r29,r23
+ 237:roomba.c      **** 	send_byte_roomba(137);
+ 1049               		.loc 1 237 0
+ 1050 03f4 89E8      		ldi r24,lo8(-119)
+ 1051               	.LVL102:
+ 1052 03f6 0E94 0000 		call send_byte_roomba
+ 1053               	.LVL103:
+ 238:roomba.c      **** 	
+ 239:roomba.c      **** 	uint8_t low = velocity;
+ 240:roomba.c      **** 	uint8_t high = (velocity >> 8);
+ 241:roomba.c      **** 	
+ 242:roomba.c      **** 	send_byte_roomba(high);
+ 1054               		.loc 1 242 0
+ 1055 03fa 802F      		mov r24,r16
+ 1056 03fc 0E94 0000 		call send_byte_roomba
+ 1057               	.LVL104:
+ 243:roomba.c      **** 	send_byte_roomba(low);	
+ 1058               		.loc 1 243 0
+ 1059 0400 812F      		mov r24,r17
+ 1060 0402 0E94 0000 		call send_byte_roomba
+ 1061               	.LVL105:
+ 244:roomba.c      **** 	
+ 245:roomba.c      **** 	uint8_t rlow = radius;
+ 246:roomba.c      **** 	uint8_t rhigh = (radius >> 8);
+ 247:roomba.c      **** 	
+ 248:roomba.c      **** 	send_byte_roomba(rhigh);
+ 1062               		.loc 1 248 0
+ 1063 0406 8D2F      		mov r24,r29
+ 1064 0408 0E94 0000 		call send_byte_roomba
+ 1065               	.LVL106:
+ 249:roomba.c      **** 	send_byte_roomba(rlow);	
+ 1066               		.loc 1 249 0
+ 1067 040c 8C2F      		mov r24,r28
+ 1068 040e 0E94 0000 		call send_byte_roomba
+ 1069               	.LVL107:
+ 1070               	/* epilogue start */
+ 250:roomba.c      **** }
+ 1071               		.loc 1 250 0
+ 1072 0412 DF91      		pop r29
+ 1073               	.LVL108:
+ 1074 0414 CF91      		pop r28
+ 1075               	.LVL109:
+ 1076 0416 1F91      		pop r17
+ 1077               	.LVL110:
+ 1078 0418 0F91      		pop r16
+ 1079               	.LVL111:
+ 1080 041a 0895      		ret
+ 1081               		.cfi_endproc
+ 1082               	.LFE14:
+ 1084               		.section	.rodata
+ 1085               	.LC0:
+ 1086 0000 6300      		.word	99
+ 1087 0002 6300      		.word	99
+ 1088 0004 6300      		.word	99
+ 1089 0006 6300      		.word	99
+ 1090               		.text
+ 1091               	.global	read_user_input
+ 1093               	read_user_input:
+ 1094               	.LFB15:
+ 251:roomba.c      **** 
+ 252:roomba.c      **** /**
+ 253:roomba.c      ****  * \brief Read 4 numbers from remote control
+ 254:roomba.c      ****  * 
+ 255:roomba.c      ****  * \return the entered number
+ 256:roomba.c      ****  */
+ 257:roomba.c      **** uint16_t read_user_input() {
+ 1095               		.loc 1 257 0
+ 1096               		.cfi_startproc
+ 1097 041c 8F92      		push r8
+ 1098               	.LCFI65:
+ 1099               		.cfi_def_cfa_offset 4
+ 1100               		.cfi_offset 8, -3
+ 1101 041e 9F92      		push r9
+ 1102               	.LCFI66:
+ 1103               		.cfi_def_cfa_offset 5
+ 1104               		.cfi_offset 9, -4
+ 1105 0420 AF92      		push r10
+ 1106               	.LCFI67:
+ 1107               		.cfi_def_cfa_offset 6
+ 1108               		.cfi_offset 10, -5
+ 1109 0422 BF92      		push r11
+ 1110               	.LCFI68:
+ 1111               		.cfi_def_cfa_offset 7
+ 1112               		.cfi_offset 11, -6
+ 1113 0424 CF92      		push r12
+ 1114               	.LCFI69:
+ 1115               		.cfi_def_cfa_offset 8
+ 1116               		.cfi_offset 12, -7
+ 1117 0426 DF92      		push r13
+ 1118               	.LCFI70:
+ 1119               		.cfi_def_cfa_offset 9
+ 1120               		.cfi_offset 13, -8
+ 1121 0428 EF92      		push r14
+ 1122               	.LCFI71:
+ 1123               		.cfi_def_cfa_offset 10
+ 1124               		.cfi_offset 14, -9
+ 1125 042a FF92      		push r15
+ 1126               	.LCFI72:
+ 1127               		.cfi_def_cfa_offset 11
+ 1128               		.cfi_offset 15, -10
+ 1129 042c 0F93      		push r16
+ 1130               	.LCFI73:
+ 1131               		.cfi_def_cfa_offset 12
+ 1132               		.cfi_offset 16, -11
+ 1133 042e 1F93      		push r17
+ 1134               	.LCFI74:
+ 1135               		.cfi_def_cfa_offset 13
+ 1136               		.cfi_offset 17, -12
+ 1137 0430 CF93      		push r28
+ 1138               	.LCFI75:
+ 1139               		.cfi_def_cfa_offset 14
+ 1140               		.cfi_offset 28, -13
+ 1141 0432 DF93      		push r29
+ 1142               	.LCFI76:
+ 1143               		.cfi_def_cfa_offset 15
+ 1144               		.cfi_offset 29, -14
+ 1145 0434 CDB7      		in r28,__SP_L__
+ 1146 0436 DEB7      		in r29,__SP_H__
+ 1147               	.LCFI77:
+ 1148               		.cfi_def_cfa_register 28
+ 1149 0438 6097      		sbiw r28,16
+ 1150               	.LCFI78:
+ 1151               		.cfi_def_cfa_offset 31
+ 1152 043a 0FB6      		in __tmp_reg__,__SREG__
+ 1153 043c F894      		cli
+ 1154 043e DEBF      		out __SP_H__,r29
+ 1155 0440 0FBE      		out __SREG__,__tmp_reg__
+ 1156 0442 CDBF      		out __SP_L__,r28
+ 1157               	/* prologue: function */
+ 1158               	/* frame size = 16 */
+ 1159               	/* stack size = 28 */
+ 1160               	.L__stack_usage = 28
+ 258:roomba.c      **** 	char awaitInput[4] = {'-', '-', '-', '-'};
+ 1161               		.loc 1 258 0
+ 1162 0444 1DE2      		ldi r17,lo8(45)
+ 1163 0446 1983      		std Y+1,r17
+ 1164 0448 1A83      		std Y+2,r17
+ 1165 044a 1B83      		std Y+3,r17
+ 1166 044c 1C83      		std Y+4,r17
+ 259:roomba.c      **** 	set_Display(awaitInput);
+ 1167               		.loc 1 259 0
+ 1168 044e CE01      		movw r24,r28
+ 1169 0450 0196      		adiw r24,1
+ 1170 0452 0E94 0000 		call set_Display
+ 1171               	.LVL112:
+ 260:roomba.c      **** 	
+ 261:roomba.c      **** 	// Set 99 as dummy value (we can't have bigger numbers than 9)
+ 262:roomba.c      **** 	uint16_t remoteVal[4] = {99, 99, 99, 99};
+ 1172               		.loc 1 262 0
+ 1173 0456 88E0      		ldi r24,lo8(8)
+ 1174 0458 E0E0      		ldi r30,lo8(.LC0)
+ 1175 045a F0E0      		ldi r31,hi8(.LC0)
+ 1176 045c DE01      		movw r26,r28
+ 1177 045e 1596      		adiw r26,5
+ 1178               		0:
+ 1179 0460 0190      		ld r0,Z+
+ 1180 0462 0D92      		st X+,r0
+ 1181 0464 8A95      		dec r24
+ 1182 0466 01F4      		brne 0b
+ 1183               	.LVL113:
+ 1184               	.LBB5:
+ 263:roomba.c      **** 	
+ 264:roomba.c      **** 	// Holds display chars
+ 265:roomba.c      **** 	char toDisplay[4];
+ 266:roomba.c      **** 	
+ 267:roomba.c      **** 	// The actual received value from the remote
+ 268:roomba.c      **** 	uint8_t actVal;
+ 269:roomba.c      **** 	
+ 270:roomba.c      **** 	// Set display to - - - -
+ 271:roomba.c      **** 	for (uint8_t b = 0; b < 4; b++) {
+ 272:roomba.c      **** 		toDisplay[b] = '-';	
+ 1185               		.loc 1 272 0
+ 1186 0468 1D87      		std Y+13,r17
+ 1187               	.LVL114:
+ 1188 046a 1E87      		std Y+14,r17
+ 1189               	.LVL115:
+ 1190 046c 1F87      		std Y+15,r17
+ 1191               	.LVL116:
+ 1192 046e 188B      		std Y+16,r17
+ 1193               	.LVL117:
+ 1194 0470 7E01      		movw r14,r28
+ 1195 0472 25E0      		ldi r18,5
+ 1196 0474 E20E      		add r14,r18
+ 1197 0476 F11C      		adc r15,__zero_reg__
+ 1198 0478 00E0      		ldi r16,0
+ 1199 047a 10E0      		ldi r17,0
+ 1200 047c 5E01      		movw r10,r28
+ 1201 047e 3DE0      		ldi r19,13
+ 1202 0480 A30E      		add r10,r19
+ 1203 0482 B11C      		adc r11,__zero_reg__
+ 1204 0484 8A2C      		mov r8,r10
+ 1205 0486 9B2C      		mov r9,r11
+ 1206 0488 00C0      		rjmp .L30
+ 1207               	.LVL118:
+ 1208               	.L35:
+ 1209               	.LBE5:
+ 1210               	.LBB6:
+ 273:roomba.c      **** 	}
+ 274:roomba.c      **** 	
+ 275:roomba.c      **** 	// 0 is 0x81 = 129
+ 276:roomba.c      **** 	uint8_t finished = 0;
+ 277:roomba.c      **** 	uint16_t counter = 0;
+ 278:roomba.c      **** 	while (counter < 4 && finished == 0) {
+ 279:roomba.c      **** 		uint8_t flag = 1;
+ 280:roomba.c      **** 
+ 281:roomba.c      **** 		while(flag) {
+ 282:roomba.c      **** 			actVal = receiveRemote();
+ 1211               		.loc 1 282 0
+ 1212 048a 0E94 0000 		call receiveRemote
+ 1213               	.LVL119:
+ 283:roomba.c      **** 			
+ 284:roomba.c      **** 			if (actVal != 0) {
+ 1214               		.loc 1 284 0
+ 1215 048e 8823      		tst r24
+ 1216 0490 01F0      		breq .L35
+ 285:roomba.c      **** 				// Check if arrow to right
+ 286:roomba.c      **** 				if (actVal == REMOTE_RIGHT && remoteVal[counter] != 99) {
+ 1217               		.loc 1 286 0
+ 1218 0492 8F38      		cpi r24,lo8(-113)
+ 1219 0494 01F4      		brne .L32
+ 1220               		.loc 1 286 0 is_stmt 0 discriminator 1
+ 1221 0496 F701      		movw r30,r14
+ 1222 0498 2081      		ld r18,Z
+ 1223 049a 3181      		ldd r19,Z+1
+ 1224 049c 2336      		cpi r18,99
+ 1225 049e 3105      		cpc r19,__zero_reg__
+ 1226 04a0 01F0      		breq .L35
+ 1227               	.LVL120:
+ 287:roomba.c      **** 					flag = 0;
+ 288:roomba.c      **** 					counter++;
+ 1228               		.loc 1 288 0 is_stmt 1
+ 1229 04a2 0F5F      		subi r16,-1
+ 1230 04a4 1F4F      		sbci r17,-1
+ 1231               	.LVL121:
+ 1232 04a6 F2E0      		ldi r31,2
+ 1233 04a8 EF0E      		add r14,r31
+ 1234 04aa F11C      		adc r15,__zero_reg__
+ 1235               	.LBE6:
+ 278:roomba.c      **** 	while (counter < 4 && finished == 0) {
+ 1236               		.loc 1 278 0
+ 1237 04ac 0430      		cpi r16,4
+ 1238 04ae 1105      		cpc r17,__zero_reg__
+ 1239 04b0 01F4      		brne .L30
+ 1240 04b2 00C0      		rjmp .L33
+ 1241               	.LVL122:
+ 1242               	.L32:
+ 1243               	.LBB7:
+ 289:roomba.c      **** 				} 
+ 290:roomba.c      **** 				// Input finished
+ 291:roomba.c      **** 				else if (actVal == REMOTE_POWER && counter > 0) {
+ 1244               		.loc 1 291 0
+ 1245 04b4 8A38      		cpi r24,lo8(-118)
+ 1246 04b6 01F4      		brne .L34
+ 1247               		.loc 1 291 0 is_stmt 0 discriminator 1
+ 1248 04b8 0115      		cp r16,__zero_reg__
+ 1249 04ba 1105      		cpc r17,__zero_reg__
+ 1250 04bc 01F0      		breq .L35
+ 1251 04be 00C0      		rjmp .L33
+ 1252               	.L34:
+ 292:roomba.c      **** 					finished = 1;
+ 293:roomba.c      **** 					break;
+ 294:roomba.c      **** 				}
+ 295:roomba.c      **** 				// Check if it is really a number
+ 296:roomba.c      **** 				else if (actVal != REMOTE_RIGHT && actVal != REMOTE_POWER && actVal >= ROOMBA_0 && actVal <= (R
+ 1253               		.loc 1 296 0 is_stmt 1 discriminator 1
+ 1254 04c0 9FE7      		ldi r25,lo8(127)
+ 1255 04c2 980F      		add r25,r24
+ 1256 04c4 9A30      		cpi r25,lo8(10)
+ 1257 04c6 00F4      		brsh .L35
+ 297:roomba.c      **** 					remoteVal[counter] = actVal - ROOMBA_0;
+ 1258               		.loc 1 297 0
+ 1259 04c8 282F      		mov r18,r24
+ 1260 04ca 30E0      		ldi r19,0
+ 1261 04cc 2158      		subi r18,-127
+ 1262 04ce 3109      		sbc r19,__zero_reg__
+ 1263 04d0 F701      		movw r30,r14
+ 1264 04d2 3183      		std Z+1,r19
+ 1265 04d4 2083      		st Z,r18
+ 298:roomba.c      **** 					toDisplay[counter] = (remoteVal[counter] + ASCI_0);
+ 1266               		.loc 1 298 0
+ 1267 04d6 205D      		subi r18,lo8(-(48))
+ 1268 04d8 F601      		movw r30,r12
+ 1269 04da 2083      		st Z,r18
+ 299:roomba.c      **** 					
+ 300:roomba.c      **** 					set_Display(toDisplay);
+ 1270               		.loc 1 300 0
+ 1271 04dc 882D      		mov r24,r8
+ 1272               	.LVL123:
+ 1273 04de 992D      		mov r25,r9
+ 1274 04e0 0E94 0000 		call set_Display
+ 1275               	.LVL124:
+ 1276 04e4 00C0      		rjmp .L35
+ 1277               	.LVL125:
+ 1278               	.L30:
+ 1279 04e6 6501      		movw r12,r10
+ 1280 04e8 C00E      		add r12,r16
+ 1281 04ea D11E      		adc r13,r17
+ 1282 04ec 00C0      		rjmp .L35
+ 1283               	.LVL126:
+ 1284               	.L37:
+ 1285               	.LBE7:
+ 1286               	.LBB8:
+ 301:roomba.c      **** 				}
+ 302:roomba.c      **** 			}			
+ 303:roomba.c      **** 		}
+ 304:roomba.c      **** 	}
+ 305:roomba.c      **** 	
+ 306:roomba.c      **** 	// Calculate number
+ 307:roomba.c      **** 	uint16_t result = 0;
+ 308:roomba.c      **** 	
+ 309:roomba.c      **** 	for (uint8_t b = 0; b < counter; b++) {
+ 310:roomba.c      **** 		result = result * 10;
+ 1287               		.loc 1 310 0 discriminator 2
+ 1288 04ee 9C01      		movw r18,r24
+ 1289 04f0 220F      		lsl r18
+ 1290 04f2 331F      		rol r19
+ 1291 04f4 880F      		lsl r24
+ 1292 04f6 991F      		rol r25
+ 1293 04f8 880F      		lsl r24
+ 1294 04fa 991F      		rol r25
+ 1295 04fc 880F      		lsl r24
+ 1296 04fe 991F      		rol r25
+ 1297               	.LVL127:
+ 1298 0500 820F      		add r24,r18
+ 1299 0502 931F      		adc r25,r19
+ 1300               	.LVL128:
+ 311:roomba.c      **** 		result = result + remoteVal[b];
+ 1301               		.loc 1 311 0 discriminator 2
+ 1302 0504 E42F      		mov r30,r20
+ 1303 0506 F0E0      		ldi r31,0
+ 1304 0508 EE0F      		lsl r30
+ 1305 050a FF1F      		rol r31
+ 1306 050c 21E0      		ldi r18,lo8(1)
+ 1307 050e 30E0      		ldi r19,0
+ 1308 0510 2C0F      		add r18,r28
+ 1309 0512 3D1F      		adc r19,r29
+ 1310 0514 E20F      		add r30,r18
+ 1311 0516 F31F      		adc r31,r19
+ 1312 0518 2481      		ldd r18,Z+4
+ 1313 051a 3581      		ldd r19,Z+5
+ 1314 051c 820F      		add r24,r18
+ 1315 051e 931F      		adc r25,r19
+ 1316               	.LVL129:
+ 309:roomba.c      **** 	for (uint8_t b = 0; b < counter; b++) {
+ 1317               		.loc 1 309 0 discriminator 2
+ 1318 0520 4F5F      		subi r20,lo8(-(1))
+ 1319               	.LVL130:
+ 1320 0522 242F      		mov r18,r20
+ 1321 0524 30E0      		ldi r19,0
+ 1322 0526 2017      		cp r18,r16
+ 1323 0528 3107      		cpc r19,r17
+ 1324 052a 00F0      		brlo .L37
+ 1325 052c 00C0      		rjmp .L38
+ 1326               	.LVL131:
+ 1327               	.L33:
+ 1328               	.LBE8:
+ 1329               	.LBB9:
+ 272:roomba.c      **** 		toDisplay[b] = '-';	
+ 1330               		.loc 1 272 0
+ 1331 052e 40E0      		ldi r20,0
+ 1332 0530 80E0      		ldi r24,0
+ 1333 0532 90E0      		ldi r25,0
+ 1334               	.LVL132:
+ 1335 0534 00C0      		rjmp .L37
+ 1336               	.LVL133:
+ 1337               	.L38:
+ 1338               	/* epilogue start */
+ 1339               	.LBE9:
+ 312:roomba.c      **** 	}
+ 313:roomba.c      **** 	
+ 314:roomba.c      **** 	
+ 315:roomba.c      **** 	return result;
+ 316:roomba.c      **** }
+ 1340               		.loc 1 316 0
+ 1341 0536 6096      		adiw r28,16
+ 1342 0538 0FB6      		in __tmp_reg__,__SREG__
+ 1343 053a F894      		cli
+ 1344 053c DEBF      		out __SP_H__,r29
+ 1345 053e 0FBE      		out __SREG__,__tmp_reg__
+ 1346 0540 CDBF      		out __SP_L__,r28
+ 1347 0542 DF91      		pop r29
+ 1348 0544 CF91      		pop r28
+ 1349 0546 1F91      		pop r17
+ 1350 0548 0F91      		pop r16
+ 1351               	.LVL134:
+ 1352 054a FF90      		pop r15
+ 1353 054c EF90      		pop r14
+ 1354 054e DF90      		pop r13
+ 1355 0550 CF90      		pop r12
+ 1356 0552 BF90      		pop r11
+ 1357 0554 AF90      		pop r10
+ 1358 0556 9F90      		pop r9
+ 1359 0558 8F90      		pop r8
+ 1360 055a 0895      		ret
+ 1361               		.cfi_endproc
+ 1362               	.LFE15:
+ 1364               	.global	drive_circle
+ 1366               	drive_circle:
+ 1367               	.LFB16:
+ 317:roomba.c      **** 
+ 318:roomba.c      **** /**
+ 319:roomba.c      ****  * \brief Drive a circle 
+ 320:roomba.c      ****  * 
+ 321:roomba.c      ****  * \param radius the radius to drive (with bigger radiuses it gets much bigger)
+ 322:roomba.c      ****  * \param velocity
+ 323:roomba.c      ****  */
+ 324:roomba.c      **** void drive_circle(uint16_t radius, uint16_t velocity) {
+ 1368               		.loc 1 324 0
+ 1369               		.cfi_startproc
+ 1370               	.LVL135:
+ 1371               	/* prologue: function */
+ 1372               	/* frame size = 0 */
+ 1373               	/* stack size = 0 */
+ 1374               	.L__stack_usage = 0
+ 1375 055c 9C01      		movw r18,r24
+ 1376 055e CB01      		movw r24,r22
+ 1377               	.LVL136:
+ 325:roomba.c      **** 	driveWithRadius(velocity, radius);
+ 1378               		.loc 1 325 0
+ 1379 0560 B901      		movw r22,r18
+ 1380               	.LVL137:
+ 1381 0562 0E94 0000 		call driveWithRadius
+ 1382               	.LVL138:
+ 1383 0566 0895      		ret
+ 1384               		.cfi_endproc
+ 1385               	.LFE16:
+ 1387               	.global	turn
+ 1389               	turn:
+ 1390               	.LFB17:
+ 326:roomba.c      **** }
+ 327:roomba.c      **** 
+ 328:roomba.c      **** /**
+ 329:roomba.c      ****  * \brief Turn the robot by
+ 330:roomba.c      ****  * 
+ 331:roomba.c      ****  * \param degree 
+ 332:roomba.c      ****  */
+ 333:roomba.c      **** void turn(int16_t degree) {
+ 1391               		.loc 1 333 0
+ 1392               		.cfi_startproc
+ 1393               	.LVL139:
+ 1394 0568 CF93      		push r28
+ 1395               	.LCFI79:
+ 1396               		.cfi_def_cfa_offset 4
+ 1397               		.cfi_offset 28, -3
+ 1398 056a DF93      		push r29
+ 1399               	.LCFI80:
+ 1400               		.cfi_def_cfa_offset 5
+ 1401               		.cfi_offset 29, -4
+ 1402               	/* prologue: function */
+ 1403               	/* frame size = 0 */
+ 1404               	/* stack size = 2 */
+ 1405               	.L__stack_usage = 2
+ 334:roomba.c      **** 	// In 13 seconds, 360°
+ 335:roomba.c      **** 	uint16_t delay = (13000 / 360) * abs(degree);
+ 1406               		.loc 1 335 0
+ 1407 056c 9C01      		movw r18,r24
+ 1408 056e 9923      		tst r25
+ 1409 0570 04F4      		brge .L41
+ 1410 0572 2227      		clr r18
+ 1411 0574 3327      		clr r19
+ 1412 0576 281B      		sub r18,r24
+ 1413 0578 390B      		sbc r19,r25
+ 1414               	.L41:
+ 1415 057a 44E2      		ldi r20,lo8(36)
+ 1416 057c 429F      		mul r20,r18
+ 1417 057e E001      		movw r28,r0
+ 1418 0580 439F      		mul r20,r19
+ 1419 0582 D00D      		add r29,r0
+ 1420 0584 1124      		clr __zero_reg__
+ 1421               	.LVL140:
+ 336:roomba.c      **** 	
+ 337:roomba.c      **** 	if (degree > 0) {
+ 1422               		.loc 1 337 0
+ 1423 0586 1816      		cp __zero_reg__,r24
+ 1424 0588 1906      		cpc __zero_reg__,r25
+ 1425 058a 04F4      		brge .L42
+ 338:roomba.c      **** 		driveWithRadius(50, 1);
+ 1426               		.loc 1 338 0
+ 1427 058c 61E0      		ldi r22,lo8(1)
+ 1428 058e 70E0      		ldi r23,0
+ 1429 0590 82E3      		ldi r24,lo8(50)
+ 1430 0592 90E0      		ldi r25,0
+ 1431               	.LVL141:
+ 1432 0594 0E94 0000 		call driveWithRadius
+ 1433               	.LVL142:
+ 1434 0598 00C0      		rjmp .L43
+ 1435               	.LVL143:
+ 1436               	.L42:
+ 339:roomba.c      **** 	} else {
+ 340:roomba.c      **** 		driveWithRadius(50, -1);
+ 1437               		.loc 1 340 0
+ 1438 059a 6FEF      		ldi r22,lo8(-1)
+ 1439 059c 7FEF      		ldi r23,lo8(-1)
+ 1440 059e 82E3      		ldi r24,lo8(50)
+ 1441 05a0 90E0      		ldi r25,0
+ 1442               	.LVL144:
+ 1443 05a2 0E94 0000 		call driveWithRadius
+ 1444               	.LVL145:
+ 1445               	.L43:
+ 341:roomba.c      **** 	}
+ 342:roomba.c      **** 	
+ 343:roomba.c      **** 	my_msleep(delay);
+ 1446               		.loc 1 343 0
+ 1447 05a6 CE01      		movw r24,r28
+ 1448 05a8 0E94 0000 		call my_msleep
+ 1449               	.LVL146:
+ 344:roomba.c      **** 	
+ 345:roomba.c      **** 	driveWithRadius(0, 0);
+ 1450               		.loc 1 345 0
+ 1451 05ac 60E0      		ldi r22,0
+ 1452 05ae 70E0      		ldi r23,0
+ 1453 05b0 80E0      		ldi r24,0
+ 1454 05b2 90E0      		ldi r25,0
+ 1455 05b4 0E94 0000 		call driveWithRadius
+ 1456               	.LVL147:
+ 1457               	/* epilogue start */
+ 346:roomba.c      **** }
+ 1458               		.loc 1 346 0
+ 1459 05b8 DF91      		pop r29
+ 1460 05ba CF91      		pop r28
+ 1461               	.LVL148:
+ 1462 05bc 0895      		ret
+ 1463               		.cfi_endproc
+ 1464               	.LFE17:
+ 1466               	.global	set_back
+ 1468               	set_back:
+ 1469               	.LFB20:
+ 347:roomba.c      **** 
+ 348:roomba.c      **** /**
+ 349:roomba.c      ****  * \brief drive straight, till a bumper sensor is active,
+ 350:roomba.c      ****  * 		set-back and turn
+ 351:roomba.c      ****  */
+ 352:roomba.c      **** void drive_autonom() {
+ 353:roomba.c      **** 	while (1) {
+ 354:roomba.c      **** 		drive(150);
+ 355:roomba.c      **** 		
+ 356:roomba.c      **** 		// Bumpers
+ 357:roomba.c      **** 		uint8_t data[2];
+ 358:roomba.c      **** 		read_values(7, data, 1);
+ 359:roomba.c      **** 			
+ 360:roomba.c      **** 		bump_handling(data[0]);
+ 361:roomba.c      **** 	}
+ 362:roomba.c      **** }
+ 363:roomba.c      **** 
+ 364:roomba.c      **** /**
+ 365:roomba.c      ****  * \brief Set back and turn, if a bump is registered
+ 366:roomba.c      ****  * 
+ 367:roomba.c      ****  * \param bump the byte where the bump values are stored
+ 368:roomba.c      ****  */
+ 369:roomba.c      **** void bump_handling(uint8_t bump) {
+ 370:roomba.c      **** 	if ((bump & 0x02) == 0x02) {
+ 371:roomba.c      **** 		// Left bumper
+ 372:roomba.c      **** 		set_back();
+ 373:roomba.c      **** 		turn(-80);
+ 374:roomba.c      **** 	} else if ((bump & 0x01) == 0x01) {
+ 375:roomba.c      **** 		// Right bumper
+ 376:roomba.c      **** 		set_back();
+ 377:roomba.c      **** 		turn(45);
+ 378:roomba.c      **** 	} 
+ 379:roomba.c      **** }
+ 380:roomba.c      **** 
+ 381:roomba.c      **** /**
+ 382:roomba.c      ****  * \brief Drive a bit backwards
+ 383:roomba.c      ****  */
+ 384:roomba.c      **** void set_back() {
+ 1470               		.loc 1 384 0
+ 1471               		.cfi_startproc
+ 1472               	/* prologue: function */
+ 1473               	/* frame size = 0 */
+ 1474               	/* stack size = 0 */
+ 1475               	.L__stack_usage = 0
+ 385:roomba.c      **** 	drive(-100);
+ 1476               		.loc 1 385 0
+ 1477 05be 8CE9      		ldi r24,lo8(-100)
+ 1478 05c0 9FEF      		ldi r25,lo8(-1)
+ 1479 05c2 0E94 0000 		call drive
+ 1480               	.LVL149:
+ 386:roomba.c      **** 	my_msleep(1700);
+ 1481               		.loc 1 386 0
+ 1482 05c6 84EA      		ldi r24,lo8(-92)
+ 1483 05c8 96E0      		ldi r25,lo8(6)
+ 1484 05ca 0E94 0000 		call my_msleep
+ 1485               	.LVL150:
+ 387:roomba.c      **** 	drive(0);
+ 1486               		.loc 1 387 0
+ 1487 05ce 80E0      		ldi r24,0
+ 1488 05d0 90E0      		ldi r25,0
+ 1489 05d2 0E94 0000 		call drive
+ 1490               	.LVL151:
+ 1491 05d6 0895      		ret
+ 1492               		.cfi_endproc
+ 1493               	.LFE20:
+ 1495               	.global	bump_handling
+ 1497               	bump_handling:
+ 1498               	.LFB19:
+ 369:roomba.c      **** void bump_handling(uint8_t bump) {
+ 1499               		.loc 1 369 0
+ 1500               		.cfi_startproc
+ 1501               	.LVL152:
+ 1502               	/* prologue: function */
+ 1503               	/* frame size = 0 */
+ 1504               	/* stack size = 0 */
+ 1505               	.L__stack_usage = 0
+ 370:roomba.c      **** 	if ((bump & 0x02) == 0x02) {
+ 1506               		.loc 1 370 0
+ 1507 05d8 81FF      		sbrs r24,1
+ 1508 05da 00C0      		rjmp .L46
+ 372:roomba.c      **** 		set_back();
+ 1509               		.loc 1 372 0
+ 1510 05dc 0E94 0000 		call set_back
+ 1511               	.LVL153:
+ 373:roomba.c      **** 		turn(-80);
+ 1512               		.loc 1 373 0
+ 1513 05e0 80EB      		ldi r24,lo8(-80)
+ 1514 05e2 9FEF      		ldi r25,lo8(-1)
+ 1515 05e4 0E94 0000 		call turn
+ 1516               	.LVL154:
+ 1517 05e8 0895      		ret
+ 1518               	.LVL155:
+ 1519               	.L46:
+ 374:roomba.c      **** 	} else if ((bump & 0x01) == 0x01) {
+ 1520               		.loc 1 374 0
+ 1521 05ea 80FF      		sbrs r24,0
+ 1522 05ec 00C0      		rjmp .L45
+ 376:roomba.c      **** 		set_back();
+ 1523               		.loc 1 376 0
+ 1524 05ee 0E94 0000 		call set_back
+ 1525               	.LVL156:
+ 377:roomba.c      **** 		turn(45);
+ 1526               		.loc 1 377 0
+ 1527 05f2 8DE2      		ldi r24,lo8(45)
+ 1528 05f4 90E0      		ldi r25,0
+ 1529 05f6 0E94 0000 		call turn
+ 1530               	.LVL157:
+ 1531               	.L45:
+ 1532 05fa 0895      		ret
+ 1533               		.cfi_endproc
+ 1534               	.LFE19:
+ 1536               	.global	drive_autonom
+ 1538               	drive_autonom:
+ 1539               	.LFB18:
+ 352:roomba.c      **** void drive_autonom() {
+ 1540               		.loc 1 352 0
+ 1541               		.cfi_startproc
+ 1542 05fc CF93      		push r28
+ 1543               	.LCFI81:
+ 1544               		.cfi_def_cfa_offset 4
+ 1545               		.cfi_offset 28, -3
+ 1546 05fe DF93      		push r29
+ 1547               	.LCFI82:
+ 1548               		.cfi_def_cfa_offset 5
+ 1549               		.cfi_offset 29, -4
+ 1550 0600 1F92      		push __zero_reg__
+ 1551 0602 1F92      		push __zero_reg__
+ 1552               	.LCFI83:
+ 1553               		.cfi_def_cfa_offset 7
+ 1554 0604 CDB7      		in r28,__SP_L__
+ 1555 0606 DEB7      		in r29,__SP_H__
+ 1556               	.LCFI84:
+ 1557               		.cfi_def_cfa_register 28
+ 1558               	/* prologue: function */
+ 1559               	/* frame size = 2 */
+ 1560               	/* stack size = 4 */
+ 1561               	.L__stack_usage = 4
+ 1562               	.L49:
+ 1563               	.LBB10:
+ 354:roomba.c      **** 		drive(150);
+ 1564               		.loc 1 354 0 discriminator 1
+ 1565 0608 86E9      		ldi r24,lo8(-106)
+ 1566 060a 90E0      		ldi r25,0
+ 1567 060c 0E94 0000 		call drive
+ 1568               	.LVL158:
+ 358:roomba.c      **** 		read_values(7, data, 1);
+ 1569               		.loc 1 358 0 discriminator 1
+ 1570 0610 41E0      		ldi r20,lo8(1)
+ 1571 0612 BE01      		movw r22,r28
+ 1572 0614 6F5F      		subi r22,-1
+ 1573 0616 7F4F      		sbci r23,-1
+ 1574 0618 87E0      		ldi r24,lo8(7)
+ 1575 061a 0E94 0000 		call read_values
+ 1576               	.LVL159:
+ 360:roomba.c      **** 		bump_handling(data[0]);
+ 1577               		.loc 1 360 0 discriminator 1
+ 1578 061e 8981      		ldd r24,Y+1
+ 1579 0620 0E94 0000 		call bump_handling
+ 1580               	.LVL160:
+ 1581 0624 00C0      		rjmp .L49
+ 1582               	.LBE10:
+ 1583               		.cfi_endproc
+ 1584               	.LFE18:
+ 1586               	.global	getSensorQueryList
+ 1588               	getSensorQueryList:
+ 1589               	.LFB21:
+ 388:roomba.c      **** }
+ 389:roomba.c      **** 
+ 390:roomba.c      **** /**
+ 391:roomba.c      ****  * \brief get a list of sensor data
+ 392:roomba.c      ****  * 
+ 393:roomba.c      ****  * \param nrPackets the number of packets we want to retrieve
+ 394:roomba.c      ****  * \param packet_ids
+ 395:roomba.c      ****  * \param packet_length are it 1 or 2 bytes
+ 396:roomba.c      ****  * \param data a array to return the values
+ 397:roomba.c      ****  */
+ 398:roomba.c      **** void getSensorQueryList(uint8_t nrPackets, uint8_t* packet_ids, uint8_t* packet_length, uint16_t* d
+ 1590               		.loc 1 398 0
+ 1591               		.cfi_startproc
+ 1592               	.LVL161:
+ 1593 0626 9F92      		push r9
+ 1594               	.LCFI85:
+ 1595               		.cfi_def_cfa_offset 4
+ 1596               		.cfi_offset 9, -3
+ 1597 0628 AF92      		push r10
+ 1598               	.LCFI86:
+ 1599               		.cfi_def_cfa_offset 5
+ 1600               		.cfi_offset 10, -4
+ 1601 062a BF92      		push r11
+ 1602               	.LCFI87:
+ 1603               		.cfi_def_cfa_offset 6
+ 1604               		.cfi_offset 11, -5
+ 1605 062c CF92      		push r12
+ 1606               	.LCFI88:
+ 1607               		.cfi_def_cfa_offset 7
+ 1608               		.cfi_offset 12, -6
+ 1609 062e DF92      		push r13
+ 1610               	.LCFI89:
+ 1611               		.cfi_def_cfa_offset 8
+ 1612               		.cfi_offset 13, -7
+ 1613 0630 EF92      		push r14
+ 1614               	.LCFI90:
+ 1615               		.cfi_def_cfa_offset 9
+ 1616               		.cfi_offset 14, -8
+ 1617 0632 FF92      		push r15
+ 1618               	.LCFI91:
+ 1619               		.cfi_def_cfa_offset 10
+ 1620               		.cfi_offset 15, -9
+ 1621 0634 0F93      		push r16
+ 1622               	.LCFI92:
+ 1623               		.cfi_def_cfa_offset 11
+ 1624               		.cfi_offset 16, -10
+ 1625 0636 1F93      		push r17
+ 1626               	.LCFI93:
+ 1627               		.cfi_def_cfa_offset 12
+ 1628               		.cfi_offset 17, -11
+ 1629 0638 CF93      		push r28
+ 1630               	.LCFI94:
+ 1631               		.cfi_def_cfa_offset 13
+ 1632               		.cfi_offset 28, -12
+ 1633 063a DF93      		push r29
+ 1634               	.LCFI95:
+ 1635               		.cfi_def_cfa_offset 14
+ 1636               		.cfi_offset 29, -13
+ 1637 063c 1F92      		push __zero_reg__
+ 1638 063e 1F92      		push __zero_reg__
+ 1639               	.LCFI96:
+ 1640               		.cfi_def_cfa_offset 16
+ 1641 0640 CDB7      		in r28,__SP_L__
+ 1642 0642 DEB7      		in r29,__SP_H__
+ 1643               	.LCFI97:
+ 1644               		.cfi_def_cfa_register 28
+ 1645               	/* prologue: function */
+ 1646               	/* frame size = 2 */
+ 1647               	/* stack size = 13 */
+ 1648               	.L__stack_usage = 13
+ 1649 0644 C82E      		mov r12,r24
+ 1650 0646 E62E      		mov r14,r22
+ 1651 0648 F72E      		mov r15,r23
+ 1652 064a 942E      		mov r9,r20
+ 1653 064c A52E      		mov r10,r21
+ 1654 064e B22E      		mov r11,r18
+ 1655 0650 D32E      		mov r13,r19
+ 399:roomba.c      **** 	send_byte_roomba(149);
+ 1656               		.loc 1 399 0
+ 1657 0652 85E9      		ldi r24,lo8(-107)
+ 1658               	.LVL162:
+ 1659 0654 0E94 0000 		call send_byte_roomba
+ 1660               	.LVL163:
+ 400:roomba.c      **** 	send_byte_roomba(nrPackets);
+ 1661               		.loc 1 400 0
+ 1662 0658 8C2D      		mov r24,r12
+ 1663 065a 0E94 0000 		call send_byte_roomba
+ 1664               	.LVL164:
+ 1665               	.LBB11:
+ 401:roomba.c      **** 	
+ 402:roomba.c      **** 	for (uint8_t a = 0; a < nrPackets; a++) {
+ 1666               		.loc 1 402 0
+ 1667 065e CC20      		tst r12
+ 1668 0660 01F0      		breq .L50
+ 1669 0662 0E2D      		mov r16,r14
+ 1670 0664 1F2D      		mov r17,r15
+ 1671 0666 F12C      		mov r15,__zero_reg__
+ 1672               	.LVL165:
+ 1673               	.L53:
+ 403:roomba.c      **** 		send_byte_roomba(packet_ids[a]);
+ 1674               		.loc 1 403 0 discriminator 2
+ 1675 0668 F801      		movw r30,r16
+ 1676 066a 8191      		ld r24,Z+
+ 1677 066c 8F01      		movw r16,r30
+ 1678 066e 0E94 0000 		call send_byte_roomba
+ 1679               	.LVL166:
+ 402:roomba.c      **** 	for (uint8_t a = 0; a < nrPackets; a++) {
+ 1680               		.loc 1 402 0 discriminator 2
+ 1681 0672 F394      		inc r15
+ 1682               	.LVL167:
+ 1683 0674 FC10      		cpse r15,r12
+ 1684 0676 00C0      		rjmp .L53
+ 1685               	.LVL168:
+ 1686 0678 E92C      		mov r14,r9
+ 1687 067a FA2C      		mov r15,r10
+ 1688               	.LVL169:
+ 1689 067c 0B2D      		mov r16,r11
+ 1690 067e 1D2D      		mov r17,r13
+ 402:roomba.c      **** 	for (uint8_t a = 0; a < nrPackets; a++) {
+ 1691               		.loc 1 402 0 is_stmt 0
+ 1692 0680 D12C      		mov r13,__zero_reg__
+ 1693               	.LVL170:
+ 1694               	.L56:
+ 1695               	.LBE11:
+ 1696               	.LBB12:
+ 404:roomba.c      **** 	}
+ 405:roomba.c      **** 	
+ 406:roomba.c      **** 	for (uint8_t b = 0; b < nrPackets; b++) {
+ 407:roomba.c      **** 		if (packet_length[b] == 1) {
+ 1697               		.loc 1 407 0 is_stmt 1
+ 1698 0682 F701      		movw r30,r14
+ 1699 0684 8191      		ld r24,Z+
+ 1700 0686 7F01      		movw r14,r30
+ 1701 0688 8130      		cpi r24,lo8(1)
+ 1702 068a 01F4      		brne .L54
+ 408:roomba.c      **** 			data[b] = receive_byte_roomba();
+ 1703               		.loc 1 408 0
+ 1704 068c 0E94 0000 		call receive_byte_roomba
+ 1705               	.LVL171:
+ 1706 0690 282F      		mov r18,r24
+ 1707 0692 30E0      		ldi r19,0
+ 1708 0694 F801      		movw r30,r16
+ 1709 0696 3183      		std Z+1,r19
+ 1710 0698 2083      		st Z,r18
+ 1711 069a 00C0      		rjmp .L55
+ 1712               	.L54:
+ 1713               	.LBB13:
+ 409:roomba.c      **** 		} else {
+ 410:roomba.c      **** 			uint8_t darray[2];
+ 411:roomba.c      **** 			darray[0] = receive_byte_roomba();
+ 1714               		.loc 1 411 0
+ 1715 069c 0E94 0000 		call receive_byte_roomba
+ 1716               	.LVL172:
+ 1717 06a0 8983      		std Y+1,r24
+ 412:roomba.c      **** 			darray[1] = receive_byte_roomba();
+ 1718               		.loc 1 412 0
+ 1719 06a2 0E94 0000 		call receive_byte_roomba
+ 1720               	.LVL173:
+ 1721 06a6 8A83      		std Y+2,r24
+ 413:roomba.c      **** 			
+ 414:roomba.c      **** 			data[b] = concat_bytes(darray);
+ 1722               		.loc 1 414 0
+ 1723 06a8 CE01      		movw r24,r28
+ 1724 06aa 0196      		adiw r24,1
+ 1725 06ac 0E94 0000 		call concat_bytes
+ 1726               	.LVL174:
+ 1727 06b0 F801      		movw r30,r16
+ 1728 06b2 9183      		std Z+1,r25
+ 1729 06b4 8083      		st Z,r24
+ 1730               	.L55:
+ 1731               	.LBE13:
+ 406:roomba.c      **** 	for (uint8_t b = 0; b < nrPackets; b++) {
+ 1732               		.loc 1 406 0
+ 1733 06b6 D394      		inc r13
+ 1734               	.LVL175:
+ 1735 06b8 0E5F      		subi r16,-2
+ 1736 06ba 1F4F      		sbci r17,-1
+ 1737 06bc DC10      		cpse r13,r12
+ 1738 06be 00C0      		rjmp .L56
+ 1739               	.LVL176:
+ 1740               	.L50:
+ 1741               	/* epilogue start */
+ 1742               	.LBE12:
+ 415:roomba.c      **** 		}
+ 416:roomba.c      **** 	}
+ 417:roomba.c      **** }
+ 1743               		.loc 1 417 0
+ 1744 06c0 0F90      		pop __tmp_reg__
+ 1745 06c2 0F90      		pop __tmp_reg__
+ 1746 06c4 DF91      		pop r29
+ 1747 06c6 CF91      		pop r28
+ 1748 06c8 1F91      		pop r17
+ 1749 06ca 0F91      		pop r16
+ 1750 06cc FF90      		pop r15
+ 1751 06ce EF90      		pop r14
+ 1752 06d0 DF90      		pop r13
+ 1753 06d2 CF90      		pop r12
+ 1754               	.LVL177:
+ 1755 06d4 BF90      		pop r11
+ 1756 06d6 AF90      		pop r10
+ 1757 06d8 9F90      		pop r9
+ 1758 06da 0895      		ret
+ 1759               		.cfi_endproc
+ 1760               	.LFE21:
+ 1762               	.global	__floatsisf
+ 1763               	.global	__addsf3
+ 1764               	.global	__divsf3
+ 1765               	.global	__fixsfsi
+ 1766               	.global	drive_with_p_regler
+ 1768               	drive_with_p_regler:
+ 1769               	.LFB22:
+ 418:roomba.c      **** 
+ 419:roomba.c      **** /**
+ 420:roomba.c      ****  * \brief Drive along aline with a p regler
+ 421:roomba.c      ****  */
+ 422:roomba.c      **** void drive_with_p_regler() {
+ 1770               		.loc 1 422 0
+ 1771               		.cfi_startproc
+ 1772 06dc CF93      		push r28
+ 1773               	.LCFI98:
+ 1774               		.cfi_def_cfa_offset 4
+ 1775               		.cfi_offset 28, -3
+ 1776 06de DF93      		push r29
+ 1777               	.LCFI99:
+ 1778               		.cfi_def_cfa_offset 5
+ 1779               		.cfi_offset 29, -4
+ 1780 06e0 CDB7      		in r28,__SP_L__
+ 1781 06e2 DEB7      		in r29,__SP_H__
+ 1782               	.LCFI100:
+ 1783               		.cfi_def_cfa_register 28
+ 1784 06e4 6097      		sbiw r28,16
+ 1785               	.LCFI101:
+ 1786               		.cfi_def_cfa_offset 21
+ 1787 06e6 0FB6      		in __tmp_reg__,__SREG__
+ 1788 06e8 F894      		cli
+ 1789 06ea DEBF      		out __SP_H__,r29
+ 1790 06ec 0FBE      		out __SREG__,__tmp_reg__
+ 1791 06ee CDBF      		out __SP_L__,r28
+ 1792               	/* prologue: function */
+ 1793               	/* frame size = 16 */
+ 1794               	/* stack size = 18 */
+ 1795               	.L__stack_usage = 18
+ 1796               	.LVL178:
+ 423:roomba.c      **** 	uint8_t speed = 250;
+ 424:roomba.c      **** 	uint8_t abtastzeit = 30;
+ 425:roomba.c      **** 	
+ 426:roomba.c      **** 	uint16_t v_right = speed;
+ 427:roomba.c      **** 	uint16_t v_left = speed;
+ 428:roomba.c      **** 	
+ 429:roomba.c      **** 	/*float kp = 0.1f;
+ 430:roomba.c      **** 	float kd = 0.08f;
+ 431:roomba.c      **** 	float ki = 0.00005f;*/
+ 432:roomba.c      **** 	
+ 433:roomba.c      **** 	float kp = 0.15f;
+ 434:roomba.c      **** 	float kd = 0.05f;
+ 435:roomba.c      **** 	float ki = 0.00005f;
+ 436:roomba.c      **** 	
+ 437:roomba.c      **** 	// Cliff left, right / bumper 
+ 438:roomba.c      **** 	uint8_t packet_ids[3] = {29, 30, 7};
+ 1797               		.loc 1 438 0
+ 1798 06f0 8DE1      		ldi r24,lo8(29)
+ 1799 06f2 8983      		std Y+1,r24
+ 1800 06f4 8EE1      		ldi r24,lo8(30)
+ 1801 06f6 8A83      		std Y+2,r24
+ 1802 06f8 87E0      		ldi r24,lo8(7)
+ 1803 06fa 8B83      		std Y+3,r24
+ 439:roomba.c      **** 	uint8_t packet_length[3] = {2, 2, 1};
+ 1804               		.loc 1 439 0
+ 1805 06fc 82E0      		ldi r24,lo8(2)
+ 1806 06fe 8C83      		std Y+4,r24
+ 1807 0700 8D83      		std Y+5,r24
+ 1808 0702 81E0      		ldi r24,lo8(1)
+ 1809 0704 8E83      		std Y+6,r24
+ 1810               	.LVL179:
+ 440:roomba.c      **** 	uint16_t qdata[3];
+ 441:roomba.c      **** 	int32_t esum = 0;
+ 442:roomba.c      **** 	int16_t ealt = 0;
+ 1811               		.loc 1 442 0
+ 1812 0706 A12C      		mov r10,__zero_reg__
+ 1813 0708 B12C      		mov r11,__zero_reg__
+ 441:roomba.c      **** 	int32_t esum = 0;
+ 1814               		.loc 1 441 0
+ 1815 070a 412C      		mov r4,__zero_reg__
+ 1816 070c 512C      		mov r5,__zero_reg__
+ 1817 070e 3201      		movw r6,r4
+ 427:roomba.c      **** 	uint16_t v_left = speed;
+ 1818               		.loc 1 427 0
+ 1819 0710 0F2E      		mov __tmp_reg__,r31
+ 1820 0712 FAEF      		ldi r31,lo8(-6)
+ 1821 0714 CF2E      		mov r12,r31
+ 1822 0716 D12C      		mov r13,__zero_reg__
+ 1823 0718 F02D      		mov r31,__tmp_reg__
+ 426:roomba.c      **** 	uint16_t v_right = speed;
+ 1824               		.loc 1 426 0
+ 1825 071a 0F2E      		mov __tmp_reg__,r31
+ 1826 071c FAEF      		ldi r31,lo8(-6)
+ 1827 071e EF2E      		mov r14,r31
+ 1828 0720 F12C      		mov r15,__zero_reg__
+ 1829 0722 F02D      		mov r31,__tmp_reg__
+ 1830               	.LBB14:
+ 443:roomba.c      **** 		
+ 444:roomba.c      **** 	while (1) {
+ 445:roomba.c      **** 		drive_direction(v_right, v_left);
+ 446:roomba.c      **** 		
+ 447:roomba.c      **** 		// Set speed to straight normal speed
+ 448:roomba.c      **** 		v_right = speed;
+ 449:roomba.c      **** 		v_left = speed;
+ 450:roomba.c      **** 		
+ 451:roomba.c      **** 		getSensorQueryList(3, packet_ids, packet_length, qdata);
+ 452:roomba.c      **** 		
+ 453:roomba.c      **** 		int16_t cliff_left = qdata[0];
+ 454:roomba.c      **** 		int16_t cliff_right = qdata[1];
+ 455:roomba.c      **** 		
+ 456:roomba.c      **** 		int16_t e = cliff_left - cliff_right;
+ 457:roomba.c      **** 		esum += e;
+ 458:roomba.c      **** 		int32_t y = kp * e + ki * abtastzeit * esum + kd * (e - ealt) / abtastzeit;
+ 459:roomba.c      **** 		ealt = e;
+ 460:roomba.c      **** 		
+ 461:roomba.c      **** 		// Output on display
+ 462:roomba.c      **** 		char result[4];
+ 463:roomba.c      **** 		intToHex(abs(y), result);
+ 464:roomba.c      **** 		set_Display(result);
+ 465:roomba.c      **** 		
+ 466:roomba.c      **** 		// Compensate direction
+ 467:roomba.c      **** 		v_right += y;
+ 468:roomba.c      **** 		v_left -= y;
+ 1831               		.loc 1 468 0
+ 1832 0724 0F2E      		mov __tmp_reg__,r31
+ 1833 0726 FAEF      		ldi r31,lo8(-6)
+ 1834 0728 8F2E      		mov r8,r31
+ 1835 072a 912C      		mov r9,__zero_reg__
+ 1836 072c F02D      		mov r31,__tmp_reg__
+ 1837               	.LVL180:
+ 1838               	.L59:
+ 445:roomba.c      **** 		drive_direction(v_right, v_left);
+ 1839               		.loc 1 445 0 discriminator 1
+ 1840 072e B601      		movw r22,r12
+ 1841 0730 C701      		movw r24,r14
+ 1842 0732 0E94 0000 		call drive_direction
+ 1843               	.LVL181:
+ 451:roomba.c      **** 		getSensorQueryList(3, packet_ids, packet_length, qdata);
+ 1844               		.loc 1 451 0 discriminator 1
+ 1845 0736 9E01      		movw r18,r28
+ 1846 0738 295F      		subi r18,-7
+ 1847 073a 3F4F      		sbci r19,-1
+ 1848 073c AE01      		movw r20,r28
+ 1849 073e 4C5F      		subi r20,-4
+ 1850 0740 5F4F      		sbci r21,-1
+ 1851 0742 BE01      		movw r22,r28
+ 1852 0744 6F5F      		subi r22,-1
+ 1853 0746 7F4F      		sbci r23,-1
+ 1854 0748 83E0      		ldi r24,lo8(3)
+ 1855 074a 0E94 0000 		call getSensorQueryList
+ 1856               	.LVL182:
+ 456:roomba.c      **** 		int16_t e = cliff_left - cliff_right;
+ 1857               		.loc 1 456 0 discriminator 1
+ 1858 074e 0F81      		ldd r16,Y+7
+ 1859 0750 1885      		ldd r17,Y+8
+ 1860 0752 8985      		ldd r24,Y+9
+ 1861 0754 9A85      		ldd r25,Y+10
+ 1862 0756 081B      		sub r16,r24
+ 1863 0758 190B      		sbc r17,r25
+ 1864               	.LVL183:
+ 457:roomba.c      **** 		esum += e;
+ 1865               		.loc 1 457 0 discriminator 1
+ 1866 075a B801      		movw r22,r16
+ 1867 075c 8827      		clr r24
+ 1868 075e 77FD      		sbrc r23,7
+ 1869 0760 8095      		com r24
+ 1870 0762 982F      		mov r25,r24
+ 1871 0764 460E      		add r4,r22
+ 1872 0766 571E      		adc r5,r23
+ 1873 0768 681E      		adc r6,r24
+ 1874 076a 791E      		adc r7,r25
+ 1875               	.LVL184:
+ 458:roomba.c      **** 		int32_t y = kp * e + ki * abtastzeit * esum + kd * (e - ealt) / abtastzeit;
+ 1876               		.loc 1 458 0 discriminator 1
+ 1877 076c 0E94 0000 		call __floatsisf
+ 1878               	.LVL185:
+ 1879 0770 2AE9      		ldi r18,lo8(-102)
+ 1880 0772 39E9      		ldi r19,lo8(-103)
+ 1881 0774 49E1      		ldi r20,lo8(25)
+ 1882 0776 5EE3      		ldi r21,lo8(62)
+ 1883 0778 0E94 0000 		call __mulsf3
+ 1884               	.LVL186:
+ 1885 077c 6B01      		movw r12,r22
+ 1886 077e 7C01      		movw r14,r24
+ 1887 0780 C301      		movw r24,r6
+ 1888 0782 B201      		movw r22,r4
+ 1889 0784 0E94 0000 		call __floatsisf
+ 1890               	.LVL187:
+ 1891 0788 26EA      		ldi r18,lo8(-90)
+ 1892 078a 3BE9      		ldi r19,lo8(-101)
+ 1893 078c 44EC      		ldi r20,lo8(-60)
+ 1894 078e 5AE3      		ldi r21,lo8(58)
+ 1895 0790 0E94 0000 		call __mulsf3
+ 1896               	.LVL188:
+ 1897 0794 9B01      		movw r18,r22
+ 1898 0796 AC01      		movw r20,r24
+ 1899 0798 C701      		movw r24,r14
+ 1900 079a B601      		movw r22,r12
+ 1901 079c 0E94 0000 		call __addsf3
+ 1902               	.LVL189:
+ 1903 07a0 6B01      		movw r12,r22
+ 1904 07a2 7C01      		movw r14,r24
+ 1905 07a4 B801      		movw r22,r16
+ 1906 07a6 6A19      		sub r22,r10
+ 1907 07a8 7B09      		sbc r23,r11
+ 1908 07aa 8827      		clr r24
+ 1909 07ac 77FD      		sbrc r23,7
+ 1910 07ae 8095      		com r24
+ 1911 07b0 982F      		mov r25,r24
+ 1912 07b2 0E94 0000 		call __floatsisf
+ 1913               	.LVL190:
+ 1914 07b6 2DEC      		ldi r18,lo8(-51)
+ 1915 07b8 3CEC      		ldi r19,lo8(-52)
+ 1916 07ba 4CE4      		ldi r20,lo8(76)
+ 1917 07bc 5DE3      		ldi r21,lo8(61)
+ 1918 07be 0E94 0000 		call __mulsf3
+ 1919               	.LVL191:
+ 1920 07c2 20E0      		ldi r18,0
+ 1921 07c4 30E0      		ldi r19,0
+ 1922 07c6 40EF      		ldi r20,lo8(-16)
+ 1923 07c8 51E4      		ldi r21,lo8(65)
+ 1924 07ca 0E94 0000 		call __divsf3
+ 1925               	.LVL192:
+ 1926 07ce 9B01      		movw r18,r22
+ 1927 07d0 AC01      		movw r20,r24
+ 1928 07d2 C701      		movw r24,r14
+ 1929 07d4 B601      		movw r22,r12
+ 1930 07d6 0E94 0000 		call __addsf3
+ 1931               	.LVL193:
+ 1932 07da 0E94 0000 		call __fixsfsi
+ 1933               	.LVL194:
+ 1934 07de 5B01      		movw r10,r22
+ 1935 07e0 6C01      		movw r12,r24
+ 1936               	.LVL195:
+ 463:roomba.c      **** 		intToHex(abs(y), result);
+ 1937               		.loc 1 463 0 discriminator 1
+ 1938 07e2 CB01      		movw r24,r22
+ 1939 07e4 9923      		tst r25
+ 1940 07e6 04F4      		brge .L58
+ 1941 07e8 8827      		clr r24
+ 1942 07ea 9927      		clr r25
+ 1943 07ec 8A19      		sub r24,r10
+ 1944 07ee 9B09      		sbc r25,r11
+ 1945               	.L58:
+ 1946 07f0 BE01      		movw r22,r28
+ 1947 07f2 635F      		subi r22,-13
+ 1948 07f4 7F4F      		sbci r23,-1
+ 1949 07f6 0E94 0000 		call intToHex
+ 1950               	.LVL196:
+ 464:roomba.c      **** 		set_Display(result);
+ 1951               		.loc 1 464 0 discriminator 1
+ 1952 07fa CE01      		movw r24,r28
+ 1953 07fc 0D96      		adiw r24,13
+ 1954 07fe 0E94 0000 		call set_Display
+ 1955               	.LVL197:
+ 467:roomba.c      **** 		v_right += y;
+ 1956               		.loc 1 467 0 discriminator 1
+ 1957 0802 7501      		movw r14,r10
+ 1958 0804 8AEF      		ldi r24,-6
+ 1959 0806 E80E      		add r14,r24
+ 1960 0808 F11C      		adc r15,__zero_reg__
+ 1961               	.LVL198:
+ 1962               		.loc 1 468 0 discriminator 1
+ 1963 080a 6401      		movw r12,r8
+ 1964 080c CA18      		sub r12,r10
+ 1965 080e DB08      		sbc r13,r11
+ 1966               	.LVL199:
+ 469:roomba.c      **** 		
+ 470:roomba.c      **** 		bump_handling(qdata[2]);
+ 1967               		.loc 1 470 0 discriminator 1
+ 1968 0810 8B85      		ldd r24,Y+11
+ 1969 0812 0E94 0000 		call bump_handling
+ 1970               	.LVL200:
+ 471:roomba.c      **** 		
+ 472:roomba.c      **** 		my_msleep(abtastzeit);
+ 1971               		.loc 1 472 0 discriminator 1
+ 1972 0816 8EE1      		ldi r24,lo8(30)
+ 1973 0818 90E0      		ldi r25,0
+ 1974 081a 0E94 0000 		call my_msleep
+ 1975               	.LVL201:
+ 459:roomba.c      **** 		ealt = e;
+ 1976               		.loc 1 459 0 discriminator 1
+ 1977 081e 5801      		movw r10,r16
+ 1978 0820 00C0      		rjmp .L59
+ 1979               	.LBE14:
+ 1980               		.cfi_endproc
+ 1981               	.LFE22:
+ 1983               	.Letext0:
+ 1984               		.file 2 "/usr/lib/avr/include/stdint.h"
+ 1985               		.file 3 "tools.h"
+ 1986               		.file 4 "/usr/lib/avr/include/stdio.h"
+ 1987               		.file 5 "usart.h"
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 roomba.c
+     /tmp/cc41Mrwy.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/cc41Mrwy.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/cc41Mrwy.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/cc41Mrwy.s:5      *ABS*:000000000000003b __RAMPZ__
+     /tmp/cc41Mrwy.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/cc41Mrwy.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/cc41Mrwy.s:13     .text:0000000000000000 initializeRoomba
+     /tmp/cc41Mrwy.s:36     .text:000000000000000e set_Display
+     /tmp/cc41Mrwy.s:97     .text:000000000000003c read_button
+     /tmp/cc41Mrwy.s:141    .text:000000000000005e read_values
+     /tmp/cc41Mrwy.s:219    .text:000000000000009e drive
+     /tmp/cc41Mrwy.s:271    .text:00000000000000ca drive_direction
+     /tmp/cc41Mrwy.s:335    .text:0000000000000102 stop
+     /tmp/cc41Mrwy.s:354    .text:000000000000010c getTicks
+     /tmp/cc41Mrwy.s:411    .text:0000000000000138 drive_roomba
+     /tmp/cc41Mrwy.s:607    .text:000000000000022c drive_roomba_exact
+     /tmp/cc41Mrwy.s:847    .text:000000000000034c receiveRemote
+     /tmp/cc41Mrwy.s:896    .text:0000000000000372 intToHex
+     /tmp/cc41Mrwy.s:943    .text:0000000000000394 showRemoteSignalInDisplay
+     /tmp/cc41Mrwy.s:1020   .text:00000000000003e4 driveWithRadius
+     /tmp/cc41Mrwy.s:1093   .text:000000000000041c read_user_input
+     /tmp/cc41Mrwy.s:1366   .text:000000000000055c drive_circle
+     /tmp/cc41Mrwy.s:1389   .text:0000000000000568 turn
+     /tmp/cc41Mrwy.s:1468   .text:00000000000005be set_back
+     /tmp/cc41Mrwy.s:1497   .text:00000000000005d8 bump_handling
+     /tmp/cc41Mrwy.s:1538   .text:00000000000005fc drive_autonom
+     /tmp/cc41Mrwy.s:1588   .text:0000000000000626 getSensorQueryList
+     /tmp/cc41Mrwy.s:1768   .text:00000000000006dc drive_with_p_regler
+
+UNDEFINED SYMBOLS
+send_byte_roomba
+receive_byte_roomba
+concat_bytes
+sprintf
+sendString
+__udivmodhi4
+my_msleep
+__floatunsisf
+__mulsf3
+__fixunssfsi
+__floatsisf
+__addsf3
+__divsf3
+__fixsfsi
+__do_copy_data
