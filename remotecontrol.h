@@ -11,6 +11,6 @@
 enum RemoteSignal{RACCELERATE, RBRAKE, RLEFT, RRIGHT, RSHOOT, RNOTHINGPRESSED};  
 typedef enum RemoteSignal remoteSignal;
 
-remoteSignal getRemoteSignal(void);
+remoteSignal getRemoteSignal(uint16_t remoteSignalData);
 
 #endif
