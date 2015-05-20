@@ -203,14 +203,14 @@
  154               		.file 4 "usart.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 drivecontrol.c
-     /tmp/ccapOvWl.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/ccapOvWl.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/ccapOvWl.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/ccapOvWl.s:5      *ABS*:000000000000003b __RAMPZ__
-     /tmp/ccapOvWl.s:6      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/ccapOvWl.s:7      *ABS*:0000000000000001 __zero_reg__
-     /tmp/ccapOvWl.s:13     .text:0000000000000000 drive_direction
-     /tmp/ccapOvWl.s:78     .text:0000000000000038 getCommand
+     /tmp/ccqbyTrJ.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccqbyTrJ.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccqbyTrJ.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccqbyTrJ.s:5      *ABS*:000000000000003b __RAMPZ__
+     /tmp/ccqbyTrJ.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccqbyTrJ.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccqbyTrJ.s:13     .text:0000000000000000 drive_direction
+     /tmp/ccqbyTrJ.s:78     .text:0000000000000038 getCommand
 
 UNDEFINED SYMBOLS
 send_byte_roomba

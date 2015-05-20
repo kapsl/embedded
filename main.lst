@@ -20,69 +20,224 @@
    6:main.c        **** #include "roomba.h"
    7:main.c        **** #include "drivecontrol.h"
    8:main.c        **** #include "remotecontrol.h"
-   9:main.c        **** 
-  10:main.c        **** int main(int argc, const char* argv[]) {
-  16               		.loc 1 10 0
+   9:main.c        **** #include "floorDetection.h"
+  10:main.c        **** 
+  11:main.c        **** int main(int argc, const char* argv[]) {
+  16               		.loc 1 11 0
   17               		.cfi_startproc
   18               	.LVL0:
-  19               	/* prologue: function */
-  20               	/* frame size = 0 */
-  21               	/* stack size = 0 */
-  22               	.L__stack_usage = 0
-  11:main.c        **** 	usart_init_roomba();
-  23               		.loc 1 11 0
-  24 0000 0E94 0000 		call usart_init_roomba
-  25               	.LVL1:
-  12:main.c        **** 	initializeRoomba();
-  26               		.loc 1 12 0
-  27 0004 0E94 0000 		call initializeRoomba
-  28               	.LVL2:
-  29               	.L3:
-  30               	.LBB2:
-  13:main.c        **** 	
-  14:main.c        **** 	int16_t velocity_right = 0;
-  15:main.c        **** 	int16_t velocity_left = 0;
-  16:main.c        **** 	
-  17:main.c        **** 	while (1) {	
-  18:main.c        **** 		remoteSignal signal = getRemoteSignal();
-  31               		.loc 1 18 0
-  32 0008 0E94 0000 		call getRemoteSignal
-  33               	.LVL3:
-  19:main.c        **** 		
-  20:main.c        **** 		if (signal != RNOTHINGPRESSED) {
-  34               		.loc 1 20 0
-  35 000c 8530      		cpi r24,lo8(5)
-  36 000e 01F0      		breq .L3
-  21:main.c        **** 			getCommand(signal, velocity_right, velocity_left);
-  37               		.loc 1 21 0
-  38 0010 40E0      		ldi r20,0
-  39 0012 50E0      		ldi r21,0
-  40 0014 60E0      		ldi r22,0
-  41 0016 70E0      		ldi r23,0
-  42 0018 0E94 0000 		call getCommand
-  43               	.LVL4:
-  44 001c 00C0      		rjmp .L3
-  45               	.LBE2:
-  46               		.cfi_endproc
-  47               	.LFE0:
-  49               	.Letext0:
-  50               		.file 2 "/usr/lib/avr/include/stdint.h"
-  51               		.file 3 "remotecontrol.h"
-  52               		.file 4 "usart.h"
-  53               		.file 5 "roomba.h"
-  54               		.file 6 "drivecontrol.h"
+  19 0000 CF93      		push r28
+  20               	.LCFI0:
+  21               		.cfi_def_cfa_offset 4
+  22               		.cfi_offset 28, -3
+  23 0002 DF93      		push r29
+  24               	.LCFI1:
+  25               		.cfi_def_cfa_offset 5
+  26               		.cfi_offset 29, -4
+  27 0004 00D0      		rcall .
+  28 0006 1F92      		push __zero_reg__
+  29 0008 1F92      		push __zero_reg__
+  30               	.LCFI2:
+  31               		.cfi_def_cfa_offset 10
+  32 000a CDB7      		in r28,__SP_L__
+  33 000c DEB7      		in r29,__SP_H__
+  34               	.LCFI3:
+  35               		.cfi_def_cfa_register 28
+  36               	/* prologue: function */
+  37               	/* frame size = 5 */
+  38               	/* stack size = 7 */
+  39               	.L__stack_usage = 7
+  12:main.c        **** 	usart_init_roomba();
+  40               		.loc 1 12 0
+  41 000e 0E94 0000 		call usart_init_roomba
+  42               	.LVL1:
+  13:main.c        **** 	initializeRoomba();
+  43               		.loc 1 13 0
+  44 0012 0E94 0000 		call initializeRoomba
+  45               	.LVL2:
+  46               	.LBB2:
+  47               	.LBB3:
+  14:main.c        **** 	
+  15:main.c        **** 	int16_t velocity_right = 0;
+  16:main.c        **** 	int16_t velocity_left = 0;
+  17:main.c        **** 	
+  18:main.c        **** 	while (1) {	
+  19:main.c        **** 		remoteSignal signal = getRemoteSignal();
+  20:main.c        **** 		
+  21:main.c        **** 		detectedType dType;
+  22:main.c        **** 		floorDetection(&dType);
+  23:main.c        **** 		
+  24:main.c        **** 		// Detect floor stuff
+  25:main.c        **** 		if (dType == POWER_UP) {
+  26:main.c        **** 			char result[4] = {'P', 'O', 'W', 'R'};
+  27:main.c        **** 			set_Display(result);
+  28:main.c        **** 		} else if (dType == BORDER_LEFT) {
+  29:main.c        **** 			char result[4] = {'L', 'E', 'F', 'T'};
+  30:main.c        **** 			set_Display(result);
+  31:main.c        **** 		} else if (dType == BORDER_RIGHT) {
+  32:main.c        **** 			char result[4] = {'R', 'I', 'G', 'T'};
+  48               		.loc 1 32 0
+  49 0016 02E5      		ldi r16,lo8(82)
+  50 0018 0F2E      		mov __tmp_reg__,r31
+  51 001a F9E4      		ldi r31,lo8(73)
+  52 001c 7F2E      		mov r7,r31
+  53 001e F02D      		mov r31,__tmp_reg__
+  54 0020 0F2E      		mov __tmp_reg__,r31
+  55 0022 F7E4      		ldi r31,lo8(71)
+  56 0024 8F2E      		mov r8,r31
+  57 0026 F02D      		mov r31,__tmp_reg__
+  58 0028 0F2E      		mov __tmp_reg__,r31
+  59 002a F4E5      		ldi r31,lo8(84)
+  60 002c CF2E      		mov r12,r31
+  61 002e F02D      		mov r31,__tmp_reg__
+  62               	.LBE3:
+  63               	.LBB4:
+  29:main.c        **** 			char result[4] = {'L', 'E', 'F', 'T'};
+  64               		.loc 1 29 0
+  65 0030 0F2E      		mov __tmp_reg__,r31
+  66 0032 FCE4      		ldi r31,lo8(76)
+  67 0034 9F2E      		mov r9,r31
+  68 0036 F02D      		mov r31,__tmp_reg__
+  69 0038 0F2E      		mov __tmp_reg__,r31
+  70 003a F5E4      		ldi r31,lo8(69)
+  71 003c AF2E      		mov r10,r31
+  72 003e F02D      		mov r31,__tmp_reg__
+  73 0040 0F2E      		mov __tmp_reg__,r31
+  74 0042 F6E4      		ldi r31,lo8(70)
+  75 0044 BF2E      		mov r11,r31
+  76 0046 F02D      		mov r31,__tmp_reg__
+  77               	.LBE4:
+  78               	.LBB5:
+  26:main.c        **** 			char result[4] = {'P', 'O', 'W', 'R'};
+  79               		.loc 1 26 0
+  80 0048 0F2E      		mov __tmp_reg__,r31
+  81 004a F0E5      		ldi r31,lo8(80)
+  82 004c DF2E      		mov r13,r31
+  83 004e F02D      		mov r31,__tmp_reg__
+  84 0050 0F2E      		mov __tmp_reg__,r31
+  85 0052 FFE4      		ldi r31,lo8(79)
+  86 0054 EF2E      		mov r14,r31
+  87 0056 F02D      		mov r31,__tmp_reg__
+  88 0058 0F2E      		mov __tmp_reg__,r31
+  89 005a F7E5      		ldi r31,lo8(87)
+  90 005c FF2E      		mov r15,r31
+  91 005e F02D      		mov r31,__tmp_reg__
+  92               	.L6:
+  93               	.LBE5:
+  19:main.c        **** 		remoteSignal signal = getRemoteSignal();
+  94               		.loc 1 19 0
+  95 0060 0E94 0000 		call getRemoteSignal
+  96               	.LVL3:
+  97 0064 182F      		mov r17,r24
+  98               	.LVL4:
+  22:main.c        **** 		floorDetection(&dType);
+  99               		.loc 1 22 0
+ 100 0066 CE01      		movw r24,r28
+ 101 0068 0596      		adiw r24,5
+ 102 006a 0E94 0000 		call floorDetection
+ 103               	.LVL5:
+  25:main.c        **** 		if (dType == POWER_UP) {
+ 104               		.loc 1 25 0
+ 105 006e 9D81      		ldd r25,Y+5
+ 106 0070 9111      		cpse r25,__zero_reg__
+ 107 0072 00C0      		rjmp .L2
+ 108               	.LBB6:
+  26:main.c        **** 			char result[4] = {'P', 'O', 'W', 'R'};
+ 109               		.loc 1 26 0
+ 110 0074 D982      		std Y+1,r13
+ 111 0076 EA82      		std Y+2,r14
+ 112 0078 FB82      		std Y+3,r15
+ 113 007a 0C83      		std Y+4,r16
+  27:main.c        **** 			set_Display(result);
+ 114               		.loc 1 27 0
+ 115 007c CE01      		movw r24,r28
+ 116 007e 0196      		adiw r24,1
+ 117 0080 0E94 0000 		call set_Display
+ 118               	.LVL6:
+ 119               	.LBE6:
+ 120 0084 00C0      		rjmp .L3
+ 121               	.L2:
+  28:main.c        **** 		} else if (dType == BORDER_LEFT) {
+ 122               		.loc 1 28 0
+ 123 0086 9130      		cpi r25,lo8(1)
+ 124 0088 01F4      		brne .L4
+ 125               	.LBB7:
+  29:main.c        **** 			char result[4] = {'L', 'E', 'F', 'T'};
+ 126               		.loc 1 29 0
+ 127 008a 9982      		std Y+1,r9
+ 128 008c AA82      		std Y+2,r10
+ 129 008e BB82      		std Y+3,r11
+ 130 0090 CC82      		std Y+4,r12
+  30:main.c        **** 			set_Display(result);
+ 131               		.loc 1 30 0
+ 132 0092 CE01      		movw r24,r28
+ 133 0094 0196      		adiw r24,1
+ 134 0096 0E94 0000 		call set_Display
+ 135               	.LVL7:
+ 136               	.LBE7:
+ 137 009a 00C0      		rjmp .L3
+ 138               	.L4:
+  31:main.c        **** 		} else if (dType == BORDER_RIGHT) {
+ 139               		.loc 1 31 0
+ 140 009c 9230      		cpi r25,lo8(2)
+ 141 009e 01F4      		brne .L3
+ 142               	.LBB8:
+ 143               		.loc 1 32 0
+ 144 00a0 0983      		std Y+1,r16
+ 145 00a2 7A82      		std Y+2,r7
+ 146 00a4 8B82      		std Y+3,r8
+ 147 00a6 CC82      		std Y+4,r12
+  33:main.c        **** 			set_Display(result);
+ 148               		.loc 1 33 0
+ 149 00a8 CE01      		movw r24,r28
+ 150 00aa 0196      		adiw r24,1
+ 151 00ac 0E94 0000 		call set_Display
+ 152               	.LVL8:
+ 153               	.L3:
+ 154               	.LBE8:
+  34:main.c        **** 		}
+  35:main.c        **** 		
+  36:main.c        **** 		if (signal != RNOTHINGPRESSED) {
+ 155               		.loc 1 36 0
+ 156 00b0 1530      		cpi r17,lo8(5)
+ 157 00b2 01F0      		breq .L6
+  37:main.c        **** 			getCommand(signal, velocity_right, velocity_left);
+ 158               		.loc 1 37 0
+ 159 00b4 40E0      		ldi r20,0
+ 160 00b6 50E0      		ldi r21,0
+ 161 00b8 60E0      		ldi r22,0
+ 162 00ba 70E0      		ldi r23,0
+ 163 00bc 812F      		mov r24,r17
+ 164 00be 0E94 0000 		call getCommand
+ 165               	.LVL9:
+ 166               	.LBE2:
+  38:main.c        **** 		}
+  39:main.c        **** 	} 
+ 167               		.loc 1 39 0
+ 168 00c2 00C0      		rjmp .L6
+ 169               		.cfi_endproc
+ 170               	.LFE0:
+ 172               	.Letext0:
+ 173               		.file 2 "/usr/lib/avr/include/stdint.h"
+ 174               		.file 3 "remotecontrol.h"
+ 175               		.file 4 "floorDetection.h"
+ 176               		.file 5 "roomba.h"
+ 177               		.file 6 "drivecontrol.h"
+ 178               		.file 7 "usart.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 main.c
-     /tmp/ccxvReHB.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/ccxvReHB.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/ccxvReHB.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/ccxvReHB.s:5      *ABS*:000000000000003b __RAMPZ__
-     /tmp/ccxvReHB.s:6      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/ccxvReHB.s:7      *ABS*:0000000000000001 __zero_reg__
-     /tmp/ccxvReHB.s:13     .text:0000000000000000 main
+     /tmp/ccecni28.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccecni28.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccecni28.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccecni28.s:5      *ABS*:000000000000003b __RAMPZ__
+     /tmp/ccecni28.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccecni28.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccecni28.s:13     .text:0000000000000000 main
 
 UNDEFINED SYMBOLS
 usart_init_roomba
 initializeRoomba
 getRemoteSignal
+floorDetection
+set_Display
 getCommand

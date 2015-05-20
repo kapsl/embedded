@@ -136,13 +136,13 @@
  103               		.file 4 "roomba.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 remotecontrol.c
-     /tmp/ccQ3q0Fp.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/ccQ3q0Fp.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/ccQ3q0Fp.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/ccQ3q0Fp.s:5      *ABS*:000000000000003b __RAMPZ__
-     /tmp/ccQ3q0Fp.s:6      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/ccQ3q0Fp.s:7      *ABS*:0000000000000001 __zero_reg__
-     /tmp/ccQ3q0Fp.s:13     .text:0000000000000000 getRemoteSignal
+     /tmp/ccJozjOU.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccJozjOU.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccJozjOU.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccJozjOU.s:5      *ABS*:000000000000003b __RAMPZ__
+     /tmp/ccJozjOU.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccJozjOU.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccJozjOU.s:13     .text:0000000000000000 getRemoteSignal
 
 UNDEFINED SYMBOLS
 read_values

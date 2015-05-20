@@ -1,0 +1,239 @@
+   1               		.file	"floorDetection.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__RAMPZ__ = 0x3b
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.text
+   9               	.Ltext0:
+  10               		.cfi_sections	.debug_frame
+  11               	.global	floorDetection
+  13               	floorDetection:
+  14               	.LFB1:
+  15               		.file 1 "floorDetection.c"
+   1:floorDetection.c **** #include "roomba.h"
+   2:floorDetection.c **** #include "tools.h"
+   3:floorDetection.c **** #include "usart.h"
+   4:floorDetection.c **** #include <stdio.h>
+   5:floorDetection.c **** #include <stdlib.h>
+   6:floorDetection.c **** #include "floorDetection.h"
+   7:floorDetection.c **** 
+   8:floorDetection.c **** /**
+   9:floorDetection.c ****  * Possible return values: 
+  10:floorDetection.c ****  * 	power up detected
+  11:floorDetection.c ****  * 	left border detected with angle
+  12:floorDetection.c ****  * 	right border detected with angle
+  13:floorDetection.c ****  */
+  14:floorDetection.c **** void floorDetection(detectedType *type) {
+  16               		.loc 1 14 0
+  17               		.cfi_startproc
+  18               	.LVL0:
+  19 0000 0F93      		push r16
+  20               	.LCFI0:
+  21               		.cfi_def_cfa_offset 4
+  22               		.cfi_offset 16, -3
+  23 0002 1F93      		push r17
+  24               	.LCFI1:
+  25               		.cfi_def_cfa_offset 5
+  26               		.cfi_offset 17, -4
+  27 0004 CF93      		push r28
+  28               	.LCFI2:
+  29               		.cfi_def_cfa_offset 6
+  30               		.cfi_offset 28, -5
+  31 0006 DF93      		push r29
+  32               	.LCFI3:
+  33               		.cfi_def_cfa_offset 7
+  34               		.cfi_offset 29, -6
+  35 0008 CDB7      		in r28,__SP_L__
+  36 000a DEB7      		in r29,__SP_H__
+  37               	.LCFI4:
+  38               		.cfi_def_cfa_register 28
+  39 000c 6497      		sbiw r28,20
+  40               	.LCFI5:
+  41               		.cfi_def_cfa_offset 27
+  42 000e 0FB6      		in __tmp_reg__,__SREG__
+  43 0010 F894      		cli
+  44 0012 DEBF      		out __SP_H__,r29
+  45 0014 0FBE      		out __SREG__,__tmp_reg__
+  46 0016 CDBF      		out __SP_L__,r28
+  47               	/* prologue: function */
+  48               	/* frame size = 20 */
+  49               	/* stack size = 24 */
+  50               	.L__stack_usage = 24
+  51 0018 8C01      		movw r16,r24
+  15:floorDetection.c **** 	// Cliff front left, front right, left right 
+  16:floorDetection.c **** 	uint8_t packet_ids[4] = {29, 30, 28, 31};
+  52               		.loc 1 16 0
+  53 001a 8DE1      		ldi r24,lo8(29)
+  54               	.LVL1:
+  55 001c 8983      		std Y+1,r24
+  56 001e 8EE1      		ldi r24,lo8(30)
+  57 0020 8A83      		std Y+2,r24
+  58 0022 8CE1      		ldi r24,lo8(28)
+  59 0024 8B83      		std Y+3,r24
+  60 0026 8FE1      		ldi r24,lo8(31)
+  61 0028 8C83      		std Y+4,r24
+  17:floorDetection.c **** 	uint8_t packet_length[4] = {2, 2, 2, 2};
+  62               		.loc 1 17 0
+  63 002a 82E0      		ldi r24,lo8(2)
+  64 002c 8D83      		std Y+5,r24
+  65 002e 8E83      		std Y+6,r24
+  66 0030 8F83      		std Y+7,r24
+  67 0032 8887      		std Y+8,r24
+  18:floorDetection.c **** 	uint16_t qdata[4];
+  19:floorDetection.c **** 	
+  20:floorDetection.c **** 	getSensorQueryList(4, packet_ids, packet_length, qdata);
+  68               		.loc 1 20 0
+  69 0034 9E01      		movw r18,r28
+  70 0036 275F      		subi r18,-9
+  71 0038 3F4F      		sbci r19,-1
+  72 003a AE01      		movw r20,r28
+  73 003c 4B5F      		subi r20,-5
+  74 003e 5F4F      		sbci r21,-1
+  75 0040 BE01      		movw r22,r28
+  76 0042 6F5F      		subi r22,-1
+  77 0044 7F4F      		sbci r23,-1
+  78 0046 84E0      		ldi r24,lo8(4)
+  79 0048 0E94 0000 		call getSensorQueryList
+  80               	.LVL2:
+  21:floorDetection.c **** 	
+  22:floorDetection.c **** 	int16_t cliff_front_left = qdata[0];
+  23:floorDetection.c **** 	int16_t cliff_front_right = qdata[1];
+  24:floorDetection.c **** 	
+  25:floorDetection.c **** 	// Power up
+  26:floorDetection.c **** 	if (cliff_front_left + cliff_front_right > POWER_UP_CLIFF_THRESHOLD) {
+  81               		.loc 1 26 0
+  82 004c 4985      		ldd r20,Y+9
+  83 004e 5A85      		ldd r21,Y+10
+  84 0050 2B85      		ldd r18,Y+11
+  85 0052 3C85      		ldd r19,Y+12
+  86 0054 240F      		add r18,r20
+  87 0056 351F      		adc r19,r21
+  88 0058 2130      		cpi r18,1
+  89 005a 3941      		sbci r19,25
+  90 005c 04F0      		brlt .L2
+  27:floorDetection.c **** 		*type = POWER_UP;
+  91               		.loc 1 27 0
+  92 005e F801      		movw r30,r16
+  93 0060 1082      		st Z,__zero_reg__
+  28:floorDetection.c **** 		
+  29:floorDetection.c **** 		return;
+  94               		.loc 1 29 0
+  95 0062 00C0      		rjmp .L1
+  96               	.L2:
+  30:floorDetection.c **** 	}
+  31:floorDetection.c **** 	
+  32:floorDetection.c **** 	int16_t cliff_left = qdata[2];
+  97               		.loc 1 32 0
+  98 0064 8D85      		ldd r24,Y+13
+  99 0066 9E85      		ldd r25,Y+14
+ 100               	.LVL3:
+  33:floorDetection.c **** 	int16_t cliff_right = qdata[3];
+ 101               		.loc 1 33 0
+ 102 0068 2F85      		ldd r18,Y+15
+ 103 006a 3889      		ldd r19,Y+16
+ 104               	.LVL4:
+  34:floorDetection.c **** 	
+  35:floorDetection.c **** 	// Left border
+  36:floorDetection.c **** 	if (cliff_left > BORDER_CLIFF_THRESHOLD) {
+ 105               		.loc 1 36 0
+ 106 006c 853C      		cpi r24,-59
+ 107 006e F9E0      		ldi r31,9
+ 108 0070 9F07      		cpc r25,r31
+ 109 0072 04F0      		brlt .L4
+ 110               	.LBB2:
+  37:floorDetection.c **** 		// Left sensor is on border
+  38:floorDetection.c **** 		//char val[4] = {'l', 'e', 'f', 't'};
+  39:floorDetection.c **** 		char result[4];
+  40:floorDetection.c **** 		intToHex(cliff_left, result);
+ 111               		.loc 1 40 0
+ 112 0074 BE01      		movw r22,r28
+ 113 0076 6F5E      		subi r22,-17
+ 114 0078 7F4F      		sbci r23,-1
+ 115 007a 0E94 0000 		call intToHex
+ 116               	.LVL5:
+  41:floorDetection.c **** 		set_Display(result);
+ 117               		.loc 1 41 0
+ 118 007e CE01      		movw r24,r28
+ 119 0080 4196      		adiw r24,17
+ 120 0082 0E94 0000 		call set_Display
+ 121               	.LVL6:
+  42:floorDetection.c **** 		
+  43:floorDetection.c **** 		*type = BORDER_LEFT;
+ 122               		.loc 1 43 0
+ 123 0086 81E0      		ldi r24,lo8(1)
+ 124 0088 F801      		movw r30,r16
+ 125 008a 8083      		st Z,r24
+ 126 008c 00C0      		rjmp .L1
+ 127               	.LVL7:
+ 128               	.L4:
+ 129               	.LBE2:
+  44:floorDetection.c **** 		
+  45:floorDetection.c **** 		return;
+  46:floorDetection.c **** 	} else if (cliff_right > BORDER_CLIFF_THRESHOLD) {
+ 130               		.loc 1 46 0
+ 131 008e 253C      		cpi r18,-59
+ 132 0090 3940      		sbci r19,9
+ 133 0092 04F0      		brlt .L1
+ 134               	.LBB3:
+  47:floorDetection.c **** 		char result[4];
+  48:floorDetection.c **** 		intToHex(cliff_left, result);
+ 135               		.loc 1 48 0
+ 136 0094 BE01      		movw r22,r28
+ 137 0096 6F5E      		subi r22,-17
+ 138 0098 7F4F      		sbci r23,-1
+ 139 009a 0E94 0000 		call intToHex
+ 140               	.LVL8:
+  49:floorDetection.c **** 		set_Display(result);
+ 141               		.loc 1 49 0
+ 142 009e CE01      		movw r24,r28
+ 143 00a0 4196      		adiw r24,17
+ 144 00a2 0E94 0000 		call set_Display
+ 145               	.LVL9:
+  50:floorDetection.c **** 		
+  51:floorDetection.c **** 		*type = BORDER_RIGHT;
+ 146               		.loc 1 51 0
+ 147 00a6 82E0      		ldi r24,lo8(2)
+ 148 00a8 F801      		movw r30,r16
+ 149 00aa 8083      		st Z,r24
+ 150               	.L1:
+ 151               	/* epilogue start */
+ 152               	.LBE3:
+  52:floorDetection.c **** 		
+  53:floorDetection.c **** 		return;
+  54:floorDetection.c **** 	}
+  55:floorDetection.c **** }
+ 153               		.loc 1 55 0
+ 154 00ac 6496      		adiw r28,20
+ 155 00ae 0FB6      		in __tmp_reg__,__SREG__
+ 156 00b0 F894      		cli
+ 157 00b2 DEBF      		out __SP_H__,r29
+ 158 00b4 0FBE      		out __SREG__,__tmp_reg__
+ 159 00b6 CDBF      		out __SP_L__,r28
+ 160 00b8 DF91      		pop r29
+ 161 00ba CF91      		pop r28
+ 162 00bc 1F91      		pop r17
+ 163 00be 0F91      		pop r16
+ 164               	.LVL10:
+ 165 00c0 0895      		ret
+ 166               		.cfi_endproc
+ 167               	.LFE1:
+ 169               	.Letext0:
+ 170               		.file 2 "/usr/lib/avr/include/stdint.h"
+ 171               		.file 3 "floorDetection.h"
+ 172               		.file 4 "roomba.h"
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 floorDetection.c
+     /tmp/cctJDMS6.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/cctJDMS6.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/cctJDMS6.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/cctJDMS6.s:5      *ABS*:000000000000003b __RAMPZ__
+     /tmp/cctJDMS6.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/cctJDMS6.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/cctJDMS6.s:13     .text:0000000000000000 floorDetection
+
+UNDEFINED SYMBOLS
+getSensorQueryList
+intToHex
+set_Display
