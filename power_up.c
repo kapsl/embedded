@@ -4,8 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "power_up.h"
-
-powerUp_type currentPowerUp;
+#include "radio.h"
 
 powerUp_type getPowerUp(uint16_t tickCountRand) {
 	char result[4] = {'P', 'O', 'W', 'R'};
@@ -13,6 +12,7 @@ powerUp_type getPowerUp(uint16_t tickCountRand) {
 	
 	my_msleep(500);
 	
+	// TODO nicer symbols and not blocking
 	// Show randomize signal on Display
 	for (int a = 0; a < 12; a++) {
 		result[0] = ' ';
@@ -50,12 +50,21 @@ powerUp_type getPowerUp(uint16_t tickCountRand) {
  * TODO
  */
 void shootPowerUp() {
-	// TODO Make shooting sound
+	if (currentPowerUp == NO_POWERUP) {
+		return;
+	}
+	
+	// Make shooting sound
 	playSong(0);
 	
-	// TODO Send shooting wireless
+	// If we have a red tank --> send shooting over radio
+	if (currentPowerUp == RED_TANK) {
+		sendRadio(RED_TANK_SHOT);
+	}
+	
+	// TODO boost set global variable
+	// TODO safe for red tank set global var
 	
 	// Delete display
 	clear_Display();
-	while(1);
 }

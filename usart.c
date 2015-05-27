@@ -1,5 +1,7 @@
 #include "usart.h"
 #include "tools.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 void usart_init_roomba() {
 	// Baudrate
@@ -88,4 +90,11 @@ void sendString(char * string) {
 		
 		a++;
 	}
+}
+
+void send_value(uint8_t value){
+	char buffer[10];
+	sprintf(buffer,"%i",value);
+	
+	sendString(buffer);
 }
