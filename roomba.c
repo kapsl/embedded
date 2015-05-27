@@ -10,6 +10,9 @@ void initializeRoomba(void) {
 		
 	// Save mode
 	send_byte_roomba(131);
+	
+	// Store songs
+	storeSongs();
 }
 
 void set_Display(char *data) {
@@ -19,6 +22,25 @@ void set_Display(char *data) {
 	while (a < 4) {
 		send_byte_roomba(data[a]);
 		a++;
+	}
+}
+
+/**
+ * TODO
+ */
+void clear_Display() {
+	char result[4] = {' ', ' ', ' ', ' '};
+	set_Display(result);
+}
+
+/**
+ * TODO
+ */
+void set_Display_raw(uint8_t *data_bytes) {
+	send_byte_roomba(163);
+	
+	for (uint8_t i = 0; i < 4; i++) {
+		send_byte_roomba(data_bytes[i]);
 	}
 }
 
@@ -448,4 +470,39 @@ void drive_with_p_regler() {
 		my_msleep(abtastzeit);
 	}	
 		
+}
+
+/**
+ * \brief Play a stored song with
+ * 
+ * \param songNr
+ */
+void playSong(uint8_t songNr) {
+	send_byte_roomba(141);
+	send_byte_roomba(0);
+}
+
+/**
+ *  \brief Store songs for playing them later
+ */
+void storeSongs() {
+	// Programm songs
+	send_byte_roomba(140);
+	
+	// Song 1 -- shoot
+	// Song nr.
+	send_byte_roomba(0);
+	
+	// Length
+	send_byte_roomba(3);
+	
+	// Note 1, duration 1
+	send_byte_roomba(87);
+	send_byte_roomba(16);
+	
+	send_byte_roomba(88);
+	send_byte_roomba(16);
+	
+	send_byte_roomba(89);
+	send_byte_roomba(16);
 }

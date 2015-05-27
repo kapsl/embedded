@@ -9,6 +9,8 @@
 #include "floorDetection.h"
 #include "power_up.h"
 
+// TODO comments in header files
+
 int main(int argc, const char* argv[]) {
 	usart_init_roomba();
 	initializeRoomba();
@@ -35,25 +37,31 @@ int main(int argc, const char* argv[]) {
 		// Detect floor stuff
 		if (dType == POWER_UP) {
 			powerUp_type powerup_type = getPowerUp(qdata[5]);
-			
-			// TODO Save current powerup, if OK is pressed --> handle powerup
+			//my_msleep(1000);
+			//while(1);
 			// TODO funkmodul
 		} else if (dType == BORDER_LEFT) {
-			char result[4] = {'L', 'E', 'F', 'T'};
-			set_Display(result);
+			//char result[4] = {'L', 'E', 'F', 'T'};
+			//set_Display(result);
 		} else if (dType == BORDER_RIGHT) {
-			char result[4] = {'R', 'I', 'G', 'T'};
-			set_Display(result);
+			//char result[4] = {'R', 'I', 'G', 'T'};
+			//set_Display(result);
 		} else {
-			char result[4] = {' ', ' ', ' ', ' '};
-			set_Display(result);
+			//char result[4] = {' ', ' ', ' ', ' '};
+			//set_Display(result);
 		}
 		
 		if (signal != RNOTHINGPRESSED) {
-			getCommand(signal, &velocity_right, &velocity_left);
+			// OK Pressed for power ups
+			if (signal == RSHOOT) {
+				// Shoot power up
+				shootPowerUp();
+			} else {
+				getCommand(signal, &velocity_right, &velocity_left);
+			}
 		}
-		my_msleep(200);
 		
+		my_msleep(200);
 	} 
     
     return 0;

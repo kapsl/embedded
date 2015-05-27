@@ -26,6 +26,9 @@
 
 void initializeRoomba(void);
 void set_Display(char *data);
+void set_Display_raw(uint8_t *data_bytes);
+void clear_Display(void);
+
 uint8_t read_button(uint8_t button);
 void read_values(uint8_t packetid, uint8_t * data, uint8_t length);
 void drive(int16_t velocity);
@@ -45,5 +48,7 @@ void set_back(void);
 void drive_with_p_regler(void);
 void getSensorQueryList(uint8_t nrPackets, uint8_t* packet_ids, uint8_t* packet_length, uint16_t* data);
 void bump_handling(uint8_t bump);
+void storeSongs(void);
+void playSong(uint8_t songNr);
 
 #endif
