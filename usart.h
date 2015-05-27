@@ -12,5 +12,6 @@ void send_byte_roomba(uint8_t byte);
 uint8_t receive_byte_roomba(void);
 
 void sendString(char * string);
+void send_value(uint8_t value);
 
 #endif

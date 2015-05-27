@@ -47,8 +47,8 @@
   29 0008 3381      		ldd r19,Z+3
   30 000a 240F      		add r18,r20
   31 000c 351F      		adc r19,r21
-  32 000e 2130      		cpi r18,1
-  33 0010 3941      		sbci r19,25
+  32 000e 253C      		cpi r18,-59
+  33 0010 3940      		sbci r19,9
   34 0012 04F0      		brlt .L2
   20:floorDetection.c **** 		*type = POWER_UP;
   35               		.loc 1 20 0
@@ -134,12 +134,12 @@
   88               		.file 3 "floorDetection.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 floorDetection.c
-     /tmp/ccGSXDKA.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/ccGSXDKA.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/ccGSXDKA.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/ccGSXDKA.s:5      *ABS*:000000000000003b __RAMPZ__
-     /tmp/ccGSXDKA.s:6      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/ccGSXDKA.s:7      *ABS*:0000000000000001 __zero_reg__
-     /tmp/ccGSXDKA.s:13     .text:0000000000000000 floorDetection
+     /tmp/cc1YaTf4.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/cc1YaTf4.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/cc1YaTf4.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/cc1YaTf4.s:5      *ABS*:000000000000003b __RAMPZ__
+     /tmp/cc1YaTf4.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/cc1YaTf4.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/cc1YaTf4.s:13     .text:0000000000000000 floorDetection
 
 NO UNDEFINED SYMBOLS
