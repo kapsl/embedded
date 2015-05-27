@@ -134,12 +134,12 @@
   88               		.file 3 "floorDetection.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 floorDetection.c
-     /tmp/cc4IcuzW.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/cc4IcuzW.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/cc4IcuzW.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/cc4IcuzW.s:5      *ABS*:000000000000003b __RAMPZ__
-     /tmp/cc4IcuzW.s:6      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/cc4IcuzW.s:7      *ABS*:0000000000000001 __zero_reg__
-     /tmp/cc4IcuzW.s:13     .text:0000000000000000 floorDetection
+     /tmp/ccGSXDKA.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccGSXDKA.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccGSXDKA.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccGSXDKA.s:5      *ABS*:000000000000003b __RAMPZ__
+     /tmp/ccGSXDKA.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccGSXDKA.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccGSXDKA.s:13     .text:0000000000000000 floorDetection
 
 NO UNDEFINED SYMBOLS

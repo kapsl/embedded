@@ -8,15 +8,15 @@
 #include "remotecontrol.h"
 #include "floorDetection.h"
 #include "power_up.h"
-#include "strafen.h"
+#include "weapondamage.h"
 
 int main(int argc, const char* argv[]) {
 	usart_init_roomba();
 	initializeRoomba();
+	my_msleep(20);
 	
 	int16_t velocity_right = 0;
-	int16_t velocity_left = 0;
-	char str [4]; 
+	int16_t velocity_left = 0; 
 
 		
 	while (1) {	
@@ -28,13 +28,10 @@ int main(int argc, const char* argv[]) {
 		uint16_t qdata[6];
 	
 		getSensorQueryList(6, packet_ids, packet_length, qdata);
-		
 		remoteSignal signal = getRemoteSignal(qdata[4]);
-		sprintf(str, "%x",
-				qdata[4]);
-		my_msleep(200);		 
-		set_Display(str);
-		my_msleep(200);
+		
+		my_msleep(20);
+		
 		if (signal != RNOTHINGPRESSED) {
 			getCommand(signal, &velocity_right, &velocity_left);
 		}

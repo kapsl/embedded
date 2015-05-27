@@ -6,27 +6,30 @@
 #include "remotecontrol.h"
 #include "drivecontrol.h"
 
-uint8_t left_just_pressed = 0x0; 
-uint8_t right_just_pressed = 0x0;
+uint8_t speed_set_left = 0x00; 
+uint8_t speed_set_right = 0x00;
+char str [5];
 /**
  * \brief TODO
  */
 void getCommand(remoteSignal type, int16_t * actVel_right,int16_t * actVel_left) {
 	
 	if (type == RACCELERATE) {
+			
 			if(*actVel_left>*actVel_right){
 				*actVel_right=*actVel_left;
 			} 
 			else if (*actVel_left<*actVel_right){
 				*actVel_left=*actVel_right; 
 			}
-			else {
+			else if (*actVel_right<500&&*actVel_left<500) {
 				*actVel_right=*actVel_right+ACC_BRAKE_CONSTANT; 
 				*actVel_left=*actVel_left+ACC_BRAKE_CONSTANT; 
 			}
 	} 
-	else if (type == RBRAKE) {
-				if(*actVel_left>*actVel_right){
+	else if (type == RBRAKE  && *actVel_left>0) {
+		
+			if(*actVel_left>*actVel_right){
 				*actVel_right=*actVel_left;
 			} 
 			else if (*actVel_left<*actVel_right){
@@ -35,22 +38,38 @@ void getCommand(remoteSignal type, int16_t * actVel_right,int16_t * actVel_left)
 			else {
 				*actVel_right=*actVel_right-ACC_BRAKE_CONSTANT; 
 				*actVel_left=*actVel_left-ACC_BRAKE_CONSTANT; 
+			}
 	} 
-	else if (type == RLEFT && left_just_pressed==0x0) {
-		left_just_pressed=0x1; 
-		right_just_pressed=0x0;
-		*actVel_right=*actVel_left;
-		*actVel_left=0.5*(*actVel_left);  
+	else if (type == RLEFT  && *actVel_left>0) {
+		if (actVel_left<500&&actVel_right<500){
+			*actVel_left=*actVel_left-CONTROL_CONSTANT;
+			*actVel_right=*actVel_right+CONTROL_CONSTANT;
+		}
+		else{
+			*actVel_right=*actVel_right+CONTROL_CONSTANT;
+			*actVel_left=*actVel_left-(2*CONTROL_CONSTANT);
+		}
 	} 
-	else if (type == RRIGHT && right_just_pressed==0x0) {
-		left_just_pressed=0x0; 
-		right_just_pressed=0x1; 
-		*actVel_left=*actVel_right;
-		*actVel_right=0.5*(*actVel_right);
+	else if (type == RRIGHT && *actVel_right>0) {
+		if (actVel_left<500&&actVel_right<500){
+			*actVel_left=*actVel_left+CONTROL_CONSTANT;
+			*actVel_right=*actVel_right-CONTROL_CONSTANT;
+		}
+		else{
+			*actVel_left=*actVel_left+CONTROL_CONSTANT;
+			*actVel_right=*actVel_right-(2*CONTROL_CONSTANT);
+		}
+		
 	}
 		 
 	drive_direction(*actVel_right, *actVel_left);
+		sprintf(str, "%x%x",
+				*actVel_left,
+				*actVel_right);
+		my_msleep(20);		 
+		set_Display(str);
 }
+
 
 /**
  * \brief Drive and have the posibility to drive a corner

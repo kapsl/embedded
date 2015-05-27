@@ -1,8 +1,9 @@
 #ifndef DRIVECONTROL_H_INCLUDED
 #define DRIVECONTROL_H_INCLUDED
 
-#define ACC_BRAKE_CONSTANT 0x50
-#define CONTROL_CONSTANT 0x30
+#define ACC_BRAKE_CONSTANT 50
+#define CONTROL_CONSTANT 50
+
 
 #include <avr/io.h>
 #include "remotecontrol.h"

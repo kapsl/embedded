@@ -32,7 +32,7 @@ TARGET = main
 
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC = $(TARGET).c tools.c button.c usart.c roomba.c drivecontrol.c remotecontrol.c floorDetection.c power_up.c strafen.c
+SRC = $(TARGET).c tools.c button.c usart.c roomba.c drivecontrol.c remotecontrol.c floorDetection.c power_up.c weapondamage.c
 
 
 # List Assembler source files here.
