@@ -5,7 +5,14 @@
 #include <stdlib.h>
 #include "power_up.h"
 #include "radio.h"
+#include "avr/interrupt.h"
 
+uint8_t bigRoombaActive = 0;
+uint8_t mushroomActive = 0;
+
+/**
+ * TODO
+ */
 powerUp_type getPowerUp(uint16_t tickCountRand) {
 	char result[4] = {'P', 'O', 'W', 'R'};
 	set_Display(result);
@@ -62,9 +69,26 @@ void shootPowerUp() {
 		sendRadio(RED_TANK_SHOT);
 	}
 	
-	// TODO boost set global variable
-	// TODO safe for red tank set global var
+	// TODO Big roomba and mushroom active global variable
+	initializeTimer(5);
+	sei();
+	
+	if (currentPowerUp == MUSHROOM) {
+		mushroomActive = 1;
+	} else if (currentPowerUp == BIG_DADY) {
+		bigRoombaActive = 1;
+	}
 	
 	// Delete display
 	clear_Display();
 }
+
+/**
+ * \brief Called from the timer, when 
+ * 		the time for a power up to be active is over
+ */
+void powerUpIsOver() {
+	bigRoombaActive = 0;
+	mushroomActive = 0;
+}
+

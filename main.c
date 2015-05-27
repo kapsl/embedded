@@ -13,10 +13,13 @@
 
 // TODO comments in header files
 
+// TODO Funk gut testen. Powerups hinkriegen. - rausfahren und zurücksetzen
+
 int main(int argc, const char* argv[]) {
 	usart_init_roomba();
 	usart_init();
 	initializeRoomba();
+	
 	my_msleep(20);
 	
 	int16_t velocity_right = 0;
@@ -75,10 +78,10 @@ int main(int argc, const char* argv[]) {
 		}
 		
 		// Receive radio
+		// Hit by red tank
 		if (receiveRadio() == RED_TANK_SHOT) {
-			// Hit by red tank
-			if (currentPowerUp == MUSHROOM) {
-				// Hit did not work
+			// Hit did not work
+			if (bigRoombaActive) {
 				playSong(0); // TODO another song
 				sendString("mushhit");
 			} else {

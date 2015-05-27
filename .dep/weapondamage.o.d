@@ -6,7 +6,8 @@ weapondamage.o: weapondamage.c weapondamage.h \
  /usr/lib/avr/include/avr/common.h /usr/lib/avr/include/avr/version.h \
  /usr/lib/avr/include/avr/fuse.h /usr/lib/avr/include/avr/lock.h roomba.h \
  /usr/lib/avr/include/stdio.h /usr/lib/gcc/avr/4.8.2/include/stdarg.h \
- /usr/lib/gcc/avr/4.8.2/include/stddef.h /usr/lib/avr/include/stdlib.h
+ /usr/lib/gcc/avr/4.8.2/include/stddef.h /usr/lib/avr/include/stdlib.h \
+ tools.h
 
 weapondamage.h:
 
@@ -43,3 +44,5 @@ roomba.h:
 /usr/lib/gcc/avr/4.8.2/include/stddef.h:
 
 /usr/lib/avr/include/stdlib.h:
+
+tools.h:
