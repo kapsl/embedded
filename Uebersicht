@@ -1,0 +1,25 @@
+Mario Kart
+
+- 2 Roombas
+- Mit Fernbedinung gesteuert (unterschiedliche Tasten)
+- Lenkung über Beschleunigung / Bremsen / Radius (falls das nicht klappt --> Standardsteuerung)
+- Kurs mit links - rechts Klebenbandbegrenzung ~ 60cm breit
+- Wenn x Sekunden über Begrenzung oder ganzer Roomba über Begrenzung --> Nicht mehr Stuerbar --> Fährt möglichst in die Mitte des Kurses 
+- evtl. wenn Roombas kollidieren --> Hinterer wird langsamer --> Vorderer kurz schneller
+
+Powerups
+	- Roter Panzer --> Trifft immer --> Roomba bremst und dreht sich 3x im Kreis
+	- Pilz --> Man darf für gewisse Zeit von der Straße fahren
+	- Großer Roomba --> Roter Panzer kann ihn nicht treffen
+	
+	- Wenn über Alustreifen (Lichtdetektor?!)
+	- Display --> Zufallsgenerator --> Powerup --> Auswahl	
+	
+TODO
+ - Steuerung hinkriegen
+ - Kurs überlegen
+ - Funkmodul zum Laufen bringen
+ - Alustreifen Erkennung
+ - Begrenzungserkennung
+ - Autonom wieder in die Mitte fahren
+ - Regeln implementieren 
