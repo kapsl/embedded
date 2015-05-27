@@ -1,12 +1,14 @@
-main.o: main.c /usr/lib/avr/include/avr/io.h \
+strafen.o: strafen.c strafen.h /usr/lib/avr/include/avr/io.h \
  /usr/lib/avr/include/avr/sfr_defs.h /usr/lib/avr/include/inttypes.h \
  /usr/lib/gcc/avr/4.8.2/include/stdint.h /usr/lib/avr/include/stdint.h \
  /usr/lib/avr/include/avr/iom2560.h /usr/lib/avr/include/avr/iomxx0_1.h \
  /usr/lib/avr/include/avr/portpins.h /usr/lib/avr/include/avr/common.h \
  /usr/lib/avr/include/avr/version.h /usr/lib/avr/include/avr/fuse.h \
- /usr/lib/avr/include/avr/lock.h tools.h button.h usart.h \
- /usr/lib/avr/include/ctype.h roomba.h drivecontrol.h remotecontrol.h \
- floorDetection.h power_up.h strafen.h
+ /usr/lib/avr/include/avr/lock.h roomba.h /usr/lib/avr/include/stdio.h \
+ /usr/lib/gcc/avr/4.8.2/include/stdarg.h \
+ /usr/lib/gcc/avr/4.8.2/include/stddef.h /usr/lib/avr/include/stdlib.h
+
+strafen.h:
 
 /usr/lib/avr/include/avr/io.h:
 
@@ -32,22 +34,12 @@ main.o: main.c /usr/lib/avr/include/avr/io.h \
 
 /usr/lib/avr/include/avr/lock.h:
 
-tools.h:
-
-button.h:
-
-usart.h:
-
-/usr/lib/avr/include/ctype.h:
-
 roomba.h:
 
-drivecontrol.h:
+/usr/lib/avr/include/stdio.h:
 
-remotecontrol.h:
+/usr/lib/gcc/avr/4.8.2/include/stdarg.h:
 
-floorDetection.h:
+/usr/lib/gcc/avr/4.8.2/include/stddef.h:
 
-power_up.h:
-
-strafen.h:
+/usr/lib/avr/include/stdlib.h:

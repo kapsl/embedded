@@ -32,7 +32,7 @@ TARGET = main
 
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC = $(TARGET).c tools.c button.c usart.c roomba.c drivecontrol.c remotecontrol.c floorDetection.c power_up.c strafen.c
+SRC = $(TARGET).c RFM12B.c usart.c
 
 
 # List Assembler source files here.
@@ -49,7 +49,7 @@ ASRC =
 # Optimization level, can be [0, 1, 2, 3, s].
 # 0 = turn off optimization. s = optimize for size.
 # (Note: 3 is not always the best optimization level. See avr-libc FAQ.)
-OPT = 1
+OPT = 0
 
 # Debugging format.
 # Native formats for AVR-GCC's -g are stabs [default], or dwarf-2.
@@ -155,12 +155,12 @@ LDFLAGS += $(PRINTF_LIB) $(SCANF_LIB) $(MATH_LIB)
 # Type: avrdude -c ?
 # to get a full listing.
 #
-AVRDUDE_PROGRAMMER = stk500 -D
+AVRDUDE_PROGRAMMER = stk500
 
 # com1 = serial port. Use lpt1 to connect to parallel port.
-AVRDUDE_PORT = /dev/ttyACM*    # programmer connected to serial device
+AVRDUDE_PORT = /dev/ttyACM0    # programmer connected to serial device
 
-AVRDUDE_WRITE_FLASH = -B 2 -U flash:w:$(TARGET).hex 
+AVRDUDE_WRITE_FLASH = -B 2 -U flash:w:$(TARGET).hex  -D -V
 #AVRDUDE_WRITE_EEPROM = -U eeprom:w:$(TARGET).eep
 
 

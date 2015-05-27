@@ -6,24 +6,49 @@
 #include "remotecontrol.h"
 #include "drivecontrol.h"
 
+uint8_t left_just_pressed = 0x0; 
+uint8_t right_just_pressed = 0x0;
 /**
  * \brief TODO
  */
 void getCommand(remoteSignal type, int16_t * actVel_right,int16_t * actVel_left) {
-	if (type == RACCELERATE) {
-		*actVel_right=*actVel_right + ACC_BRAKE_CONSTANT;
-		*actVel_left=*actVel_left + ACC_BRAKE_CONSTANT; 
-	} else if (type == RBRAKE) {
-		*actVel_right=*actVel_right - ACC_BRAKE_CONSTANT;
-		*actVel_left=*actVel_left - ACC_BRAKE_CONSTANT; 
-	} else if (type == RLEFT) {
-		*actVel_right=*actVel_right + ACC_BRAKE_CONSTANT;
-		*actVel_left=*actVel_left - ACC_BRAKE_CONSTANT;  
-	} else if (type == RRIGHT) {
-		*actVel_right=*actVel_right - ACC_BRAKE_CONSTANT;
-		*actVel_left=*actVel_left + ACC_BRAKE_CONSTANT; 
-	}
 	
+	if (type == RACCELERATE) {
+			if(*actVel_left>*actVel_right){
+				*actVel_right=*actVel_left;
+			} 
+			else if (*actVel_left<*actVel_right){
+				*actVel_left=*actVel_right; 
+			}
+			else {
+				*actVel_right=*actVel_right+ACC_BRAKE_CONSTANT; 
+				*actVel_left=*actVel_left+ACC_BRAKE_CONSTANT; 
+			}
+	} 
+	else if (type == RBRAKE) {
+				if(*actVel_left>*actVel_right){
+				*actVel_right=*actVel_left;
+			} 
+			else if (*actVel_left<*actVel_right){
+				*actVel_left=*actVel_right; 
+			}
+			else {
+				*actVel_right=*actVel_right-ACC_BRAKE_CONSTANT; 
+				*actVel_left=*actVel_left-ACC_BRAKE_CONSTANT; 
+	} 
+	else if (type == RLEFT && left_just_pressed==0x0) {
+		left_just_pressed=0x1; 
+		right_just_pressed=0x0;
+		*actVel_right=*actVel_left;
+		*actVel_left=0.5*(*actVel_left);  
+	} 
+	else if (type == RRIGHT && right_just_pressed==0x0) {
+		left_just_pressed=0x0; 
+		right_just_pressed=0x1; 
+		*actVel_left=*actVel_right;
+		*actVel_right=0.5*(*actVel_right);
+	}
+		 
 	drive_direction(*actVel_right, *actVel_left);
 }
 

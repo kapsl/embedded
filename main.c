@@ -8,6 +8,7 @@
 #include "remotecontrol.h"
 #include "floorDetection.h"
 #include "power_up.h"
+#include "strafen.h"
 
 int main(int argc, const char* argv[]) {
 	usart_init_roomba();
@@ -15,6 +16,7 @@ int main(int argc, const char* argv[]) {
 	
 	int16_t velocity_right = 0;
 	int16_t velocity_left = 0;
+	char str [4]; 
 
 		
 	while (1) {	
@@ -28,31 +30,14 @@ int main(int argc, const char* argv[]) {
 		getSensorQueryList(6, packet_ids, packet_length, qdata);
 		
 		remoteSignal signal = getRemoteSignal(qdata[4]);
-		
-		detectedType dType;
-		floorDetection(&dType, qdata);
-		
-		// Detect floor stuff
-		if (dType == POWER_UP) {
-			powerUp_type powerup_type = getPowerUp(qdata[5]);
-			
-			// TODO Save current powerup, if OK is pressed --> handle powerup
-			// TODO funkmodul
-		} else if (dType == BORDER_LEFT) {
-			char result[4] = {'L', 'E', 'F', 'T'};
-			set_Display(result);
-		} else if (dType == BORDER_RIGHT) {
-			char result[4] = {'R', 'I', 'G', 'T'};
-			set_Display(result);
-		} else {
-			char result[4] = {' ', ' ', ' ', ' '};
-			set_Display(result);
-		}
-		
+		sprintf(str, "%x",
+				qdata[4]);
+		my_msleep(200);		 
+		set_Display(str);
+		my_msleep(200);
 		if (signal != RNOTHINGPRESSED) {
 			getCommand(signal, &velocity_right, &velocity_left);
 		}
-		my_msleep(200);
 		
 	} 
     

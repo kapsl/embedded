@@ -312,17 +312,17 @@ void drive_circle(uint16_t radius, uint16_t velocity) {
  */
 void turn(int16_t degree) {
 	// In 13 seconds, 360°
-	uint16_t delay = (13000 / 360) * abs(degree);
+	uint16_t delay = (uint16_t)(abs(degree)*10.45f);;
 	
 	if (degree > 0) {
-		driveWithRadius(50, 1);
+		driveWithRadius(200, 1);
 	} else {
-		driveWithRadius(50, -1);
+		driveWithRadius(200, -1);
 	}
 	
 	my_msleep(delay);
 	
-	driveWithRadius(0, 0);
+	stop();
 }
 
 /**
