@@ -6,8 +6,8 @@
 
 #define RIGHT_WHEEL 0
 #define LEFT_WHEEL 1
-#define DRIVE_STRAIGHT_SPEED 50
-#define DRIVE_IN_SPEED 20
+#define DRIVE_STRAIGHT_SPEED 80
+#define DRIVE_IN_SPEED 30
 
 void handleOutOfCourse(detectedType activeSensorSide);
 void driveIn(uint8_t wheel);

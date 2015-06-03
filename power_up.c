@@ -85,6 +85,9 @@ void shootPowerUp() {
 		
 		if (currentPowerUp == MUSHROOM) {
 			mushroomActive = 1;
+			
+			// TODO probably we will disable steering / accelerating / etc. 
+			//so that we have a defined position when driving off the road
 		} else if (currentPowerUp == BIG_DADY) {
 			bigRoombaActive = 1;
 		}

@@ -252,7 +252,7 @@ void getSensorQueryList(uint8_t nrPackets, uint8_t* packet_ids, uint8_t* packet_
  */
 void playSong(uint8_t songNr) {
 	send_byte_roomba(141);
-	send_byte_roomba(0);
+	send_byte_roomba(songNr);
 }
 
 /**

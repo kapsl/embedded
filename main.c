@@ -11,9 +11,10 @@
 #include "radio.h"
 #include "outOfCourseController.h"
 
+// TODO Alles zum laufen kriegen - Kurs bauen
 // TODO comments in header files
-
-// TODO Funk gut testen. Powerups hinkriegen. - rausfahren und zurücksetzen
+// TODO rausfahren richtig handeln mit schwarzem Klebeband
+// TODO Funk ACK. Rausfahren power up
 
 int main(int argc, const char* argv[]) {
 	usart_init_roomba();
@@ -27,7 +28,11 @@ int main(int argc, const char* argv[]) {
 	currentPowerUp = NO_POWERUP;
 	
 	// Get nr. of roomba from remote control
-	uint16_t result = read_user_input();
+	//uint16_t result = read_user_input();
+	
+	//TODO for testing
+	uint16_t result = 1;
+	
 	// TODO error, when not 1 or 2
 	initializeRadio((uint8_t) result);
 	
@@ -44,7 +49,6 @@ int main(int argc, const char* argv[]) {
 	
 		getSensorQueryList(6, packet_ids, packet_length, qdata);
 		remoteSignal signal = getRemoteSignal(qdata[4]);
-		
 
 		my_msleep(20);
 
@@ -52,19 +56,12 @@ int main(int argc, const char* argv[]) {
 		floorDetection(&dType, qdata);
 		
 		// Detect floor stuff
-		if (dType == POWER_UP) {
-			getPowerUp(qdata[5]);
-		} else if (dType == BORDER_LEFT) {
-			//char result[4] = {'L', 'E', 'F', 'T'};
-			//set_Display(result);
-			handleOutOfCourse(BORDER_LEFT);
-		} else if (dType == BORDER_RIGHT) {
-			//char result[4] = {'R', 'I', 'G', 'T'};
-			//set_Display(result);
-			handleOutOfCourse(BORDER_RIGHT);
-		} else {
-			//char result[4] = {' ', ' ', ' ', ' '};
-			//set_Display(result);
+		if (dType != NO_TYPE) {
+			if (dType == POWER_UP) {
+				getPowerUp(qdata[5]);
+			} else {
+				handleOutOfCourse(dType);
+			}
 		}
 		
 		if (signal != RNOTHINGPRESSED) {
@@ -83,13 +80,13 @@ int main(int argc, const char* argv[]) {
 			// Hit did not work
 			if (bigRoombaActive) {
 				playSong(0); // TODO another song
-				sendString("mushhit");
+				sendString("Hit with mushroom - no damage...");
 			} else {
 				// Stop roomba and turn
 				// TODO
 				//weapondamage(1);
 				playSong(0);
-				sendString("Hit..");
+				sendString("Hit...");
 			}
 		}
 		
