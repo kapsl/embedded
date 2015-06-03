@@ -33,7 +33,7 @@ void getCommand(remoteSignal type, int16_t * actVel_right,int16_t * actVel_left)
 	}
 		 
 	drive_direction(*actVel_right, *actVel_left);
-	my_msleep(40);
+	my_msleep(100);
 }
 
 void drive_stop(){
@@ -144,17 +144,17 @@ void drive_turn(int16_t degree){
 }
 
  
-void drive_direction(int16_t velocity_right, int16_t velocity_left) {
+void drive_direction(int16_t velocity_left, int16_t velocity_right) {
 	send_byte_roomba(145);
 	
-	uint8_t low = velocity_right;
-	uint8_t high = (velocity_right >> 8);
+	uint8_t low = velocity_left;
+	uint8_t high = (velocity_left >> 8);
 	
 	send_byte_roomba(high);
 	send_byte_roomba(low);
 	
-	low = velocity_left;
-	high = (velocity_left >> 8);
+	low = velocity_right;
+	high = (velocity_right >> 8);
 	
 	send_byte_roomba(high);
 	send_byte_roomba(low);
@@ -216,15 +216,13 @@ uint16_t getTicks() {
  * \param bump the byte where the bump values are stored
  */
 void bump_handling(uint8_t bump) {
-	/*if ((bump & 0x02) == 0x02) {
+	if ((bump & 0x02) == 0x02) {
 		// Left bumper
-		set_back();
-		drive_turn(-80);
+		drive_stop();
 	} else if ((bump & 0x01) == 0x01) {
 		// Right bumper
-		set_back();
-		turn(45);
-	}*/
+		drive_stop(); 
+	}
 }
 
 /**
@@ -249,3 +247,8 @@ void driveWithRadius(uint16_t velocity, uint16_t radius) {
 	send_byte_roomba(rhigh);
 	send_byte_roomba(rlow);	
 }
+
+void drive_hit(){
+	drive_stop(); 
+	drive_turn(3*360+10); 
+	}; 
