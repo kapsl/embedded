@@ -25,8 +25,6 @@ remoteSignal getRemoteSignal(uint16_t remoteSignalData){
 			return RLEFT; 
 		} else if (rem == POWER){
 			return RSHOOT;
-		} else {
-			return RNOTHINGPRESSED; 
 		}
 	}	
 	else if (node_id==2){
@@ -42,8 +40,8 @@ remoteSignal getRemoteSignal(uint16_t remoteSignalData){
 			return RLEFT; 
 		} else if (rem == NR_5){
 			return RSHOOT;
-		} else {
-			return RNOTHINGPRESSED; 
 		}
 	}
+	
+	return RNOTHINGPRESSED;
 }

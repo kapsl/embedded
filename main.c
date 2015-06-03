@@ -8,8 +8,8 @@
 #include "remotecontrol.h"
 #include "floorDetection.h"
 #include "power_up.h"
-#include "weapondamage.h"
 #include "radio.h"
+#include "outOfCourseController.h"
 
 // TODO comments in header files
 

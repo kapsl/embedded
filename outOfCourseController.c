@@ -2,9 +2,10 @@
 #include "usart.h"
 #include "floorDetection.h"
 #include "drivecontrol.h"
+#include "outOfCourseController.h"
 
-leftSensorOverLine = 0;
-rightSensorOverLine = 0;
+uint8_t leftSensorOverLine = 0;
+uint8_t rightSensorOverLine = 0;
 
 /**
  * TODO

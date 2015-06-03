@@ -100,47 +100,6 @@ void drive(int16_t velocity) {
 	send_byte_roomba(low);
 }
 
-
-
-/**
- * Stop the roomba
- */
-void stop() {
-	drive(0);
-}
-
-/**
- * \brief Drive the roomba
- * 
- * \param distance so far
- * \param velocity with this velocity
- */
-void drive_roomba(uint16_t distance, int16_t velocity) {
-	// Start tick
-	char buff[50];
-	uint16_t start_value = getTicks();
-	sprintf(buff, "Ticks-Start: %u\r\n", start_value);
-	sendString(buff);
-	
-	drive(velocity);
-	
-	uint16_t sleep = distance / abs(velocity);
-	my_msleep(sleep * 1000);
-	
-	stop();
-	
-	uint16_t end_value = getTicks();
-	sprintf(buff, "Ticks-End: %u\r\n", end_value);
-	sendString(buff);
-	sprintf(buff, "Ticks: %u\r\n", (end_value - start_value));
-	sendString(buff);
-	
-	// 1m = 2262 Ticks
-}
-
-
-
-
 /**
  * \brief Receive a signal from the remote. Show the received
  * 			value as hex on Display and drive corresponding
@@ -247,53 +206,6 @@ uint16_t read_user_input() {
 	
 	return result;
 }
-
-/**
- * \brief Drive a circle 
- * 
- * \param radius the radius to drive (with bigger radiuses it gets much bigger)
- * \param velocity
- */
-void drive_circle(uint16_t radius, uint16_t velocity) {
-	driveWithRadius(velocity, radius);
-}
-
-/**
- * \brief Turn the robot by
- * 
- * \param degree 
- */
-void turn(int16_t degree) {
-	// In 13 seconds, 360°
-	uint16_t delay = (uint16_t)(abs(degree)*10.45f);;
-	
-	if (degree > 0) {
-		driveWithRadius(200, 1);
-	} else {
-		driveWithRadius(200, -1);
-	}
-	
-	my_msleep(delay);
-	
-	stop();
-}
-
-/**
- * \brief drive straight, till a bumper sensor is active,
- * 		set-back and turn
- */
-void drive_autonom() {
-	while (1) {
-		drive(150);
-		
-		// Bumpers
-		uint8_t data[2];
-		read_values(7, data, 1);
-			
-		bump_handling(data[0]);
-	}
-}
-
 
 /**
  * \brief Drive a bit backwards

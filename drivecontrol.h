@@ -21,6 +21,7 @@ void drive_right (int16_t * actVel_right, int16_t * actVel_left);
 void drive_left (int16_t * actVel_right, int16_t * actVel_left);
 void drive_stop(void); 
 void drive_turn(int16_t degree);
+void drive_roomba_exact(uint16_t distance, int16_t velocity);
 void driveWithRadius(uint16_t velocity, uint16_t radius);
 void bump_handling(uint8_t bump); 
 uint16_t getTicks(void);

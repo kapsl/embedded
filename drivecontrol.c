@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "remotecontrol.h"
 #include "drivecontrol.h"
+#include "roomba.h"
 
 /**
  * \brief TODO
@@ -215,15 +216,15 @@ uint16_t getTicks() {
  * \param bump the byte where the bump values are stored
  */
 void bump_handling(uint8_t bump) {
-	if ((bump & 0x02) == 0x02) {
+	/*if ((bump & 0x02) == 0x02) {
 		// Left bumper
 		set_back();
-		turn(-80);
+		drive_turn(-80);
 	} else if ((bump & 0x01) == 0x01) {
 		// Right bumper
 		set_back();
 		turn(45);
-	} 
+	}*/
 }
 
 /**

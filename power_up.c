@@ -45,7 +45,7 @@ powerUp_type getPowerUp(uint16_t tickCountRand) {
     //powerUp_type powerup_type = rand() % 3 + 1;
     
     // For testing
-    //powerUp_type powerup_type = 1;
+    powerUp_type powerup_type = 1;
     
     // Display what power up we have
     uint8_t tank[4] = {0x00, 0x5c, 0x40, 0x00};
