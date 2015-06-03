@@ -42,9 +42,10 @@ int main(int argc, const char* argv[]) {
 		uint8_t packet_length[7] = {2, 2, 2, 2, 1, 2, 1};
 		uint16_t qdata[7];
 	
-		getSensorQueryList(6, packet_ids, packet_length, qdata);
+		getSensorQueryList(7, packet_ids, packet_length, qdata);
 		remoteSignal signal = getRemoteSignal(qdata[4]);
 		
+		bump_handling((uint8_t)qdata[6]); 
 
 		my_msleep(20);
 
@@ -85,15 +86,19 @@ int main(int argc, const char* argv[]) {
 				playSong(0); // TODO another song
 				sendString("mushhit");
 			} else {
-				// Stop roomba and turn
-				// TODO
-				//weapondamage(1);
+				drive_hit();
 				playSong(0);
 				sendString("Hit..");
 			}
 		}
-		
-		//my_msleep(200);
+	playSong(0);
+	my_msleep (5000);
+	playSong(1);
+	my_msleep (5000);
+	playSong(2);
+	my_msleep (5000);
+	playSong(3);
+	my_msleep (5000);
 	} 
     
     return 0;

@@ -34,10 +34,8 @@ remoteSignal getRemoteSignal(uint16_t remoteSignalData){
 			return RBRAKE;
 		} else if (rem == NR_4){
 			return RLEFT; 
-		} else if (rem == NR_2){
-			return RRIGHT; 
 		} else if (rem == NR_6){
-			return RLEFT; 
+			return RRIGHT; 
 		} else if (rem == NR_5){
 			return RSHOOT;
 		}

@@ -252,7 +252,8 @@ void getSensorQueryList(uint8_t nrPackets, uint8_t* packet_ids, uint8_t* packet_
  */
 void playSong(uint8_t songNr) {
 	send_byte_roomba(141);
-	send_byte_roomba(0);
+	send_byte_roomba(songNr);
+	
 }
 
 /**
@@ -260,22 +261,127 @@ void playSong(uint8_t songNr) {
  */
 void storeSongs() {
 	// Programm songs
+	
+	// Song 1 -- hit
+	// Send optcode
 	send_byte_roomba(140);
 	
-	// Song 1 -- shoot
 	// Song nr.
 	send_byte_roomba(0);
 	
 	// Length
+	send_byte_roomba(6);
+	
+	// Note 1, duration 1	
+	send_byte_roomba(60);
+	send_byte_roomba(16);
+	
+	// Note 2, duration 2	
+	send_byte_roomba(65);
+	send_byte_roomba(32);
+	
+	// Note 3, duration 3	
+	send_byte_roomba(60);
+	send_byte_roomba(16);
+	
+	// Note 4, duration 4	
+	send_byte_roomba(65);
+	send_byte_roomba(32);
+	
+	// Note 5, duration 5	
+	send_byte_roomba(60);
+	send_byte_roomba(16);
+	
+	// Note 6, duration 6	
+	send_byte_roomba(65);
+	send_byte_roomba(32);
+		
+	// Song 2 -- power-up
+	// Send optcode
+	send_byte_roomba(140);
+	
+	// Song nr.
+	send_byte_roomba(1);
+	
+	// Length
+	send_byte_roomba(4);
+	
+	// Note 1, duration 1	
+	send_byte_roomba(65);
+	send_byte_roomba(8);
+	
+	// Note 2, duration 2
+	send_byte_roomba(70);
+	send_byte_roomba(8);
+	
+	// Note 3, duration 3
+	send_byte_roomba(75);
+	send_byte_roomba(8);
+	
+	// Note 4, duration 4
+	send_byte_roomba(80);
+	send_byte_roomba(8);
+	
+	// Song 3 -- hit
+	// Send optcode
+	send_byte_roomba(140);
+	
+	// Song nr.
+	send_byte_roomba(2);
+	
+	// Length
+	send_byte_roomba(6);
+	
+	// Note 1, duration 1	
+	send_byte_roomba(60);
+	send_byte_roomba(16);
+	
+	// Note 2, duration 2	
+	send_byte_roomba(65);
+	send_byte_roomba(32);
+	
+	// Note 3, duration 3	
+	send_byte_roomba(60);
+	send_byte_roomba(16);
+	
+	// Note 4, duration 4	
+	send_byte_roomba(65);
+	send_byte_roomba(32);
+	
+	// Note 5, duration 5	
+	send_byte_roomba(60);
+	send_byte_roomba(16);
+	
+	// Note 6, duration 6	
+	send_byte_roomba(65);
+	send_byte_roomba(32);
+		
+	// Song 4 -- power-up
+	// Send optcode
+	send_byte_roomba(140);
+	
+	// Song nr.
 	send_byte_roomba(3);
 	
-	// Note 1, duration 1
-	send_byte_roomba(87);
-	send_byte_roomba(16);
+	// Length
+	send_byte_roomba(4);
 	
-	send_byte_roomba(88);
-	send_byte_roomba(16);
+	// Note 1, duration 1	
+	send_byte_roomba(65);
+	send_byte_roomba(8);
 	
-	send_byte_roomba(89);
-	send_byte_roomba(16);
+	// Note 2, duration 2
+	send_byte_roomba(70);
+	send_byte_roomba(8);
+	
+	// Note 3, duration 3
+	send_byte_roomba(75);
+	send_byte_roomba(8);
+	
+	// Note 4, duration 4
+	send_byte_roomba(80);
+	send_byte_roomba(8);
+	
+
+	
 }
