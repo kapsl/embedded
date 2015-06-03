@@ -419,60 +419,6 @@ void getSensorQueryList(uint8_t nrPackets, uint8_t* packet_ids, uint8_t* packet_
 }
 
 /**
- * \brief Drive along aline with a p regler
- */
-void drive_with_p_regler() {
-	uint8_t speed = 250;
-	uint8_t abtastzeit = 30;
-	
-	uint16_t v_right = speed;
-	uint16_t v_left = speed;
-	
-	float kp = 0.1f;
-	float kd = 0.08f;
-	float ki = 0.00005f;
-	
-	// Cliff left, right / bumper 
-	uint8_t packet_ids[3] = {29, 30, 7};
-	uint8_t packet_length[3] = {2, 2, 1};
-	uint16_t qdata[3];
-	int32_t esum = 0;
-	int16_t ealt = 0;
-		
-	while (1) {
-		drive_direction(v_right, v_left);
-		
-		// Set speed to straight normal speed
-		v_right = speed;
-		v_left = speed;
-		
-		getSensorQueryList(3, packet_ids, packet_length, qdata);
-		
-		int16_t cliff_left = qdata[0];
-		int16_t cliff_right = qdata[1];
-		
-		int16_t e = cliff_left - cliff_right;
-		esum += e;
-		int32_t y = kp * e + ki * abtastzeit * esum + kd * (e - ealt) / abtastzeit;
-		ealt = e;
-		
-		// Output on display
-		char result[4];
-		intToHex(abs(y), result);
-		set_Display(result);
-		
-		// Compensate direction
-		v_right += y;
-		v_left -= y;
-		
-		bump_handling(qdata[2]);
-		
-		my_msleep(abtastzeit);
-	}	
-		
-}
-
-/**
  * \brief Play a stored song with
  * 
  * \param songNr

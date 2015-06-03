@@ -28,7 +28,7 @@ int main(int argc, const char* argv[]) {
 	
 	// Get nr. of roomba from remote control
 	uint16_t result = read_user_input();
-	// TODO error, when not 1 or 0
+	// TODO error, when not 1 or 2
 	initializeRadio((uint8_t) result);
 	
 	// Wait a bit so the power button is not pressed immediatley afterwards
@@ -53,15 +53,14 @@ int main(int argc, const char* argv[]) {
 		// Detect floor stuff
 		if (dType == POWER_UP) {
 			getPowerUp(qdata[5]);
-			//my_msleep(1000);
-			//while(1);
-			// TODO funkmodul
 		} else if (dType == BORDER_LEFT) {
 			//char result[4] = {'L', 'E', 'F', 'T'};
 			//set_Display(result);
+			handleOutOfCourse(BORDER_LEFT);
 		} else if (dType == BORDER_RIGHT) {
 			//char result[4] = {'R', 'I', 'G', 'T'};
 			//set_Display(result);
+			handleOutOfCourse(BORDER_RIGHT);
 		} else {
 			//char result[4] = {' ', ' ', ' ', ' '};
 			//set_Display(result);
@@ -86,9 +85,10 @@ int main(int argc, const char* argv[]) {
 				sendString("mushhit");
 			} else {
 				// Stop roomba and turn
+				// TODO
 				//weapondamage(1);
 				playSong(0);
-				sendString("hit");
+				sendString("Hit..");
 			}
 		}
 		

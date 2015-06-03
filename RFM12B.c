@@ -48,7 +48,7 @@ void Initialize(uint8_t ID, uint8_t networkid)
 
   uint8_t txPower = 0;
   uint8_t airKbps = 0x08;
-  uint8_t lowVoltageThreshold = RF12_2v75;
+  //uint8_t lowVoltageThreshold = RF12_2v75;
 
 
   cs_pin = SS_BIT;

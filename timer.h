@@ -12,6 +12,7 @@
 
 //uint8_t timer_counter;
 
-void initializeTimer(uint16_t ms);
+void initializeTimer1(uint16_t seconds);
+void initializeTimer2(uint16_t seconds);
 
 #endif

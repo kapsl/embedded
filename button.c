@@ -9,7 +9,7 @@ void initializeButton() {
 
 uint8_t button_pressed(uint8_t button) {
 	// If bitmask says that both buttons should be pressed
-	if (button == SW12_PRESSED && ((PINB & button) == 0x00) && ((PINH & button) == 0x00)) {
+	if ((button) == (SW12_PRESSED) && (((PINB) & (button)) == (0x00)) && (((PINH) & (button)) == (0x00))) {
 		return 1;
 	} else if (button == (1 << PORTB4) && (PINB & button) == 0x00) {
 		return 1;

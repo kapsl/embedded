@@ -16,7 +16,10 @@ void initializeRadio(uint8_t nr) {
  * \param payload - array with only one char!
  */
 void sendRadio(char payload) {
-	uint8_t requestACK = 1;
+	/**
+	 * TODO ack doesn't work at the moment it seems that it is sending, but never received
+	 */
+	uint8_t requestACK = 0;
 	//uint8_t interPacketDelay = 50; //wait this many ms between sending packets
 	
 	sendString("Transmitting...\r\n");
@@ -25,7 +28,9 @@ void sendRadio(char payload) {
 	payloadArray[0] = payload;
     
     // Send to node_id 1 or 2 (the opposite)
-	Send((node_id % 2) + 1, payloadArray, 1, requestACK);
+	Send(((node_id % 2) + 1), payloadArray, 1, requestACK);
+	
+	sendString("Transmitted...\r\n");
 	
 	// TODO test with ack etc. bad checksum ...
 	if (requestACK) {
@@ -46,12 +51,13 @@ void sendRadio(char payload) {
  * TODO
  */
 uint8_t waitForAck() {
-  my_msleep(ACK_TIME);
+	my_msleep(ACK_TIME);
   
-  if (ACKReceived((node_id % 2) + 1))
-	return 1;
+	if (ACKReceived((node_id % 2) + 1)) {
+		return 1;
+	}
     
-  return 0;
+	return 0;
 }
 
 char receiveRadio() {
@@ -64,6 +70,8 @@ char receiveRadio() {
 				SendACK();
 				sendString(" - ACK sent");
 			}
+			
+			return (char) Data[0];
 		} else {
 			sendString("BAD-CRC");
 			
@@ -71,5 +79,5 @@ char receiveRadio() {
 		}
     }
     
-    return (char) Data[0];
+    return '0';
 }

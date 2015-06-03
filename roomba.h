@@ -45,7 +45,6 @@ void drive_circle(uint16_t radius, uint16_t velocity);
 void turn(int16_t degree);
 void drive_autonom(void);
 void set_back(void);
-void drive_with_p_regler(void);
 void getSensorQueryList(uint8_t nrPackets, uint8_t* packet_ids, uint8_t* packet_length, uint16_t* data);
 void bump_handling(uint8_t bump);
 void storeSongs(void);
