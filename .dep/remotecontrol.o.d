@@ -7,7 +7,7 @@ remotecontrol.o: remotecontrol.c roomba.h /usr/lib/avr/include/avr/io.h \
  /usr/lib/avr/include/avr/lock.h tools.h usart.h \
  /usr/lib/avr/include/stdio.h /usr/lib/gcc/avr/4.8.2/include/stdarg.h \
  /usr/lib/gcc/avr/4.8.2/include/stddef.h /usr/lib/avr/include/stdlib.h \
- remotecontrol.h
+ remotecontrol.h radio.h
 
 roomba.h:
 
@@ -48,3 +48,5 @@ usart.h:
 /usr/lib/avr/include/stdlib.h:
 
 remotecontrol.h:
+
+radio.h:

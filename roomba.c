@@ -138,55 +138,8 @@ void drive_roomba(uint16_t distance, int16_t velocity) {
 	// 1m = 2262 Ticks
 }
 
-/**
- * \brief Does the same like drive_roomba but more exact with counting ticks
- */
-void drive_roomba_exact(uint16_t distance, int16_t velocity) {
-	uint16_t start_value = getTicks();
-	
-	drive(velocity);
-	
-	char buff[50];
-	sprintf(buff, "Ticks-Start: %u\r\n", start_value);
-	sendString(buff);
-	
-	uint16_t maxTicks = (uint16_t) (distance * 2.262);
-	sprintf(buff, "Max: %u\r\n", maxTicks);
-	sendString(buff);
-	
-	my_msleep(200);
-	
-	while (1) {
-		uint16_t ticks = getTicks();
-		uint16_t distanceTicks;
-		
-		// Overflow
-		if (ticks < start_value && velocity > 0) {
-			distanceTicks = 65535 - start_value + ticks;
-		} else if (ticks > start_value && velocity < 0) {
-			distanceTicks = start_value + (65535 - ticks);
-		} else {
-			distanceTicks = abs(ticks - start_value);
-		}
-		
-		if (distanceTicks > maxTicks) {
-			break;
-		}
-	}
-	
-	stop();
-}
 
-/**
- * \brief Get the actual tick count for the left wheel
- * 			(at the moment enough, as long as we only drive straight)
- */
-uint16_t getTicks() {
-	uint8_t data[2];
-	read_values(43, data, 2);
-	
-	return concat_bytes(data);
-}
+
 
 /**
  * \brief Receive a signal from the remote. Show the received
@@ -228,28 +181,6 @@ void intToHex(uint16_t hex, char *result) {
 	sprintf(result, "%4x", hex);
 }
 
-/**
- * \brief Drive roomba with
- * 
- * \param velocity this velocity
- * \param radius this radius (use DRIVE_STRAIGHT for straight, -1 for 
- * 			clockwise 1 for anticlockwise)
- */
-void driveWithRadius(uint16_t velocity, uint16_t radius) {
-	send_byte_roomba(137);
-	
-	uint8_t low = velocity;
-	uint8_t high = (velocity >> 8);
-	
-	send_byte_roomba(high);
-	send_byte_roomba(low);	
-	
-	uint8_t rlow = radius;
-	uint8_t rhigh = (radius >> 8);
-	
-	send_byte_roomba(rhigh);
-	send_byte_roomba(rlow);	
-}
 
 /**
  * \brief Read 4 numbers from remote control
@@ -363,22 +294,6 @@ void drive_autonom() {
 	}
 }
 
-/**
- * \brief Set back and turn, if a bump is registered
- * 
- * \param bump the byte where the bump values are stored
- */
-void bump_handling(uint8_t bump) {
-	if ((bump & 0x02) == 0x02) {
-		// Left bumper
-		set_back();
-		turn(-80);
-	} else if ((bump & 0x01) == 0x01) {
-		// Right bumper
-		set_back();
-		turn(45);
-	} 
-}
 
 /**
  * \brief Drive a bit backwards
