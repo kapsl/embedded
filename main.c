@@ -38,13 +38,14 @@ int main(int argc, const char* argv[]) {
 	while (1) {			
 		// Get sensor data
 		// Cliff front left, front right, left, right, remotecontrol, tick_count
-		uint8_t packet_ids[6] = {29, 30, 28, 31, 17, 43};
-		uint8_t packet_length[6] = {2, 2, 2, 2, 1, 2};
-		uint16_t qdata[6];
+		uint8_t packet_ids[7] = {29, 30, 28, 31, 17, 43, 7};
+		uint8_t packet_length[7] = {2, 2, 2, 2, 1, 2, 1};
+		uint16_t qdata[7];
 	
 		getSensorQueryList(6, packet_ids, packet_length, qdata);
 		remoteSignal signal = getRemoteSignal(qdata[4]);
 		
+
 		my_msleep(20);
 
 		detectedType dType;
