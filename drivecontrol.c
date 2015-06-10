@@ -5,6 +5,7 @@
 #include "remotecontrol.h"
 #include "drivecontrol.h"
 #include "roomba.h"
+#include "radio.h"
 
 /**
  * \brief This function receives a signal from the remote control which is used to stear the roomba. 
@@ -21,7 +22,7 @@ void getCommand(remoteSignal type, int16_t * actVel_right,int16_t * actVel_left)
 				drive_forward(actVel_right, actVel_left); 
 	
 		} 
-		else if (type == RBRAKE  && *actVel_left>-500) {
+		else if (type == RBRAKE  && *actVel_left>-400) {
 				
 				drive_break_backwards(actVel_right, actVel_left); 
 	
@@ -43,7 +44,9 @@ void getCommand(remoteSignal type, int16_t * actVel_right,int16_t * actVel_left)
 
 void drive_stop(){
 
-		drive_direction(0,0); 	
+		velocity_left=0; 
+		velocity_right=0; 
+		drive_direction(velocity_left,velocity_right); 	
 
 }	
 
@@ -64,7 +67,7 @@ void drive_forward (int16_t * actVel_right, int16_t * actVel_left){
 				
 				*actVel_left=*actVel_right; 
 		}
-		else if (*actVel_right<500&&*actVel_left<500) {
+		else if (*actVel_right<400&&*actVel_left<400) {
 				
 				*actVel_right=*actVel_right+ACC_BRAKE_CONSTANT; 
 				*actVel_left=*actVel_left+ACC_BRAKE_CONSTANT; 
@@ -108,9 +111,9 @@ void drive_break_backwards (int16_t * actVel_right, int16_t * actVel_left){
 
 void drive_left (int16_t * actVel_right, int16_t * actVel_left){
 	
-		if (*actVel_right>0){
+		if (*actVel_right>=0){
 			
-				if (*actVel_right<500){
+				if (*actVel_right<400){
 							
 						*actVel_left=*actVel_left-CONTROL_CONSTANT;
 						*actVel_right=*actVel_right+CONTROL_CONSTANT;
@@ -121,7 +124,7 @@ void drive_left (int16_t * actVel_right, int16_t * actVel_left){
 		}
 		else if (*actVel_right<0){
 				
-				if (*actVel_right>-500){
+				if (*actVel_right>-400){
 							
 							*actVel_left=*actVel_left-CONTROL_CONSTANT;
 							*actVel_right=*actVel_right+CONTROL_CONSTANT;
@@ -141,9 +144,9 @@ void drive_left (int16_t * actVel_right, int16_t * actVel_left){
 
 void drive_right (int16_t * actVel_right, int16_t * actVel_left){
 	
-		if (*actVel_left>0){
+		if (*actVel_left>=0){
 		
-				if (*actVel_left<500){
+				if (*actVel_left<400){
 					
 						*actVel_left=*actVel_left+CONTROL_CONSTANT;
 						*actVel_right=*actVel_right-CONTROL_CONSTANT;
@@ -154,7 +157,7 @@ void drive_right (int16_t * actVel_right, int16_t * actVel_left){
 		}
 		else if (*actVel_left<0){
 	
-				if (*actVel_left>-500){
+				if (*actVel_left>-400){
 						*actVel_left=*actVel_left+CONTROL_CONSTANT;
 						*actVel_right=*actVel_right-CONTROL_CONSTANT;
 				}
@@ -228,7 +231,7 @@ void drive_roomba_exact(uint16_t distance, int16_t velocity) {
 	sprintf(buff, "Max: %u\r\n", maxTicks);
 	sendString(buff);
 	
-	my_msleep(500);
+	my_msleep(400);
 	
 	while (1) {
 		uint16_t ticks = getTicks();
@@ -281,7 +284,8 @@ void bump_handling(uint8_t bump) {
 		
 		// Left bumper
 		if ((bump & 0x02) == 0x02) {
-		
+				
+				sendRadio(BUMP_SPEED); 
 				drive_stop();
 		
 		// Right bumper

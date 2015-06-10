@@ -11,6 +11,7 @@
 #define SERIAL_BAUD  115200
 
 #define RED_TANK_SHOT 'r'
+#define BUMP_SPEED 's'
 
 uint8_t node_id;
 

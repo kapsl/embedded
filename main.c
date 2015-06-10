@@ -16,6 +16,9 @@
 // TODO Code aufräumen
 // TODO comments in header files
 
+int16_t velocity_left=0; 
+int16_t velocity_right=0; 
+
 int main(int argc, const char* argv[]) {
 	usart_init_roomba();
 	usart_init();
@@ -23,8 +26,6 @@ int main(int argc, const char* argv[]) {
 	
 	my_msleep(20);
 	
-	int16_t velocity_right = 0;
-	int16_t velocity_left = 0;
 	currentPowerUp = NO_POWERUP;
 	
 	// Get nr. of roomba from remote control
@@ -76,6 +77,11 @@ int main(int argc, const char* argv[]) {
 			}
 		}
 		
+		// Receive radio
+		// faster when hit by other roomba
+		if (receiveRadio() == BUMP_SPEED){
+			drive_direction(500,500);  
+		}
 		// Receive radio
 		// Hit by red tank
 		if (receiveRadio() == RED_TANK_SHOT) {

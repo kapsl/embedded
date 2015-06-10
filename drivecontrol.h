@@ -8,6 +8,10 @@
 #include <avr/io.h>
 #include "remotecontrol.h"
 
+extern int16_t velocity_right;
+extern int16_t velocity_left;
+
+
 /**
  * \brief Gets a command from remote control
  * 
@@ -26,5 +30,7 @@ void driveWithRadius(uint16_t velocity, uint16_t radius);
 void bump_handling(uint8_t bump); 
 void drive_hit(void); 
 uint16_t getTicks(void);
+
+
 
 #endif
