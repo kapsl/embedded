@@ -28,10 +28,10 @@ int main(int argc, const char* argv[]) {
 	currentPowerUp = NO_POWERUP;
 	
 	// Get nr. of roomba from remote control
-	//uint16_t result = read_user_input();
+	uint16_t result = read_user_input();
 	
 	//TODO for testing
-	uint16_t result = 1;
+	//uint16_t result = 1;
 	
 	// TODO error, when not 1 or 2
 	initializeRadio((uint8_t) result);
@@ -89,14 +89,14 @@ int main(int argc, const char* argv[]) {
 				sendString("Hit...");
 			}
 		}
-	playSong(0);
+	/*playSong(0);
 	my_msleep (5000);
 	playSong(1);
 	my_msleep (5000);
 	playSong(2);
 	my_msleep (5000);
 	playSong(3);
-	my_msleep (5000);
+	my_msleep (5000);*/
 	} 
     
     return 0;
