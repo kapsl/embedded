@@ -12,8 +12,8 @@
 #include "outOfCourseController.h"
 
 // TODO Kurs bauen
-// TODO rausfahren richtig handeln mit schwarzem Klebeband
-// TODO (Funk ACK.) Rausfahren power up
+// TODO Testen
+// TODO Code aufräumen
 // TODO comments in header files
 
 int main(int argc, const char* argv[]) {
@@ -28,10 +28,10 @@ int main(int argc, const char* argv[]) {
 	currentPowerUp = NO_POWERUP;
 	
 	// Get nr. of roomba from remote control
-	//uint16_t result = read_user_input();
+	uint16_t result = read_user_input();
 	
 	//TODO for testing
-	uint16_t result = 1;
+	//uint16_t result = 1;
 	
 	// TODO error, when not 1 or 2
 	initializeRadio((uint8_t) result);
@@ -42,12 +42,12 @@ int main(int argc, const char* argv[]) {
 
 	while (1) {			
 		// Get sensor data
-		// Cliff front left, front right, left, right, remotecontrol, tick_count
-		uint8_t packet_ids[7] = {29, 30, 28, 31, 17, 43, 7};
-		uint8_t packet_length[7] = {2, 2, 2, 2, 1, 2, 1};
-		uint16_t qdata[7];
+		// Cliff front left, front right, left, right, remotecontrol, tick_count, bumper, wall sensor
+		uint8_t packet_ids[8] = {29, 30, 28, 31, 17, 43, 7, 27};
+		uint8_t packet_length[8] = {2, 2, 2, 2, 1, 2, 1, 2};
+		uint16_t qdata[8];
 	
-		getSensorQueryList(7, packet_ids, packet_length, qdata);
+		getSensorQueryList(8, packet_ids, packet_length, qdata);
 		remoteSignal signal = getRemoteSignal(qdata[4]);
 
 		bump_handling((uint8_t) qdata[6]); 
@@ -66,7 +66,7 @@ int main(int argc, const char* argv[]) {
 			}
 		}
 		
-		if (signal != RNOTHINGPRESSED) {
+		if (signal != RNOTHINGPRESSED && !drive_in) {
 			// OK Pressed for power ups
 			if (signal == RSHOOT) {
 				// Shoot power up

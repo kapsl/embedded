@@ -43,9 +43,11 @@ void handleOutOfCourse(detectedType activeSensorSide) {
 		if (mushroomActive && outsideCourse == 0) {
 			// We drove outside
 			outsideCourse = 1;
+			my_msleep(1000);
 		} else if (mushroomActive && outsideCourse == 1) {
 			// We are driving back inside
 			outsideCourse = 0;
+			my_msleep(1000);
 		} else {
 			driveIn(RIGHT_WHEEL);
 		}

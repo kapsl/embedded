@@ -44,10 +44,10 @@ powerUp_type getPowerUp(uint16_t tickCountRand) {
 	// Get random nr.
     srand((unsigned int) tickCountRand);  
     
-    //powerUp_type powerup_type = rand() % 3;
+    powerUp_type powerup_type = rand() % 3;
     
     // For testing
-    powerUp_type powerup_type = MUSHROOM;
+    //powerUp_type powerup_type = MUSHROOM;
     
     // Display what power up we have
     uint8_t tank[4] = {0x00, 0x5c, 0x40, 0x00};
