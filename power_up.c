@@ -7,6 +7,8 @@
 #include "radio.h"
 #include "avr/interrupt.h"
 #include "timer.h"
+#include "outOfCourseController.h"
+#include "drivecontrol.h"
 
 uint8_t bigRoombaActive = 0;
 uint8_t mushroomActive = 0;
@@ -45,7 +47,7 @@ powerUp_type getPowerUp(uint16_t tickCountRand) {
     //powerUp_type powerup_type = rand() % 3;
     
     // For testing
-    powerUp_type powerup_type = RED_TANK;
+    powerUp_type powerup_type = MUSHROOM;
     
     // Display what power up we have
     uint8_t tank[4] = {0x00, 0x5c, 0x40, 0x00};
@@ -104,6 +106,15 @@ void shootPowerUp() {
  */
 void powerUpIsOver() {
 	sendString("Power up is over...");
+	
+	// When we had a mushroom, check if we are outside the course
+	if (mushroomActive == 1 && outsideCourse == 1) {
+		// Game over
+		playSong(3);
+		
+		drive_stop();
+		while(1);
+	}
 	
 	bigRoombaActive = 0;
 	mushroomActive = 0;

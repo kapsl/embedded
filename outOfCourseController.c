@@ -6,46 +6,64 @@
 #include "outOfCourseController.h"
 #include "roomba.h"
 
-uint8_t leftSensorOverLine = 0;
-uint8_t rightSensorOverLine = 0;
 
+uint8_t step = 0;
+
+/**
+ * If we are currently driving back to the middle of the line
+ */
 uint8_t drive_in = 0;
+
+/**
+ * On which side of the road did we drive out
+ */
+uint8_t side = 0;
+
+/**
+ * Flag if we are inside or outside the course
+ */
+uint8_t outsideCourse = 0;
 
 /**
  * TODO
  */
 void handleOutOfCourse(detectedType activeSensorSide) {
-	// TODO Time window, after that the flags are set back, elseway 
-	// it is possible, that we drive out with one wheel and then on 
-	// the other side and then we have a problem
-	
 	// TODO eventually implement that he drives off the road backwards
 	
-	if (activeSensorSide == BORDER_BOTH && !drive_in && rightSensorOverLine == 0) {
-		driveIn(RIGHT_WHEEL);
-	} else if (activeSensorSide == BORDER_RIGHT && rightSensorOverLine == 0 && drive_in) {
-		rightSensorOverLine = 1;
+	// Detect side on which we drive out
+	if (activeSensorSide == BORDER_FRONT_LEFT && !drive_in) {
+		side = 0;
+	} else if (activeSensorSide == BORDER_FRONT_RIGHT && !drive_in) {
+		side = 1;
+	}
+	
+	// Drive back to line
+	else if (activeSensorSide == BORDER_BOTH && !drive_in && step == 0) {
+		// TODO When mushroom is active, we are allowed to drive out
+		if (mushroomActive && outsideCourse == 0) {
+			// We drove outside
+			outsideCourse = 1;
+		} else if (mushroomActive && outsideCourse == 1) {
+			// We are driving back inside
+			outsideCourse = 0;
+		} else {
+			driveIn(RIGHT_WHEEL);
+		}
+	} else if (activeSensorSide == BORDER_RIGHT && step == 0 && drive_in) {
+		step = 1;
 		driveIn(LEFT_WHEEL);
-	} else if (activeSensorSide == BORDER_LEFT && drive_in && rightSensorOverLine == 1) {
-		rightSensorOverLine = 2;
+	} else if (activeSensorSide == BORDER_LEFT && drive_in && step == 1) {
+		step = 2;
 		driveIn(RIGHT_WHEEL);
-	} else if (activeSensorSide == BORDER_SIDE_BOTH && rightSensorOverLine == 2 && drive_in) {
+	} 
+	
+	// Drive back to middle of the road
+	else if (activeSensorSide == BORDER_SIDE_BOTH && step == 2 && drive_in) {
 		driveInContinued(activeSensorSide);
 	}
 }
 
 void driveIn(uint8_t wheel) {
-	sendString("Drive in\r\n");
-	
-	/*if (drive_in) {
-		return;
-	}*/
-	
-	// TODO When mushroom is active, we are allowed to drive out
-	if (mushroomActive) {
-		return;
-	}
-	
 	drive_in = 1;
 	
 	// Stop roomba
@@ -64,9 +82,6 @@ void driveIn(uint8_t wheel) {
 void driveInContinued(detectedType activeSensorSide) {
 	sendString("Drive in Continued\r\n");
 	
-	// Wait a bit more, because sensor is not in center of roomba
-	//my_msleep(350);
-	
 	// Stop when sensor readed line
 	drive_stop();
 	
@@ -74,15 +89,13 @@ void driveInContinued(detectedType activeSensorSide) {
 	drive_roomba_exact(300, DRIVE_IN_SPEED);
 	
 	// Turn to driving direction
-	// No turn, when we drove off straight
-	/*if (activeSensorSide == BORDER_RIGHT) {
-		drive_turn(-90);
-	} else if (activeSensorSide == BORDER_LEFT) {
+	if (side == 0) {
 		drive_turn(90);
-	}*/
-	drive_turn(90);
+	} else if (side == 1) {
+		drive_turn(-90);
+	}
 	
 	drive_in = 0;
-	leftSensorOverLine = 0;
-	rightSensorOverLine = 0;
+	step = 0;
+	side = 0;
 }

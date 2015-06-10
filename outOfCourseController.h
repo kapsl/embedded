@@ -9,6 +9,8 @@
 #define DRIVE_STRAIGHT_SPEED 80
 #define DRIVE_IN_SPEED 30
 
+extern uint8_t outsideCourse;
+
 void handleOutOfCourse(detectedType activeSensorSide);
 void driveIn(uint8_t wheel);
 void driveInContinued(detectedType activeSensorSide);
