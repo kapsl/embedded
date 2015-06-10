@@ -45,14 +45,14 @@ powerUp_type getPowerUp(uint16_t tickCountRand) {
     //powerUp_type powerup_type = rand() % 3;
     
     // For testing
-    powerUp_type powerup_type = 0;
+    powerUp_type powerup_type = RED_TANK;
     
     // Display what power up we have
     uint8_t tank[4] = {0x00, 0x5c, 0x40, 0x00};
-    uint8_t bigTank[4] = {0x5c, 0xff, 0x40, 0x00};
     uint8_t mushroom[4] = {0x61, 0x1D, 0x43, 0x00};
+    uint8_t bigDaddy[4] = {0x5c, 0xff, 0x40, 0x00};
      
-    uint8_t *pUSymbols[3] = {tank, bigTank, mushroom};
+    uint8_t *pUSymbols[3] = {tank, mushroom, bigDaddy};
 
     set_Display_raw(pUSymbols[powerup_type]);
     
@@ -77,11 +77,7 @@ void shootPowerUp() {
 	// If we have a red tank --> send shooting over radio
 	if (currentPowerUp == RED_TANK) {
 		sendRadio(RED_TANK_SHOT);
-	} else {
-		// If Big roomba or mushroom is active --> set global variable
-		// Initialize timer so we can use the power up for a nr. of seconds
-		initializeTimer1(5);
-		
+	} else {		
 		if (currentPowerUp == MUSHROOM) {
 			mushroomActive = 1;
 			
@@ -90,6 +86,10 @@ void shootPowerUp() {
 		} else if (currentPowerUp == BIG_DADY) {
 			bigRoombaActive = 1;
 		}
+		
+		// If Big roomba or mushroom is active --> set global variable
+		// Initialize timer so we can use the power up for a nr. of seconds
+		initializeTimer1(5);
 	}
 	
 	// Delete display

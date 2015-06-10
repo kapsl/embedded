@@ -6,7 +6,7 @@ outOfCourseController.o: outOfCourseController.c tools.h \
  /usr/lib/avr/include/avr/common.h /usr/lib/avr/include/avr/version.h \
  /usr/lib/avr/include/avr/fuse.h /usr/lib/avr/include/avr/lock.h usart.h \
  floorDetection.h drivecontrol.h remotecontrol.h power_up.h \
- outOfCourseController.h
+ outOfCourseController.h roomba.h
 
 tools.h:
 
@@ -45,3 +45,5 @@ remotecontrol.h:
 power_up.h:
 
 outOfCourseController.h:
+
+roomba.h:

@@ -11,10 +11,10 @@
 #include "radio.h"
 #include "outOfCourseController.h"
 
-// TODO Alles zum laufen kriegen - Kurs bauen
-// TODO comments in header files
+// TODO Kurs bauen
 // TODO rausfahren richtig handeln mit schwarzem Klebeband
-// TODO Funk ACK. Rausfahren power up
+// TODO (Funk ACK.) Rausfahren power up
+// TODO comments in header files
 
 int main(int argc, const char* argv[]) {
 	usart_init_roomba();
@@ -28,10 +28,10 @@ int main(int argc, const char* argv[]) {
 	currentPowerUp = NO_POWERUP;
 	
 	// Get nr. of roomba from remote control
-	uint16_t result = read_user_input();
+	//uint16_t result = read_user_input();
 	
 	//TODO for testing
-	//uint16_t result = 1;
+	uint16_t result = 1;
 	
 	// TODO error, when not 1 or 2
 	initializeRadio((uint8_t) result);

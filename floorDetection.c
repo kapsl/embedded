@@ -39,28 +39,13 @@ void floorDetection(detectedType *type, uint16_t *sensorData) {
 	set_Display(result);*/
 	//my_msleep(1000);
 	
-	// Yellow, black crep
-	// Left border
-	if (cliff_left > BORDER_CLIFF_THRESHOLD) {
+	if (cliff_front_left + cliff_front_right > BORDER_SIDE_BOTH_THRESHOLD) {
+		*type = BORDER_BOTH;
+	} else if (cliff_left + cliff_right > BORDER_SIDE_BOTH_THRESHOLD) {
+		*type = BORDER_SIDE_BOTH;
+	} else if (cliff_left > BORDER_CLIFF_THRESHOLD) {
 		*type = BORDER_LEFT;
-	} else if (cliff_left > BORDER_CLIFF_BLACK_THRESHOLD) {
-		*type = BORDER_LEFT_BLACK;
-	}
-	
-	// Right border
-	if (cliff_right > BORDER_CLIFF_THRESHOLD) {
-		// Both borders
-		if (*type == BORDER_LEFT) {
-			*type = BORDER_BOTH;	
-		} else {
-			*type = BORDER_RIGHT;
-		}
-	} else if (cliff_right > BORDER_CLIFF_BLACK_THRESHOLD) {
-		// Both borders
-		if (*type == BORDER_LEFT_BLACK) {
-			*type = BORDER_BOTH_BLACK;	
-		} else {
-			*type = BORDER_RIGHT_BLACK;
-		}
+	} else if (cliff_right > BORDER_CLIFF_THRESHOLD) {
+		*type = BORDER_RIGHT;
 	}
 }

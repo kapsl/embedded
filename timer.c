@@ -4,10 +4,10 @@
 #include "power_up.h"
 #include "usart.h"
 
-uint8_t timer_counter_1 = 0;
+uint8_t timer_counter_1 = -1;
 uint8_t max_seconds_1 = 0;
 
-uint8_t timer_counter_2 = 0;
+uint8_t timer_counter_2 = -1;
 uint8_t max_seconds_2 = 0;
 
 // TODO make one function out of the different timers
@@ -16,9 +16,10 @@ uint8_t max_seconds_2 = 0;
  * TODO
  */
 void initializeTimer1(uint16_t seconds) {
+	cli();
 	//sendString("Timer initialized...");
 	
-	max_seconds_1 = seconds;
+	max_seconds_1 = (int8_t) seconds;
 	timer_counter_1 = 0;
 	
 	//uint16_t timerval = ms / 1000 * 15625;
@@ -43,10 +44,12 @@ ISR(TIMER1_COMPA_vect) {
 	sendString("Interrupt 1 ...");
 	
 	// DO stuff when timer is on
-	if (timer_counter_1 < max_seconds_1 - 1) {
+	if (timer_counter_1 < max_seconds_1 - 1  && timer_counter_1 != -1) {
 		timer_counter_1++;		
 	} else if (timer_counter_1 == max_seconds_1 - 1) {
 		powerUpIsOver();
+		
+		TCCR1B = 0x0;
 		
 		timer_counter_1 = -1;
 	}	
@@ -58,6 +61,7 @@ ISR(TIMER1_COMPA_vect) {
  * TODO make possibility to use ms
  */
 void initializeTimer2(uint16_t seconds) {
+	cli();
 	//sendString("Timer initialized...");
 	
 	max_seconds_2 = seconds;
@@ -87,8 +91,10 @@ ISR(TIMER3_COMPA_vect) {
 	// DO stuff when timer is on
 	if (timer_counter_2 < max_seconds_2 - 1) {
 		timer_counter_2++;		
-	} else if (timer_counter_2 == max_seconds_2 - 1) {
+	} else if (timer_counter_2 == max_seconds_2 - 1 && timer_counter_2 != -1) {
 		sendString("Timer 3 reached ...");
+		
+		TCCR3B = 0x0;
 		
 		timer_counter_2 = -1;
 	}	

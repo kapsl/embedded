@@ -228,7 +228,7 @@ void drive_roomba_exact(uint16_t distance, int16_t velocity) {
 	sprintf(buff, "Max: %u\r\n", maxTicks);
 	sendString(buff);
 	
-	my_msleep(200);
+	my_msleep(500);
 	
 	while (1) {
 		uint16_t ticks = getTicks();
