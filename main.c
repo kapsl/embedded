@@ -81,11 +81,11 @@ int main(int argc, const char* argv[]) {
 		if (receiveRadio() == RED_TANK_SHOT) {
 			// Hit did not work
 			if (bigRoombaActive) {
-				playSong(0); // TODO another song
+				playSong(1);
 				sendString("Hit with mushroom - no damage...");
 			} else {
+				playSong(2);
 				drive_hit();
-				playSong(0);
 				sendString("Hit...");
 			}
 		}
