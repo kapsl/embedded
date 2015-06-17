@@ -17,7 +17,7 @@ uint8_t mushroomActive = 0;
  * Used for counting which state we have when showing the randomize
  * symbol on the display
  */
-uint8_t powerUpDisplayCounter = 0;
+int16_t powerUpDisplayCounter = -1;
 uint16_t tickCountRandGlobal = 1;
 
 /**
@@ -37,10 +37,10 @@ void getPowerUp(uint16_t tickCountRand) {
 	char result[4] = {'P', 'O', 'W', 'R'};
 	set_Display(result);
 	
-	// TODO
-	powerUpDisplayCounter = 16;
-	timer2Triggered();
-	//initializeTimer2(1000);
+	my_msleep(500);
+	
+	powerUpDisplayCounter = 0;
+	showRandomizeSign();
 }
 
 /**
@@ -68,7 +68,7 @@ void shootPowerUp() {
 		
 		// If Big roomba or mushroom is active --> set global variable
 		// Initialize timer so we can use the power up for a nr. of seconds
-		initializeTimer1(5);
+		startTimer1(5);
 	}
 	
 	// Delete display
@@ -98,22 +98,30 @@ void powerUpIsOver() {
 }
 
 /**
- * \brief Called when timmer 2 was fired. Used for setting the display,
+ * \brief Used for setting the display,
  * 			when power up is generated and steering must not be blocked
- * 			and to finish the process of getting a power upü
+ * 			and to finish the process of getting a power up
  */
-void timer2Triggered() {
-	uint8_t infinitySign[7][4] = {{0x10, 0x0, 0x0, 0x0}, {0x30, 0x0, 0x0, 0x0}, 
-		{0x31, 0x0, 0x0, 0x0}, {0x31, 0x1, 0x0, 0x0}, {0x31, 0x1, 0x1, 0x0},
-		{0x31, 0x1, 0x3, 0x0}, {0x31, 0x1, 0x4, 0x0}};
-	set_Display_raw(infinitySign[powerUpDisplayCounter]);
+void showRandomizeSign() {
+	if (powerUpDisplayCounter == -1) {
+		return;
+	}
+	
+	my_msleep(20);
+	
+	// Infinity sign in 7 segments
+	uint8_t infinitySign[16][4] = {{0x10, 0x0, 0x0, 0x0}, {0x30, 0x0, 0x0, 0x0}, 
+		{0x31, 0x0, 0x0, 0x0}, {0x31, 0x1, 0x0, 0x0}, {0x31, 0x3, 0x0, 0x0},
+		{0x31, 0x7, 0x0, 0x0}, {0x31, 0x7, 0x8, 0x0}, {0x31, 0x7, 0x8, 0x8},
+		{0x31, 0x7, 0x8, 0xC}, {0x31, 0x7, 0x8, 0xE}, {0x31, 0x7, 0x8, 0xF},
+		{0x31, 0x7, 0x9, 0xF}, {0x31, 0x7, 0x9, 0xF}, {0x31, 0xF, 0x9, 0xF},
+		{0x39, 0xF, 0x9, 0xF}, {0x0, 0x0, 0x0, 0x0}};
+	set_Display_raw(infinitySign[powerUpDisplayCounter % 16]);
 	
 	powerUpDisplayCounter++;
 	
 	// Stop when we reached array length
-	if (powerUpDisplayCounter >= 7) {
-		stopTimer2();
-		
+	if (powerUpDisplayCounter > 16*5) {
 		// Get random nr.
 		srand((unsigned int) tickCountRandGlobal);  
 		
@@ -132,5 +140,7 @@ void timer2Triggered() {
 		set_Display_raw(pUSymbols[powerup_type]);
 		
 		currentPowerUp = powerup_type;
+		
+		powerUpDisplayCounter = -1;
 	}
 }

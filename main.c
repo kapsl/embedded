@@ -53,6 +53,11 @@ int main(int argc, const char* argv[]) {
 		bump_handling((uint8_t) qdata[6]); 
 
 		my_msleep(20);
+		
+		// If we are getting a power up, we need to call this method 
+		// To show the randomize sign at the display and not block
+		// everything else
+		showRandomizeSign();
 
 		detectedType dType;
 		floorDetection(&dType, qdata);

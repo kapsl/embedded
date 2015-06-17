@@ -10,10 +10,9 @@
 //#define TIMER_INT_ADDR *(volatile uint8_t *) 0x6F
 #define TIMER_VAL_ADDR *(volatile uint16_t *) 0x88
 
-//uint8_t timer_counter;
+void initializeTimers(void);
+void initializeTimer1(void);
+void startTimer1(uint16_t seconds);
 
-void initializeTimer1(uint16_t seconds);
-void initializeTimer2(uint16_t seconds);
-void stopTimer2(void);
 
 #endif
