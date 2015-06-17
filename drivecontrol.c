@@ -60,15 +60,16 @@ void roomba_drive(remoteSignal type) {
 		
 		}		
 	
-		drive_direction(actVel_left, actVel_right);
-		
+		if(bump_active==0){
+				drive_direction(actVel_left, actVel_right);
+		}
 		
 
 		/*sprintf(str, "%d",
 				bump_active); 
-		set_Display(str); */
+		set_Display(str);*/ 
 		
-		my_msleep(150);
+		my_msleep(20);
 }
 
 void drive_stop(){
@@ -361,10 +362,7 @@ void drive_hit(){
 } 
 
 void drive_bump_speed(){
-		
 		bump_active=1; 
-		int16_t turbo_speed_left=500;
-		int16_t turbo_speed_right=500; 
-		drive_direction(turbo_speed_left, turbo_speed_right);
-
+		
+		drive_direction(500, 500);
 }
