@@ -60,10 +60,8 @@ void roomba_drive(remoteSignal type) {
 		
 		}		
 	
-		 
-		// TODO Changed that, doesn't make sense from naming convention
-		//drive_direction(actVel_left, actVel_right);
-		drive_direction(actVel_right, actVel_left);
+		drive_direction(actVel_left, actVel_right);
+		
 		
 
 		/*sprintf(str, "%d",
@@ -76,13 +74,10 @@ void roomba_drive(remoteSignal type) {
 void drive_stop(){
 	actVel_right=0; 
 	actVel_left=0;
-	
-	// TODO changed this, so that the roomba doesn't drive forward with
-	// full speed, after outOfCourse was handled
 	actVel_right_old = 0;
 	actVel_left_old = 0;
 	
-	drive_direction(actVel_left, actVel_right); 
+	drive_direction(actVel_right, actVel_left); 
 }	
 
 /**
@@ -232,14 +227,14 @@ void drive_turn(int16_t degree){
 void drive_direction(int16_t left_speed, int16_t right_speed) {
 	send_byte_roomba(145);
 	
-	uint8_t low = left_speed;
-	uint8_t high = (left_speed >> 8);
+	uint8_t low = right_speed;
+	uint8_t high = (right_speed >> 8);
 	
 	send_byte_roomba(high);
 	send_byte_roomba(low);
 	
-	low = right_speed;
-	high = (right_speed >> 8);
+	low = left_speed;
+	high = (left_speed >> 8);
 	
 	send_byte_roomba(high);
 	send_byte_roomba(low);
