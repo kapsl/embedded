@@ -79,7 +79,7 @@ void shootPowerUp() {
 		
 		// If Big roomba or mushroom is active --> set global variable
 		// Initialize timer so we can use the power up for a nr. of seconds
-		startTimer1(5);
+		startTimer1(7);
 	}
 	
 	// Delete display
@@ -139,7 +139,7 @@ void showRandomizeSign() {
 		powerUp_type powerup_type = rand() % 3;
 		
 		// For testing
-		//powerUp_type powerup_type = MUSHROOM;
+		//powerup_type = MUSHROOM;
 		
 		// Display what power up we have
 		uint8_t tank[4] = {0x00, 0x5c, 0x40, 0x00};

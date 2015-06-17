@@ -1,7 +1,7 @@
 #ifndef DRIVECONTROL_H_INCLUDED
 #define DRIVECONTROL_H_INCLUDED
 
-#define SPEED_CONSTANT 25
+#define SPEED_CONSTANT 5
 
 
 #include <avr/io.h>

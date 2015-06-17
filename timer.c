@@ -54,7 +54,7 @@ void startTimer1(uint16_t seconds) {
 ISR(TIMER1_COMPA_vect) {
 	cli();
 	
-	//sendString("Interrupt 1 ...");
+	sendString("Interrupt 1 ...");
 	
 	// Do stuff when timer is triggered
 	if (timer_counter_1 < max_seconds_1 - 1  && timer_counter_1 != -1) {
