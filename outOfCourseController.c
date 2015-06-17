@@ -78,7 +78,7 @@ void driveIn(uint8_t wheel) {
 	drive_stop();
 	
 	// Turn the roomba till sensor reaches line
-	if (wheel == RIGHT_WHEEL) {
+	if (wheel == LEFT_WHEEL) {
 		drive_direction(-DRIVE_STRAIGHT_SPEED, 0);
 	} else {
 		drive_direction(0, -DRIVE_STRAIGHT_SPEED);

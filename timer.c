@@ -20,7 +20,8 @@ uint8_t max_seconds_1 = 0;
  */
 void initializeTimers() {
 	// Initalize timer 1 with CTC and 1024 as divider
-	TCCR1B = CTC_1024;
+	//TCCR1B = CTC_1024;
+	//sei();
 }
 
 /**
@@ -29,8 +30,11 @@ void initializeTimers() {
  * \param seconds how many seconds till the timer is triggered
  */
 void startTimer1(uint16_t seconds) {
+	cli();
 	max_seconds_1 = (int8_t) seconds;
 	timer_counter_1 = 0;
+	
+	TCCR1B = CTC_1024;
 	
 	// Make 1 second
 	uint16_t timerval = 15625;
@@ -40,6 +44,7 @@ void startTimer1(uint16_t seconds) {
 		
 	// Activate interrupts
 	TIMSK1 = 0x03;
+	sei();
 }
 
 /**
