@@ -16,9 +16,6 @@
 // TODO Code aufräumen
 // TODO comments in header files
 
-int16_t velocity_left=0; 
-int16_t velocity_right=0; 
-
 int main(int argc, const char* argv[]) {
 	usart_init_roomba();
 	usart_init();
@@ -70,14 +67,14 @@ int main(int argc, const char* argv[]) {
 				handleOutOfCourse(dType);
 			}
 		}
-		
-		if (signal != RNOTHINGPRESSED && !drive_in) {
+		//signal != RNOTHINGPRESSED && 
+		if (!drive_in) {
 			// OK Pressed for power ups
 			if (signal == RSHOOT) {
 				// Shoot power up
 				shootPowerUp();
 			} else {
-				getCommand(signal, &velocity_right, &velocity_left);
+				roomba_drive(signal);
 			}
 		}
 		
@@ -86,7 +83,7 @@ int main(int argc, const char* argv[]) {
 		char radioSignal = receiveRadio();
 		
 		if (signal == BUMP_SPEED){
-			drive_direction(500,500);  
+			drive_bump_speed();  
 		}
 		// Receive radio
 		// Hit by red tank
