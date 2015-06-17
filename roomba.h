@@ -31,12 +31,10 @@ void clear_Display(void);
 
 uint8_t read_button(uint8_t button);
 void read_values(uint8_t packetid, uint8_t * data, uint8_t length);
-void drive(int16_t velocity);
 uint8_t receiveRemote(void);
 void showRemoteSignalInDisplay(char *data);
 void intToHex(uint16_t hex, char *result);
 uint16_t read_user_input(void);
-void set_back(void);
 void getSensorQueryList(uint8_t nrPackets, uint8_t* packet_ids, uint8_t* packet_length, uint16_t* data);
 void storeSongs(void);
 void playSong(uint8_t songNr);

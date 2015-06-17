@@ -7,13 +7,14 @@
 uint8_t timer_counter_1 = -1;
 uint8_t max_seconds_1 = 0;
 
-uint8_t timer_counter_2 = -1;
-uint8_t max_seconds_2 = 0;
-
 // TODO make one function out of the different timers
 
 /**
- * TODO
+ * \brief Initialize the first timer, used for longer times
+ * 
+ * \param seconds how many seconds till the timer is triggered
+ * 
+ * TODO ask if cli / sei like this is ok
  */
 void initializeTimer1(uint16_t seconds) {
 	cli();
@@ -22,7 +23,6 @@ void initializeTimer1(uint16_t seconds) {
 	max_seconds_1 = (int8_t) seconds;
 	timer_counter_1 = 0;
 	
-	//uint16_t timerval = ms / 1000 * 15625;
 	// Make 1 second
 	uint16_t timerval = 15625;
 	
@@ -38,10 +38,14 @@ void initializeTimer1(uint16_t seconds) {
 	sei();
 }
 
+/**
+ * \brief Timer1 is triggered, but we need additional logic to 
+ * 			support longer times
+ */
 ISR(TIMER1_COMPA_vect) {
 	cli();
 	
-	sendString("Interrupt 1 ...");
+	//sendString("Interrupt 1 ...");
 	
 	// DO stuff when timer is on
 	if (timer_counter_1 < max_seconds_1 - 1  && timer_counter_1 != -1) {
@@ -49,6 +53,7 @@ ISR(TIMER1_COMPA_vect) {
 	} else if (timer_counter_1 == max_seconds_1 - 1) {
 		powerUpIsOver();
 		
+		// Stop timer
 		TCCR1B = 0x0;
 		
 		timer_counter_1 = -1;
@@ -58,18 +63,15 @@ ISR(TIMER1_COMPA_vect) {
 }
 
 /**
- * TODO make possibility to use ms
+ * \brief Initialize timer 2, used for short times.
+ * 
+ * \param ms How many milliseconds till timer is triggered
  */
-void initializeTimer2(uint16_t seconds) {
+void initializeTimer2(uint16_t ms) {
 	cli();
-	//sendString("Timer initialized...");
+	//sendString("Timer 2 initialized...");
 	
-	max_seconds_2 = seconds;
-	timer_counter_2 = 0;
-	
-	//uint16_t timerval = ms / 1000 * 15625;
-	// Make 1 second
-	uint16_t timerval = 15625;
+	uint16_t timerval = ms / 1000 * 15625;
 	
 	// Initalize timer with CTC and 1024 as divider
 	TCCR3B = CTC_1024;
@@ -83,21 +85,22 @@ void initializeTimer2(uint16_t seconds) {
 	sei();
 }
 
+/**
+ * \brief Stop counting for timer 2
+ */
+void stopTimer2() {
+	TCCR3B = 0x0;
+}
+
+/**
+ * \brief Timer 2 is triggered
+ */
 ISR(TIMER3_COMPA_vect) {
 	cli();
 	
-	sendString("Interrupt 3 ...");
+	sendString("Interrupt Timer 2 ...");
 	
-	// DO stuff when timer is on
-	if (timer_counter_2 < max_seconds_2 - 1) {
-		timer_counter_2++;		
-	} else if (timer_counter_2 == max_seconds_2 - 1 && timer_counter_2 != -1) {
-		sendString("Timer 3 reached ...");
-		
-		TCCR3B = 0x0;
-		
-		timer_counter_2 = -1;
-	}	
+	timer2Triggered();
 	
 	sei();
 }

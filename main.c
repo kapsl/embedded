@@ -39,7 +39,6 @@ int main(int argc, const char* argv[]) {
 	
 	// Wait a bit so the power button is not pressed immediatley afterwards
 	my_msleep(200);
-	// TODO set remote control by this
 
 	while (1) {			
 		// Get sensor data
@@ -58,7 +57,7 @@ int main(int argc, const char* argv[]) {
 		detectedType dType;
 		floorDetection(&dType, qdata);
 		
-		// Detect floor stuff
+		// Detect course border and power up
 		if (dType != NO_TYPE) {
 			if (dType == POWER_UP) {
 				getPowerUp(qdata[5]);
@@ -79,12 +78,14 @@ int main(int argc, const char* argv[]) {
 		
 		// Receive radio
 		// faster when hit by other roomba
-		if (receiveRadio() == BUMP_SPEED){
+		char radioSignal = receiveRadio();
+		
+		if (signal == BUMP_SPEED){
 			drive_direction(500,500);  
 		}
 		// Receive radio
 		// Hit by red tank
-		if (receiveRadio() == RED_TANK_SHOT) {
+		else if (radioSignal == RED_TANK_SHOT) {
 			// Hit did not work
 			if (bigRoombaActive) {
 				playSong(1);
@@ -95,14 +96,6 @@ int main(int argc, const char* argv[]) {
 				sendString("Hit...");
 			}
 		}
-	/*playSong(0);
-	my_msleep (5000);
-	playSong(1);
-	my_msleep (5000);
-	playSong(2);
-	my_msleep (5000);
-	playSong(3);
-	my_msleep (5000);*/
 	} 
     
     return 0;

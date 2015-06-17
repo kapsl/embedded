@@ -26,7 +26,7 @@ void set_Display(char *data) {
 }
 
 /**
- * TODO
+ * \brief Clear all entries on the display
  */
 void clear_Display() {
 	char result[4] = {' ', ' ', ' ', ' '};
@@ -34,7 +34,10 @@ void clear_Display() {
 }
 
 /**
- * TODO
+ * \brief Set display by using the 7 segment mode
+ * 
+ * \param data_bytes array of 4 values, each value gives the combination
+ * 			of 7 segments switched on or off
  */
 void set_Display_raw(uint8_t *data_bytes) {
 	send_byte_roomba(163);
@@ -83,24 +86,6 @@ void read_values(uint8_t packetid, uint8_t * data, uint8_t length) {
 }
 
 /**
- * \brief Let the roomba drive
- * 
- * \param velocity the velocity in mm/s. If negative --> backwards
- */
-void drive(int16_t velocity) {
-	send_byte_roomba(145);
-	
-	uint8_t low = velocity;
-	uint8_t high = (velocity >> 8);
-	
-	send_byte_roomba(high);
-	send_byte_roomba(low);
-	
-	send_byte_roomba(high);
-	send_byte_roomba(low);
-}
-
-/**
  * \brief Receive a signal from the remote. Show the received
  * 			value as hex on Display and drive corresponding
  * 			to the steering buttons
@@ -135,9 +120,12 @@ void showRemoteSignalInDisplay(char *data) {
 
 /**
  * \brief Convert a integer to a hex value
+ * 
+ * \param mint the integer value to convert
+ * \param result a pointer to store the hex value in 
  */
-void intToHex(uint16_t hex, char *result) {
-	sprintf(result, "%4x", hex);
+void intToHex(uint16_t mint, char *result) {
+	sprintf(result, "%4x", mint);
 }
 
 
@@ -208,15 +196,6 @@ uint16_t read_user_input() {
 }
 
 /**
- * \brief Drive a bit backwards
- */
-void set_back() {
-	drive(-100);
-	my_msleep(1700);
-	drive(0);
-}
-
-/**
  * \brief get a list of sensor data
  * 
  * \param nrPackets the number of packets we want to retrieve
@@ -257,10 +236,9 @@ void playSong(uint8_t songNr) {
 
 /**
  *  \brief Store songs for playing them later
+ *  TODO change songs
  */
 void storeSongs() {
-	// Programm songs
-	
 	// Song 1 -- hit
 	// Send optcode
 	send_byte_roomba(140);
@@ -295,6 +273,7 @@ void storeSongs() {
 	send_byte_roomba(65);
 	send_byte_roomba(32);
 		
+	
 	// Song 2 -- power-up
 	// Send optcode
 	send_byte_roomba(140);
@@ -320,6 +299,7 @@ void storeSongs() {
 	// Note 4, duration 4
 	send_byte_roomba(80);
 	send_byte_roomba(8);
+	
 	
 	// Song 3 -- hit
 	// Send optcode
@@ -355,6 +335,7 @@ void storeSongs() {
 	send_byte_roomba(65);
 	send_byte_roomba(32);
 		
+	
 	// Song 4 -- power-up
 	// Send optcode
 	send_byte_roomba(140);
