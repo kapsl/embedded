@@ -68,7 +68,7 @@ void roomba_drive(remoteSignal type) {
 				bump_active); 
 		set_Display(str); */
 		
-		my_msleep(150);
+		//my_msleep(150);
 }
 
 void drive_stop(){
