@@ -82,7 +82,7 @@ int main(int argc, const char* argv[]) {
 		// faster when hit by other roomba
 		char radioSignal = receiveRadio();
 		
-		if (signal == BUMP_SPEED){
+		if (radioSignal == BUMP_SPEED){
 			drive_bump_speed();  
 		}
 		// Receive radio
@@ -90,12 +90,17 @@ int main(int argc, const char* argv[]) {
 		else if (radioSignal == RED_TANK_SHOT) {
 			// Hit did not work
 			if (bigRoombaActive) {
+				char result[4] = {'N', 'O', 'H', 'T'};
+				set_Display(result);
+				
 				playSong(1);
-				sendString("Hit with mushroom - no damage...");
 			} else {
+				
+				char result[4] = {'H', 'I', 'T', ' '};
+				set_Display(result);
+				
 				playSong(2);
 				drive_hit();
-				sendString("Hit...");
 			}
 		}
 	} 
