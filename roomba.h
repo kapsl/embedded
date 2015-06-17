@@ -38,5 +38,6 @@ uint16_t read_user_input(void);
 void getSensorQueryList(uint8_t nrPackets, uint8_t* packet_ids, uint8_t* packet_length, uint16_t* data);
 void storeSongs(void);
 void playSong(uint8_t songNr);
+uint8_t getRoombaNrFromRemote(void);
 
 #endif

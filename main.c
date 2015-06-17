@@ -28,12 +28,8 @@ int main(int argc, const char* argv[]) {
 	currentPowerUp = NO_POWERUP;
 	
 	// Get nr. of roomba from remote control
-	uint16_t result = read_user_input();
-	
-	//TODO for testing
-	//uint16_t result = 1;
-	
-	// TODO error, when not 1 or 2
+	uint8_t result = getRoombaNrFromRemote();
+
 	initializeRadio((uint8_t) result);
 	
 	// Wait a bit so the power button is not pressed immediatley afterwards
@@ -84,12 +80,12 @@ int main(int argc, const char* argv[]) {
 		// faster when hit by other roomba
 		char radioSignal = receiveRadio();
 		
-		if (radioSignal == BUMP_SPEED){
+		if (radioSignal == BUMP_SPEED && !drive_in){
 			drive_bump_speed();  
 		}
 		// Receive radio
 		// Hit by red tank
-		else if (radioSignal == RED_TANK_SHOT) {
+		else if (radioSignal == RED_TANK_SHOT && !drive_in) {
 			// Hit did not work
 			if (bigRoombaActive) {
 				char result[4] = {'N', 'O', 'H', 'T'};

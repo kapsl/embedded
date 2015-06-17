@@ -10,7 +10,14 @@
 #include "outOfCourseController.h"
 #include "drivecontrol.h"
 
+/**
+ * If 1 big roomba power up is active
+ */
 uint8_t bigRoombaActive = 0;
+
+/**
+ * If 1 mushroom power up is active
+ */
 uint8_t mushroomActive = 0;
 
 /**
@@ -18,6 +25,10 @@ uint8_t mushroomActive = 0;
  * symbol on the display
  */
 int16_t powerUpDisplayCounter = -1;
+
+/**
+ * Hold the tick count of a wheel to calculate a random number
+ */
 uint16_t tickCountRandGlobal = 1;
 
 /**

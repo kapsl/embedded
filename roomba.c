@@ -343,3 +343,25 @@ void storeSongs() {
 	send_byte_roomba(80);
 	send_byte_roomba(8);
 }
+
+/**
+ * \brief Get from remote control if roomba should be nr 1 or 2
+ */
+uint8_t getRoombaNrFromRemote() {
+	while (1) {
+		uint8_t result = read_user_input();
+	
+		//TODO for testing
+		//uint16_t result = 1;
+	
+		// Error, when not 1 or 2
+		if (result != 1 && result != 2) {
+			char result[4] = {'1', 'O', 'R', '2'};
+			set_Display(result);
+			
+			my_msleep(2000);
+		} else {
+			return result;
+		}
+	}
+}
