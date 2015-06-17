@@ -309,31 +309,12 @@ void storeSongs() {
 	send_byte_roomba(2);
 	
 	// Length
-	send_byte_roomba(6);
+	send_byte_roomba(1);
 	
 	// Note 1, duration 1	
 	send_byte_roomba(60);
-	send_byte_roomba(16);
-	
-	// Note 2, duration 2	
-	send_byte_roomba(65);
-	send_byte_roomba(32);
-	
-	// Note 3, duration 3	
-	send_byte_roomba(60);
-	send_byte_roomba(16);
-	
-	// Note 4, duration 4	
-	send_byte_roomba(65);
-	send_byte_roomba(32);
-	
-	// Note 5, duration 5	
-	send_byte_roomba(60);
-	send_byte_roomba(16);
-	
-	// Note 6, duration 6	
-	send_byte_roomba(65);
-	send_byte_roomba(32);
+	send_byte_roomba(128);
+
 		
 	
 	// Song 4 -- power-up

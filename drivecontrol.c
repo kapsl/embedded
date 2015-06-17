@@ -12,41 +12,72 @@
  *        Depending on the signal the roomba will drive forward, backwards, right or left 
  * 
  * \param type
- * \param actVel_left
- * \param actVel_right
  */
-void getCommand(remoteSignal type, int16_t * actVel_right,int16_t * actVel_left) {
+
+int16_t  actVel_right=0; 
+int16_t  actVel_left=0;
+int16_t  actVel_right_old=0;
+int16_t  actVel_left_old=0;
+uint8_t  bump_active=0;
+char str [4]; 
+
+void roomba_drive(remoteSignal type) {
 	
-		if (type == RACCELERATE) {
-		
-				drive_forward(actVel_right, actVel_left); 
-	
-		} 
-		else if (type == RBRAKE  && *actVel_left>-400) {
+		if(type == RACCELERATE && actVel_left<400 && actVel_right < 400) {
 				
-				drive_break_backwards(actVel_right, actVel_left); 
+				bump_active=0; 
+				drive_forward(); 
+				actVel_left_old=actVel_left;
+				actVel_right_old=actVel_right; 
+		}
+		else if (type == RBRAKE  && actVel_left>-400 && actVel_right>-400) {
+				
+				bump_active=0; 
+				drive_break_backwards(); 
+				actVel_left_old=actVel_left;
+				actVel_right_old=actVel_right; 
 	
 		} 
 		else if (type == RLEFT) {
-		
-				drive_left(actVel_right, actVel_left);
+				
+				bump_active=0; 
+				drive_left();
 	
 		}		 
 		else if (type == RRIGHT) {
-		
-				drive_right(actVel_right, actVel_left);
+				
+				bump_active=0; 
+				drive_right();
 			
 		}
+		else{
+			
+			if(bump_active==0){
+			
+				actVel_left=actVel_left_old;
+				actVel_right=actVel_right_old; 
+		
+			}
+		
+		}		
+	
 		 
-		drive_direction(*actVel_right, *actVel_left);
-		my_msleep(100);
+		 
+		drive_direction(actVel_left, actVel_right);
+		
+		sprintf(str, "%d",
+				bump_active); 
+		set_Display(str); 
+		
+		my_msleep(200);
 }
 
 void drive_stop(){
 
-		velocity_left=0; 
-		velocity_right=0; 
-		drive_direction(velocity_left,velocity_right); 	
+		actVel_right=0; 
+		actVel_left=0;
+		drive_direction(actVel_left, actVel_right); 
+			
 
 }	
 
@@ -57,20 +88,20 @@ void drive_stop(){
  * \param velocity_left
  */
 
-void drive_forward (int16_t * actVel_right, int16_t * actVel_left){
+void drive_forward (){
 	
-		if(*actVel_left>*actVel_right){
+		if(actVel_left>actVel_right){
 				
-				*actVel_right=*actVel_left;
+				actVel_right=actVel_left;
 		} 
-		else if (*actVel_left<*actVel_right){
+		else if (actVel_left<actVel_right){
 				
-				*actVel_left=*actVel_right; 
+				actVel_left=actVel_right; 
 		}
-		else if (*actVel_right<400&&*actVel_left<400) {
+		else if (actVel_right<400&&actVel_left<400) {
 				
-				*actVel_right=*actVel_right+ACC_BRAKE_CONSTANT; 
-				*actVel_left=*actVel_left+ACC_BRAKE_CONSTANT; 
+				actVel_right=actVel_right+SPEED_CONSTANT; 
+				actVel_left=actVel_left+SPEED_CONSTANT; 
 		}
 }
 
@@ -81,24 +112,24 @@ void drive_forward (int16_t * actVel_right, int16_t * actVel_left){
  * \param velocity_left
  */
 
-void drive_break_backwards (int16_t * actVel_right, int16_t * actVel_left){
+void drive_break_backwards (){
 	
-		if(*actVel_left>*actVel_right){
+		if(actVel_left>actVel_right){
 				
-				*actVel_right=*actVel_left;
-				*actVel_right=*actVel_right-ACC_BRAKE_CONSTANT; 
-				*actVel_left=*actVel_left-ACC_BRAKE_CONSTANT; 
+				actVel_right=actVel_left;
+				actVel_right=actVel_right-SPEED_CONSTANT; 
+				actVel_left=actVel_left-SPEED_CONSTANT; 
 		} 
-		else if (*actVel_left<*actVel_right){
+		else if (actVel_left<actVel_right){
 			
-				*actVel_left=*actVel_right; 
-				*actVel_right=*actVel_right-ACC_BRAKE_CONSTANT; 
-				*actVel_left=*actVel_left-ACC_BRAKE_CONSTANT; 
+				actVel_left=actVel_right; 
+				actVel_right=actVel_right-SPEED_CONSTANT; 
+				actVel_left=actVel_left-SPEED_CONSTANT; 
 		}
 		else{
 		
-				*actVel_right=*actVel_right-ACC_BRAKE_CONSTANT; 
-				*actVel_left=*actVel_left-ACC_BRAKE_CONSTANT; 
+				actVel_right=actVel_right-SPEED_CONSTANT; 
+				actVel_left=actVel_left-SPEED_CONSTANT; 
 		}
 }	
 
@@ -109,28 +140,28 @@ void drive_break_backwards (int16_t * actVel_right, int16_t * actVel_left){
  * \param velocity_left
  */
 
-void drive_left (int16_t * actVel_right, int16_t * actVel_left){
+void drive_left (){
 	
-		if (*actVel_right>=0){
+		if (actVel_right>=0){
 			
-				if (*actVel_right<400){
+				if (actVel_right<400){
 							
-						*actVel_left=*actVel_left-CONTROL_CONSTANT;
-						*actVel_right=*actVel_right+CONTROL_CONSTANT;
+						actVel_left=actVel_left-SPEED_CONSTANT;
+						actVel_right=actVel_right+SPEED_CONSTANT;
 				}
 				else{
-						*actVel_left=*actVel_left-(2*CONTROL_CONSTANT);
+						actVel_left=actVel_left-(2*SPEED_CONSTANT);
 				}
 		}
-		else if (*actVel_right<0){
+		else if (actVel_right<0){
 				
-				if (*actVel_right>-400){
+				if (actVel_right>-400){
 							
-							*actVel_left=*actVel_left-CONTROL_CONSTANT;
-							*actVel_right=*actVel_right+CONTROL_CONSTANT;
+							actVel_left=actVel_left-SPEED_CONSTANT;
+							actVel_right=actVel_right+SPEED_CONSTANT;
 				}
 				else{
-							*actVel_left=*actVel_left-(2*CONTROL_CONSTANT);
+							actVel_left=actVel_left-(2*SPEED_CONSTANT);
 				}
 		}
 }
@@ -142,27 +173,27 @@ void drive_left (int16_t * actVel_right, int16_t * actVel_left){
  * \param velocity_left
  */
 
-void drive_right (int16_t * actVel_right, int16_t * actVel_left){
+void drive_right (){
 	
-		if (*actVel_left>=0){
+		if (actVel_left>=0){
 		
-				if (*actVel_left<400){
+				if (actVel_left<400){
 					
-						*actVel_left=*actVel_left+CONTROL_CONSTANT;
-						*actVel_right=*actVel_right-CONTROL_CONSTANT;
+						actVel_left=actVel_left+SPEED_CONSTANT;
+						actVel_right=actVel_right-SPEED_CONSTANT;
 				}
 				else{
-						*actVel_right=*actVel_right-(2*CONTROL_CONSTANT);
+						actVel_right=actVel_right-(2*SPEED_CONSTANT);
 				}
 		}
-		else if (*actVel_left<0){
+		else if (actVel_left<0){
 	
-				if (*actVel_left>-400){
-						*actVel_left=*actVel_left+CONTROL_CONSTANT;
-						*actVel_right=*actVel_right-CONTROL_CONSTANT;
+				if (actVel_left>-400){
+						actVel_left=actVel_left+SPEED_CONSTANT;
+						actVel_right=actVel_right-SPEED_CONSTANT;
 				}
 				else{
-						*actVel_right=*actVel_right-(2*CONTROL_CONSTANT);
+						actVel_right=actVel_right-(2*SPEED_CONSTANT);
 				}
 		}	
 }
@@ -195,17 +226,17 @@ void drive_turn(int16_t degree){
  * \param velocity_left
  */
 
-void drive_direction(int16_t velocity_left, int16_t velocity_right) {
+void drive_direction(int16_t left_speed, int16_t right_speed) {
 	send_byte_roomba(145);
 	
-	uint8_t low = velocity_left;
-	uint8_t high = (velocity_left >> 8);
+	uint8_t low = actVel_right;
+	uint8_t high = (actVel_right >> 8);
 	
 	send_byte_roomba(high);
 	send_byte_roomba(low);
 	
-	low = velocity_right;
-	high = (velocity_right >> 8);
+	low = actVel_left;
+	high = (actVel_left >> 8);
 	
 	send_byte_roomba(high);
 	send_byte_roomba(low);
@@ -282,16 +313,18 @@ uint16_t getTicks() {
  
 void bump_handling(uint8_t bump) {
 		
+		
 		// Left bumper
 		if ((bump & 0x02) == 0x02) {
-				
+				bump_active=1; 
 				sendRadio(BUMP_SPEED); 
 				drive_stop();
 		
 		// Right bumper
 		} 
 		else if ((bump & 0x01) == 0x01) {
-		
+		bump_active=1; 
+		sendRadio(BUMP_SPEED); 
 		drive_stop(); 
 		}
 }
@@ -330,3 +363,12 @@ void drive_hit(){
 	drive_stop(); 
 	drive_turn(3*360+10); 
 } 
+
+void drive_bump_speed(){
+		
+		bump_active=1; 
+		int16_t turbo_speed_left=500;
+		int16_t turbo_speed_right=500; 
+		drive_direction(turbo_speed_left, turbo_speed_right);
+
+}
