@@ -274,7 +274,7 @@ void storeSongs() {
 	send_byte_roomba(32);
 		
 	
-	// Song 2 -- power-up
+	// Song 2 -- power-up and game over
 	// Send optcode
 	send_byte_roomba(140);
 	
@@ -301,7 +301,7 @@ void storeSongs() {
 	send_byte_roomba(8);
 	
 	
-	// Song 3 -- hit
+	// Song 3 -- Shooting
 	// Send optcode
 	send_byte_roomba(140);
 	
@@ -309,15 +309,24 @@ void storeSongs() {
 	send_byte_roomba(2);
 	
 	// Length
-	send_byte_roomba(1);
+	send_byte_roomba(4);
 	
 	// Note 1, duration 1	
-	send_byte_roomba(60);
-	send_byte_roomba(128);
+	send_byte_roomba(80);
+	send_byte_roomba(10);
+	
+	send_byte_roomba(80);
+	send_byte_roomba(10);
+	
+	send_byte_roomba(80);
+	send_byte_roomba(10);
+	
+	send_byte_roomba(80);
+	send_byte_roomba(10);
 
 		
 	
-	// Song 4 -- power-up
+	// Song 4 -- No hit, because of mushroom
 	// Send optcode
 	send_byte_roomba(140);
 	
@@ -328,19 +337,20 @@ void storeSongs() {
 	send_byte_roomba(4);
 	
 	// Note 1, duration 1	
-	send_byte_roomba(65);
+	send_byte_roomba(80);
 	send_byte_roomba(8);
+	
 	
 	// Note 2, duration 2
-	send_byte_roomba(70);
-	send_byte_roomba(8);
-	
-	// Note 3, duration 3
 	send_byte_roomba(75);
 	send_byte_roomba(8);
 	
+	// Note 3, duration 3
+	send_byte_roomba(70);
+	send_byte_roomba(8);
+	
 	// Note 4, duration 4
-	send_byte_roomba(80);
+	send_byte_roomba(65);
 	send_byte_roomba(8);
 }
 

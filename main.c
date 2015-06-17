@@ -12,7 +12,7 @@
 #include "outOfCourseController.h"
 #include "timer.h"
 
-// TODO Kurs bauen
+// TODO Kurs bauen -evtl. 3 lagig bauen
 // TODO Testen
 // TODO Code aufräumen
 // TODO comments in header files
@@ -97,7 +97,7 @@ int main(int argc, const char* argv[]) {
 				char result[4] = {'H', 'I', 'T', ' '};
 				set_Display(result);
 				
-				playSong(2);
+				playSong(3);
 				drive_hit();
 			}
 		}
