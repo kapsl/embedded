@@ -10,6 +10,7 @@
 #include "power_up.h"
 #include "radio.h"
 #include "outOfCourseController.h"
+#include "timer.h"
 
 // TODO Kurs bauen
 // TODO Testen
@@ -20,6 +21,7 @@ int main(int argc, const char* argv[]) {
 	usart_init_roomba();
 	usart_init();
 	initializeRoomba();
+	initializeTimers();
 	
 	my_msleep(20);
 	
@@ -67,7 +69,7 @@ int main(int argc, const char* argv[]) {
 				handleOutOfCourse(dType);
 			}
 		}
-		//signal != RNOTHINGPRESSED && 
+		
 		if (!drive_in) {
 			// OK Pressed for power ups
 			if (signal == RSHOOT) {

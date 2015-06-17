@@ -4,10 +4,16 @@
 #include "power_up.h"
 #include "usart.h"
 
+/**
+ * How often do we have to let the timer run, till we reached
+ * the number of seconds we want
+ */
 uint8_t timer_counter_1 = -1;
-uint8_t max_seconds_1 = 0;
 
-// TODO make one function out of the different timers
+/**
+ * After how many seconds should the timer call the callback function
+ */
+uint8_t max_seconds_1 = 0;
 
 /**
  * \brief Initialize the two timers
@@ -45,7 +51,7 @@ ISR(TIMER1_COMPA_vect) {
 	
 	//sendString("Interrupt 1 ...");
 	
-	// DO stuff when timer is on
+	// Do stuff when timer is triggered
 	if (timer_counter_1 < max_seconds_1 - 1  && timer_counter_1 != -1) {
 		timer_counter_1++;		
 	} else if (timer_counter_1 == max_seconds_1 - 1) {

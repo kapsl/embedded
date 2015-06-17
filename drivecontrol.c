@@ -72,12 +72,10 @@ void roomba_drive(remoteSignal type) {
 }
 
 void drive_stop(){
-
-		actVel_right=0; 
-		actVel_left=0;
-		drive_direction(actVel_left, actVel_right); 
-			
-
+	actVel_right=0; 
+	actVel_left=0;
+	
+	drive_direction(actVel_left, actVel_right); 
 }	
 
 /**
@@ -224,18 +222,17 @@ void drive_turn(int16_t degree){
  * \param velocity_right
  * \param velocity_left
  */
-
 void drive_direction(int16_t left_speed, int16_t right_speed) {
 	send_byte_roomba(145);
 	
-	uint8_t low = actVel_right;
-	uint8_t high = (actVel_right >> 8);
+	uint8_t low = right_speed;
+	uint8_t high = (right_speed >> 8);
 	
 	send_byte_roomba(high);
 	send_byte_roomba(low);
 	
-	low = actVel_left;
-	high = (actVel_left >> 8);
+	low = left_speed;
+	high = (left_speed >> 8);
 	
 	send_byte_roomba(high);
 	send_byte_roomba(low);

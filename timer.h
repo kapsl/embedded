@@ -14,5 +14,4 @@ void initializeTimers(void);
 void initializeTimer1(void);
 void startTimer1(uint16_t seconds);
 
-
 #endif

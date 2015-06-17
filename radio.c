@@ -5,20 +5,21 @@
 #include "usart.h"
 #include "tools.h"
 
+/**
+ * \brief Initialize the radio
+ */
 void initializeRadio(uint8_t nr) {	
 	node_id = nr;
 	Initialize(nr, NETWORKID);
 }
 
 /**
- * TODO
+ * Send the payload over the radio to the other roomba
  * 
- * \param payload - array with only one char!
+ * \param payload - array with only one! char
  */
 void sendRadio(char payload) {
-	/**
-	 * TODO ack doesn't work at the moment it seems that it is sending, but never received
-	 */
+	// We don't need ACK, works great without ;-)
 	uint8_t requestACK = 0;
 	//uint8_t interPacketDelay = 50; //wait this many ms between sending packets
 	
@@ -48,7 +49,7 @@ void sendRadio(char payload) {
 }
 
 /**
- * TODO
+ * \brief Wait for an ACK - not used at the moment
  */
 uint8_t waitForAck() {
 	my_msleep(ACK_TIME);
@@ -60,8 +61,12 @@ uint8_t waitForAck() {
 	return 0;
 }
 
+/**
+ * \brief Receive a radio signal
+ * 
+ * \return the received char, '0' otherwise
+ */
 char receiveRadio() {
-	//sendString("Receiving\r\n");
 	if (ReceiveComplete()) {
 		if (CRCPass()) {
 			//uint8_t sender_node_id = GetSender();

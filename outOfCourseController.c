@@ -6,7 +6,9 @@
 #include "outOfCourseController.h"
 #include "roomba.h"
 
-
+/**
+ * Variable to check at which step of driving back in we are
+ */
 uint8_t step = 0;
 
 /**
@@ -25,7 +27,8 @@ uint8_t side = 0;
 uint8_t outsideCourse = 0;
 
 /**
- * TODO
+ * \brief Determine if we are driving out of the course,
+ * 		and if yes, drive the roomba back into the middle of thecourse
  */
 void handleOutOfCourse(detectedType activeSensorSide) {
 	// Detect side on which we drive out
@@ -37,7 +40,7 @@ void handleOutOfCourse(detectedType activeSensorSide) {
 	
 	// Drive back to line
 	else if (activeSensorSide == BORDER_BOTH && !drive_in && step == 0) {
-		// TODO When mushroom is active, we are allowed to drive out
+		// When mushroom is active, we are allowed to drive out
 		if (mushroomActive && outsideCourse == 0) {
 			// We drove outside
 			outsideCourse = 1;
@@ -63,12 +66,17 @@ void handleOutOfCourse(detectedType activeSensorSide) {
 	}
 }
 
+/**
+ * \brief Drive back in to the course
+ * 
+ * \param wheel RIGHT_WHEEL or LEFT_WHEEL, with wich we drove out
+ */
 void driveIn(uint8_t wheel) {
 	drive_in = 1;
-	
+
 	// Stop roomba
 	drive_stop();
-		
+	
 	// Turn the roomba till sensor reaches line
 	if (wheel == RIGHT_WHEEL) {
 		drive_direction(-DRIVE_STRAIGHT_SPEED, 0);
@@ -79,9 +87,12 @@ void driveIn(uint8_t wheel) {
 	my_msleep(350);
 }
 
+/**
+ * \brief When we are 90 degrees to the border, continue here,
+ * 			drive back in the middle of the course and turn 
+ * 			roomba by 90 degrees into the right direction
+ */
 void driveInContinued(detectedType activeSensorSide) {
-	sendString("Drive in Continued\r\n");
-	
 	// Stop when sensor readed line
 	drive_stop();
 	
