@@ -64,6 +64,11 @@ void roomba_drive(remoteSignal type) {
 		 
 		drive_direction(actVel_left, actVel_right);
 		
+
+		/*sprintf(str, "%d",
+				bump_active); 
+		set_Display(str); */
+		
 		my_msleep(150);
 }
 
@@ -354,6 +359,7 @@ void driveWithRadius(uint16_t velocity, uint16_t radius) {
  */
 
 void drive_hit(){
+	bump_active = 1;
 	
 	bump_active=1;
 	drive_stop(); 

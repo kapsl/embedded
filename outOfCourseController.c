@@ -28,8 +28,6 @@ uint8_t outsideCourse = 0;
  * TODO
  */
 void handleOutOfCourse(detectedType activeSensorSide) {
-	// TODO eventually implement that he drives off the road backwards
-	
 	// Detect side on which we drive out
 	if (activeSensorSide == BORDER_FRONT_LEFT && !drive_in) {
 		side = 0;

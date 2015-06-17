@@ -107,7 +107,7 @@ void showRandomizeSign() {
 		return;
 	}
 	
-	my_msleep(20);
+	//my_msleep(20);
 	
 	// Infinity sign in 7 segments
 	uint8_t infinitySign[16][4] = {{0x10, 0x0, 0x0, 0x0}, {0x30, 0x0, 0x0, 0x0}, 
@@ -121,7 +121,7 @@ void showRandomizeSign() {
 	powerUpDisplayCounter++;
 	
 	// Stop when we reached array length
-	if (powerUpDisplayCounter > 16*5) {
+	if (powerUpDisplayCounter > 16*2) {
 		// Get random nr.
 		srand((unsigned int) tickCountRandGlobal);  
 		
