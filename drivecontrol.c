@@ -53,12 +53,37 @@ void roomba_drive(remoteSignal type) {
 			
 			if(bump_active==0){
 			
-				actVel_left=actVel_left_old;
-				actVel_right=actVel_right_old; 
-		
+				if ((actVel_left >= actVel_left_old) && (actVel_right < actVel_right_old)){
+					if(actVel_left==actVel_left_old){
+						actVel_right=actVel_right+2*SPEED_CONSTANT;; 
+						set_Display("1---");
+					}
+					else{
+					actVel_left=actVel_left-SPEED_CONSTANT;
+					actVel_right=actVel_right+SPEED_CONSTANT; 
+					set_Display("1---");
+					}
+				}
+				else if ((actVel_left < actVel_left_old) && (actVel_right >= actVel_right_old)){
+					if(actVel_right==actVel_right_old){
+						actVel_left=actVel_left+2*SPEED_CONSTANT; 
+						set_Display("2---");
+					}
+					else{
+					actVel_left=actVel_left+SPEED_CONSTANT;
+					actVel_right=actVel_right-SPEED_CONSTANT;
+					set_Display("2---");  
+					}
+				}
+				else{
+					actVel_left=actVel_left_old;
+					actVel_right=actVel_right_old;
+					set_Display("3---"); 
+				}
+			
 			}
-		
-		}		
+		}
+				
 	
 		if(bump_active==0){
 				drive_direction(actVel_left, actVel_right);
