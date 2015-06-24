@@ -1,0 +1,5 @@
+\select@language {ngerman}
+\contentsline {section}{\numberline {1}Einf\IeC {\"u}hrung}{2}
+\contentsline {section}{\numberline {2}Spielstart}{2}
+\contentsline {section}{\numberline {3}Bedienung}{3}
+\contentsline {section}{\numberline {4}Regelwerk}{4}
