@@ -1,28 +1,17 @@
 \section{Einführung}
-Roomba Kart ist ein an Mario Kart angelegtes Rennspiel, welches von zwei Spielern gegeneinander gespielt werden kann. Die Karts sind zwei umfunktionierte Staubsauger Roboter des Herstellers Roomba. Die Karts werden von zwei Logitech Fernbedienungen gesteuert. Auf dem Arduino Board ist ein Funkmodul angebracht, welches eine Kommunikation zwischen den Roombas erlaubt. Hierdurch können sich die Spieler via vorher erworbener Powerups beeinträchtigen oder vor Attacken schützen.  Ein Powerup kann durch das Dichte vorbeifahren an einem vorher definierten Gegenstand oder am Gegener erworben werden. Folgende Powerups stehen zur Verfügung: 
-
-\begin{itemize}
-\item RED TANK: Wird als kleiner Panzer auf dem Display des Karts ausgegeben.\\Wirkung: Wenn dieses Powerup abgeschossen wird, dreht sich das gegnerische Kart um $1080^\circ$. Ein verfehlen ist nur dann möglich 	wenn sich der gegnerische Spieler rechtzeitig durch einen BIG DADY schützen 
-\item BIG DADY: Wird als großer Panzer auf dem Display des Karts ausgegeben.
-\\Wirkung: Wenn dieses Powerup aktiviert wird, besteht ein 7 Sekunden Schutz vor  
-dem Powerup RED TANK. 
-\item MUSHROOM: Wird als Pilz auf dem Display des Karts ausgeben. 
-\\Wirkung: Kart kann 7 Sekunden ungestraft die Seitenbegrenzung der Strecke verlassen. 		
-Wenn der Kurs verlassen wurde aber nicht rechtzeitig wieder befahren wird hat dieser 	
-Spieler das Rennen verloren und das Kart bleibt stehen.
-\end{itemize}
+Roomba Kart ist ein an Mario Kart angelegtes Rennspiel, welches von zwei Spielern gegeneinander gespielt werden kann. Die Karts sind zwei umfunktionierte Staubsauger Roboter des Herstellers Roomba. Die Karts werden von zwei Logitech Fernbedienungen gesteuert und sind mit einem Arduino Board, an denen ein Funkmodul angebracht ist, verbunden. Hierdurch können sich die Kontrahenten gegenseitig beeinflussen und dadurch stören. Im Folgenden wird detailiert beschrieben wie ein Spiel gestartet werden kann, die Steuerung funktioniert und die Regeln lauten. 
 
 \section{Spielstart}
 Die mindeste und maximale Anzahl von Spielern, die beim Roomba Kart mitmachen können, ist zwei. Um mitspielen zu können, braucht jeder Spieler einen Roomba, ein mit dem Spiel programmiertes Arduino Board mit Funkmodul und eine Ferbedienung. Das Arduino Board wird durch eine Steckverbindung mit dem Roomba verbunden. Im Anschluss sollten auf dem Roomba-Display vier Bindestriche anzeigt werden. Falls dies nicht der Fall ist, muss der Resetbutton auf dem Arduino Board gedrückt werden.
 
-Durch die vier Bindestriche werden die Spieler aufgefordert anzugeben, ob sie Spieler eins oder Spieler zwei sind. Durch die Eingabe der entsprechenden Ziffer durch die Fernbedienung und einer Bestätigung der Eingabe durch die Rechtstaste gefolgt von dem Powertaste, werden die Spieler festgelegt. Die Spieler müssen sich unterscheiden. Bei der gleichen Eingabe muss ein Roomba durch pressen des Resetbuttons auf dem Arduino Board zurückgesetzt werden und die Spielerwahl muss erneut durchgeführt werden. 
+Durch die vier Bindestriche werden die Spieler aufgefordert anzugeben, ob sie Spieler 1 oder 2 sind. Durch die Eingabe der entsprechenden Ziffer mittels der Fernbedienung und einer Bestätigung der Eingabe durch die Rechtstaste gefolgt von dem Powertaste, werden die Spieler festgelegt. Die Spieler müssen sich unterscheiden, da sonst keine Funkverbindung zustande kommen kann. Bei gleicher Eingabe muss ein Roomba, durch drücken des auf dem Arduino Board befindlichen Resetbuttons, zurückgesetzt werden, um dadurch die Spielerauswahl erneut zu starten. 
    
-\section{Bedienung}
+\section{Steuerung}
 Im folgenden werden kurz die allgemeine Steuereigenschaften erklärt. Danach wird die Steuerung für Spieler 1 und im Anschluss die Steuerung für Spieler 2 erklärt. 
 
 \underline{Allgemein:} 
 
-Das Kart hält selbständig seine Geschwindigkeit. Die Spieler können durch die Vorwärtstaste bzw. Rückwärtstaste einfluss auf die Geschwindigkeit sowie die Fahrtrichtung (Vorwärts/Rückwärts) nehmen. Durch die Rechts- und Linkstaste bestimmt der Spieler in welche Richtung sein Kart fahren soll. Desto länger die Links- oder Rechtstaste gedrückt wird desto stärker lenkt das Kart in die jeweilige Richtung. Wenn Links- oder Rechtstaste nicht mehr gedrückt wird, fährt das Kart wieder von selbstständig geradeaus. Eingesammelte Powerups können durch die Schusstaste abgeschossen.
+Das Kart hält selbständig seine Geschwindigkeit. Die Spieler können durch die Vorwärtstaste bzw. Rückwärtstaste Einfluss auf die Geschwindigkeit nehemen und bestimmen, ob das Kart Vorwärts oder Rückwärts fahren soll. Durch die Rechts- und Linkstaste bestimmt der Spieler in welche Richtung sein Kart fahren soll. Desto länger die Links- oder Rechtstaste gedrückt wird, desto stärker lenkt das Kart in die jeweilige Richtung. Wenn die Links- oder Rechtstaste nicht mehr gedrückt wird, fährt das Kart wieder von selbstständig wieder geradeaus. Eingesammelte Powerups können durch die Schusstaste abgeschossen.
 
 \underline{Spieler 1:}
 
@@ -32,11 +21,11 @@ Spieler 1 steuert sein Kart mit dem Steuerkreuz der Fernbedienung und feuert sei
 \begin{tabular}{|l|l|}
 \hline
 Taste & Auswirkung \\ \hline
-Steuerkreuz hoch & Kart fährt vorwärts \\ \hline
-Steuerkreuz runter & Kart fährt rückwärts/bremst \\ \hline
-Steuerkreuz links & Kart fährt nach links \\ \hline
-Steuerkreuz rechts & Kart fährt nach rechts \\ \hline
-Powertaste & Kart feuert Powerup ab, falls vorhanden \\ \hline  
+Steuerkreuz hoch & Vorwärtstaste: Kart fährt vorwärts \\ \hline
+Steuerkreuz runter & Rückwärtstaste: Kart fährt rückwärts/bremst \\ \hline
+Steuerkreuz links & Linkstaste: Kart fährt nach links \\ \hline
+Steuerkreuz rechts & Rechtstaste: Kart fährt nach rechts \\ \hline
+Powertaste & Schusstaste: Kart feuert Powerup ab, falls vorhanden \\ \hline  
 \end{tabular} 
 \vspace{0.5cm}
 
@@ -48,15 +37,34 @@ Spieler 2 steuert sein Kart mit dem Tastenfeld der Fernbedienung und feuert sein
 \begin{tabular}{|l|l|}
 \hline
 Taste & Auswirkung \\ \hline
-Taste 2 & Kart fährt vorwärts \\ \hline
-Taste 8 & Kart fährt rückwärts/bremst \\ \hline
-Taste 4 & Kart fährt nach links \\ \hline
-Taste 6 & Kart fährt nach rechts \\ \hline
-Taste 5 & Kart feuert Powerup ab, falls vorhanden \\ \hline 
+Taste 2 & Vorwärtstaste: Kart fährt vorwärts \\ \hline
+Taste 8 & Rückwärtstaste: Kart fährt rückwärts/bremst \\ \hline
+Taste 4 & Linkstaste: Kart fährt nach links \\ \hline
+Taste 6 & Rechtstaste: Kart fährt nach rechts \\ \hline
+Taste 5 & Schusstaste: Kart feuert Powerup ab, falls vorhanden \\ \hline 
 \end{tabular}
 \vspace{0.5cm}
 
 \section{Regelwerk}
+Ein Rennen zwischen zwei Kontrahenten dauert 5 Runden. Sieger ist derjenige, der den im Embeddedlabor aufgebauten Kurs zuerst fünf mal erfolgreich absolviert hat. Die Richtung spielt hierbei keine Rolle. Das bedeutet, dass der Kurs sowohl in die eine als auch in die andere Richtung gefahren werden kann. Ein Richtungswechsel während des Rennens ist erlaubt, hierbei muss jedoch gewähleistet werden, dass am Schluss auch tatsächlich fünf Runden gefahren wurden. Bei Uneinigkeit zwischen den Kontrahenten, muss eine Strafrunde absolviert werden. Falls nachweislich betrogen wurde erfolgt die sofortige Disqualifikation oder Verlust des Titels und eine dreijährige Sperre. 
+
+Ein vorsetzliches oder versehentliches Verlassen des Parkus wird bestraft. Die Bestrafung äußert sich dadurch, dass sich das Kart kurzeitig selbständig fährt und sich zurück in die Mitte der Fahrbahn manövriert. Dieser Vorgang kostet wertvolle Sekunden, die der Gegner zum Überholen bzw. Aufholen nutzen kann. 
+
+Falls ein Spieler den gegnerischen Spieler, das gegnerische Kart oder ein anderes Hindernis rammt, fährt das andere Kart solange mit einer erhöhten Geschwindigkeit bis sein Pilot, durch drücken einer Steuertaste, eingreift. Dieser Vorgang kann bei riskanten überholmanövern in der Endphase über Sieg oder Niederlage entscheiden.    
+
+Speziell in Alufolie gkleidete Hindernisse am Streckenrand, dienen der Generierung von Powerups. Ein Sensor vorne rechts im Kart registriert diese bei sehr nahem Vorbeifahren. Im Anschluss wird durch ein Zufallsprizip wird ein Powerup ausgewählt. Powerups können bei sinvollem Gebrauch wertvolle Zeit verschaffen bzw. den Gegner stark beeinträchtigen. Ein Powerup das auf das gegnerische Kart abgefeuert wird, ist  nicht wirksam, wenn dieses gerade eine automatische Kurskorrektur vornimmt. Folgende Powerups gibt es: 
+
+\begin{itemize}
+	\item RED TANK: Wird als kleiner Panzer auf dem Display des Karts angezeigt.\\Wirkung: Wenn dieses Powerup abgeschossen wird, dreht sich das gegnerische Kart um $1080^\circ$. Ein verfehlen ist nur dann möglich, wenn sich der gegnerische Spieler rechtzeitig durch das Powerup BIG DADY, schützen kann.  
+	\item BIG DADY: Wird als großer Panzer auf dem Display des Karts angezeigt.
+	\\Wirkung: Wenn dieses Powerup aktiviert wird, besteht ein 7 Sekunden Schutz vor  
+	dem Powerup RED TANK. 
+	\item MUSHROOM: Wird als Pilz auf dem Display des Karts angezeigt. 
+	\\Wirkung: Kart kann 7 Sekunden ungestraft die Seitenbegrenzung der Strecke verlassen. 		
+	Wenn der Kurs verlassen wurde aber nicht rechtzeitig wieder befahren wird hat dieser 	
+	Spieler das Rennen verloren und das Kart bleibt stehen.
+\end{itemize}
+
 
  
 
