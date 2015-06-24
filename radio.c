@@ -10,10 +10,10 @@ void initializeRadio(uint8_t nr) {
 	Initialize(nr, NETWORKID);
 }
 
-void sendRadio(char payload) {
-	// We don't need ACK, works great without ;-)
-	uint8_t requestACK = 0;
-	uint8_t interPacketDelay = 50; //wait this many ms between sending packets
+void sendRadio(char payload, uint8_t timesToResend) {
+	// We want an ack
+	uint8_t requestACK = 1;
+	//uint8_t interPacketDelay = 50; //wait this many ms between sending packets
 	
 	sendString("Transmitting...\r\n");
 	
@@ -27,24 +27,32 @@ void sendRadio(char payload) {
 	
 	// TODO test with ack etc. bad checksum ...
 	if (requestACK) {
-		sendString(" - waiting for ACK...");
+		sendString(" Waiting for ACK...");
       
 		if (waitForAck()) {
-			sendString("ok!");  
+			sendString("Ack OK!");  
 		} else {
-			sendString("No ack - resending...");
-			sendRadio(payload);
+			if (timesToResend > 0) {
+				sendString("No ack - resending...");
+				sendRadio(payload, timesToResend - 1);
+			} else {
+				sendString("No ack - resending cancelled...");
+			}
 		}
     }
 	
-	my_msleep(interPacketDelay);
+	//my_msleep(interPacketDelay);
 }
 
-uint8_t waitForAck() {
-	my_msleep(ACK_TIME);
-  
-	if (ACKReceived((node_id % 2) + 1)) {
-		return 1;
+char waitForAck() {
+	uint64_t waitCounter = 4000;
+	
+	while(waitCounter > 0) {
+		if (ACKReceived((node_id % 2) + 1)) {
+			return 1;
+		}
+	
+		waitCounter--;
 	}
     
 	return 0;

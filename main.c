@@ -11,9 +11,6 @@
 #include "outOfCourseController.h"
 #include "timer.h"
 
-// TODO Testen
-// TODO Code aufräumen
-
 int main(int argc, const char* argv[]) {
 	usart_init_roomba();
 	usart_init();
@@ -42,9 +39,9 @@ int main(int argc, const char* argv[]) {
 		getSensorQueryList(8, packet_ids, packet_length, qdata);
 		remoteSignal signal = getRemoteSignal(qdata[4]);
 
-		bump_handling((uint8_t) qdata[6]); 
-
-		my_msleep(20);
+		if (!drive_in) {
+			bump_handling((uint8_t) qdata[6]); 
+		}
 		
 		// If we are getting a power up, we need to call this method 
 		// To show the randomize sign at the display and not block
@@ -99,7 +96,7 @@ int main(int argc, const char* argv[]) {
 			
 			// Delete Power up
 			currentPowerUp = NO_POWERUP;
-			char result[4] = {'-', '-', '-', '-'};
+			char result[4] = {' ', ' ', ' ', ' '};
 			set_Display(result);
 		}
 	} 

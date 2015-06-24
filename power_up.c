@@ -20,7 +20,7 @@ int16_t powerUpDisplayCounter = -1;
 uint16_t tickCountRandGlobal = 1;
 
 void getPowerUp(uint16_t tickCountRand) {
-	if (currentPowerUp != NO_POWERUP) {
+	if (currentPowerUp != NO_POWERUP || powerUpDisplayCounter != -1) {
 		return;
 	}
 	
@@ -47,7 +47,7 @@ void shootPowerUp() {
 	
 	// If we have a red tank --> send shooting over radio
 	if (currentPowerUp == RED_TANK) {
-		sendRadio(RED_TANK_SHOT);
+		sendRadio(RED_TANK_SHOT, 3);
 	} else {		
 		if (currentPowerUp == MUSHROOM) {
 			mushroomActive = 1;
@@ -87,7 +87,7 @@ void showRandomizeSign() {
 		return;
 	}
 	
-	//my_msleep(20);
+	my_msleep(30);
 	
 	// Infinity sign in 7 segments
 	uint8_t infinitySign[16][4] = {{0x10, 0x0, 0x0, 0x0}, {0x30, 0x0, 0x0, 0x0}, 

@@ -15,41 +15,35 @@ uint8_t timer_counter_1 = -1;
  */
 uint8_t max_seconds_1 = 0;
 
-/**
- * \brief Initialize the two timers
- * We know that in the lecture we said that the timer had to be
- * initialized at the beginning, but this produced errors!
- * 
- * TODO
- */
 void initializeTimers() {
 	// Initalize timer 1 with CTC and 1024 as divider
-	TCCR1B = CTC_1024;
-	
-	uint16_t timerval = 15625;
-
-	OCR1AH = (timerval & 0xFF00) >> 8;
-	OCR1AL = (timerval & 0x00FF);
-	
-	sei();
-}
-
-void startTimer1(uint16_t seconds) {
 	cli();
-	max_seconds_1 = (int8_t) seconds;
-	timer_counter_1 = 0;
-	
-	TCCR1B = CTC_1024;
-	
+	TCCR1A = 0;
+	TCCR1B = 0;
+	TCNT1  = 0;
+
 	// Make 1 second
 	uint16_t timerval = 15625;
 
 	OCR1AH = (timerval & 0xFF00) >> 8;
 	OCR1AL = (timerval & 0x00FF);
-		
-	// Activate interrupts
-	TIMSK1 = 0x03;
+  
+	TCCR1B = CTC_1024;
+  
+	TIMSK1 |= (1 << OCIE1A);  // enable timer compare interrupt
 	sei();
+}
+
+void startTimer1(uint16_t seconds) {
+	max_seconds_1 = (int8_t) seconds;
+	timer_counter_1 = 0;
+	
+	// Sets the timer overflow interrupt enable bit 
+	TIMSK3 = _BV(TOIE1);
+	sei();
+	
+	// Start timer
+	TCCR1B |= _BV(CS12) | _BV(CS10);
 }
 
 /**
@@ -59,7 +53,7 @@ void startTimer1(uint16_t seconds) {
 ISR(TIMER1_COMPA_vect) {
 	cli();
 	
-	sendString("Interrupt 1 ...");
+	//sendString("Interrupt 1 ...");
 	
 	// Do stuff when timer is triggered
 	if (timer_counter_1 < max_seconds_1 - 1  && timer_counter_1 != -1) {
@@ -68,7 +62,7 @@ ISR(TIMER1_COMPA_vect) {
 		powerUpIsOver();
 		
 		// Stop timer
-		TCCR1B = 0x0;
+		TCCR3B &= ~(_BV(CS10) | _BV(CS11) | _BV(CS12)); // Clears all clock selects bits
 		
 		timer_counter_1 = -1;
 	}	

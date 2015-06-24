@@ -206,22 +206,17 @@ uint16_t getTicks() {
 }
  
 void bump_handling(uint8_t bump) {
-	// Left bumper
-	if ((bump & 0x02) == 0x02) {
+	// Left or right bumper
+	if ((bump & 0x02) == 0x02 || (bump & 0x01) == 0x01) {
 		bump_active=1; 
-		sendRadio(BUMP_SPEED); 
+		
+		sendRadio(BUMP_SPEED, 3); 
 		drive_direction(-100,-100); 
+		
 		my_msleep(400); 
+		
 		drive_stop();
-		}
-		// Right bumper 
-		else if ((bump & 0x01) == 0x01) {
-		bump_active=1; 
-		sendRadio(BUMP_SPEED); 
-		drive_direction(-100,-100); 
-		my_msleep(400); 
-		drive_stop(); 
-		}
+	}
 }
 
 void driveWithRadius(uint16_t velocity, uint16_t radius) {
