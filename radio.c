@@ -13,7 +13,7 @@ void initializeRadio(uint8_t nr) {
 void sendRadio(char payload) {
 	// We don't need ACK, works great without ;-)
 	uint8_t requestACK = 0;
-	//uint8_t interPacketDelay = 50; //wait this many ms between sending packets
+	uint8_t interPacketDelay = 50; //wait this many ms between sending packets
 	
 	sendString("Transmitting...\r\n");
 	
@@ -37,7 +37,7 @@ void sendRadio(char payload) {
 		}
     }
 	
-	//my_msleep(interPacketDelay);
+	my_msleep(interPacketDelay);
 }
 
 uint8_t waitForAck() {

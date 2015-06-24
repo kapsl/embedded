@@ -8,7 +8,7 @@
 #define CTC_1024 0x0D
 #define TIMER_VAL_ADDR *(volatile uint16_t *) 0x88
 
-//void initializeTimers(void);
+void initializeTimers(void);
 
 /**
  * \brief Initialize the first timer, used for longer times

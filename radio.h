@@ -3,7 +3,7 @@
 
 #include <avr/io.h>
 
-#define NETWORKID    99  //the network ID we are on
+#define NETWORKID    38  //the network ID we are on
 #define ACK_TIME     50  // # of ms to wait for an ack
 #define SERIAL_BAUD  115200
 

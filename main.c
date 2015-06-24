@@ -18,7 +18,7 @@ int main(int argc, const char* argv[]) {
 	usart_init_roomba();
 	usart_init();
 	initializeRoomba();
-	//initializeTimers();
+	initializeTimers();
 	
 	my_msleep(20);
 	
@@ -90,13 +90,17 @@ int main(int argc, const char* argv[]) {
 				
 				playSong(1);
 			} else {
-				
 				char result[4] = {'H', 'I', 'T', ' '};
 				set_Display(result);
 				
 				playSong(3);
 				drive_hit();
 			}
+			
+			// Delete Power up
+			currentPowerUp = NO_POWERUP;
+			char result[4] = {'-', '-', '-', '-'};
+			set_Display(result);
 		}
 	} 
     
