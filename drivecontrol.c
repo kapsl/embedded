@@ -206,19 +206,20 @@ uint16_t getTicks() {
 }
  
 void bump_handling(uint8_t bump) {
-		
-		
-		// Left bumper
-		if ((bump & 0x02) == 0x02) {
-				bump_active=1; 
-				sendRadio(BUMP_SPEED); 
-				drive_stop();
-		
-		// Right bumper
-		} 
+	// Left bumper
+	if ((bump & 0x02) == 0x02) {
+		bump_active=1; 
+		sendRadio(BUMP_SPEED); 
+		drive_direction(-100,-100); 
+		my_msleep(400); 
+		drive_stop();
+		}
+		// Right bumper 
 		else if ((bump & 0x01) == 0x01) {
 		bump_active=1; 
 		sendRadio(BUMP_SPEED); 
+		drive_direction(-100,-100); 
+		my_msleep(400); 
 		drive_stop(); 
 		}
 }
