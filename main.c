@@ -1,6 +1,5 @@
 #include <avr/io.h>
 #include "tools.h"
-#include "button.h"
 #include "usart.h"
 #include <ctype.h>
 #include "roomba.h"
@@ -12,16 +11,14 @@
 #include "outOfCourseController.h"
 #include "timer.h"
 
-// TODO Kurs bauen -evtl. 3 lagig bauen
 // TODO Testen
 // TODO Code aufräumen
-// TODO comments in header files
 
 int main(int argc, const char* argv[]) {
 	usart_init_roomba();
 	usart_init();
 	initializeRoomba();
-	initializeTimers();
+	//initializeTimers();
 	
 	my_msleep(20);
 	

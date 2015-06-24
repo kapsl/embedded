@@ -5,16 +5,6 @@
 #include <stdlib.h>
 #include "floorDetection.h"
 
-int16_t cliff_front_both_past = 0;
-
-/**
- *  \brief Possible return values: 
- * 	power up detected
- * 	left border detected with angle
- * 	right border detected with angle
- * 
- * 	\param type TODO
- */
 void floorDetection(detectedType *type, uint16_t *sensorData) {
 	int16_t cliff_front_left = sensorData[0];
 	int16_t cliff_front_right = sensorData[1];
@@ -27,7 +17,7 @@ void floorDetection(detectedType *type, uint16_t *sensorData) {
 	int16_t wall_distance = sensorData[7];
 	
 	/*char result[4];
-	intToHex(wall_distance, result);
+	intToHex(cliff_left, result);
 	set_Display(result);
 	my_msleep(200);*/
 	
@@ -41,9 +31,7 @@ void floorDetection(detectedType *type, uint16_t *sensorData) {
 	// Gelb ca. 2757
 	// Teppich ca. 592
 	// Schwarz ca. 860 --> evtl. schwarz unterscheiden
-	// Braun ca. 2664
-	
-	
+	// Braun ca. 2664	
 	
 	if (cliff_front_left + cliff_front_right > BORDER_BOTH_THRESHOLD) {
 		*type = BORDER_BOTH;
@@ -62,6 +50,4 @@ void floorDetection(detectedType *type, uint16_t *sensorData) {
 	} else if (cliff_right > BORDER_CLIFF_THRESHOLD) {
 		*type = BORDER_RIGHT;
 	}
-	
-	cliff_front_both_past = cliff_front_left + cliff_front_right;
 }

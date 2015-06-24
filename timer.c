@@ -17,18 +17,15 @@ uint8_t max_seconds_1 = 0;
 
 /**
  * \brief Initialize the two timers
+ * We know that in the lecture we said that the timer had to be
+ * initialized at the beginning, but this produced errors!
  */
-void initializeTimers() {
+/*void initializeTimers() {
 	// Initalize timer 1 with CTC and 1024 as divider
 	//TCCR1B = CTC_1024;
 	//sei();
-}
+}*/
 
-/**
- * \brief Initialize the first timer, used for longer times
- * 
- * \param seconds how many seconds till the timer is triggered
- */
 void startTimer1(uint16_t seconds) {
 	cli();
 	max_seconds_1 = (int8_t) seconds;

@@ -25,20 +25,11 @@ void set_Display(char *data) {
 	}
 }
 
-/**
- * \brief Clear all entries on the display
- */
 void clear_Display() {
 	char result[4] = {' ', ' ', ' ', ' '};
 	set_Display(result);
 }
 
-/**
- * \brief Set display by using the 7 segment mode
- * 
- * \param data_bytes array of 4 values, each value gives the combination
- * 			of 7 segments switched on or off
- */
 void set_Display_raw(uint8_t *data_bytes) {
 	send_byte_roomba(163);
 	
@@ -47,12 +38,6 @@ void set_Display_raw(uint8_t *data_bytes) {
 	}
 }
 
-/**
- * \brief Find out if a button on the roomba was pressed
- * 
- * \param button a constant fromm roomba.h e.g HOUR
- * \return 0 if button was not pressed, 1 instead
- */
 uint8_t read_button(uint8_t button) {
 	// Get sensor packets
 	send_byte_roomba(142);
@@ -69,13 +54,6 @@ uint8_t read_button(uint8_t button) {
 	return 0;
 }
 
-/**
- * \brief Read a sensor value
- * 
- * \param packetid the packetid corresponding to the sensor
- * \param data an array where the returned bytes are stored
- * \param length how many bytes should be retrieved
- */
 void read_values(uint8_t packetid, uint8_t * data, uint8_t length) {
 	send_byte_roomba(142);
 	send_byte_roomba(packetid);
@@ -85,11 +63,6 @@ void read_values(uint8_t packetid, uint8_t * data, uint8_t length) {
 	}
 }
 
-/**
- * \brief Receive a signal from the remote. Show the received
- * 			value as hex on Display and drive corresponding
- * 			to the steering buttons
- */
 uint8_t receiveRemote() {
 	uint8_t data[2];
 	read_values(17, data, 1);
@@ -99,11 +72,6 @@ uint8_t receiveRemote() {
 	return data[0];
 }
 
-/**
- * \brief Show the pressed remote button hex code on display
- * 
- * \param data the received button code
- */
 void showRemoteSignalInDisplay(char *data) {
 	if (data == 0) {
 		char empty[4] = {' ', ' ', ' ', ' '};
@@ -118,22 +86,10 @@ void showRemoteSignalInDisplay(char *data) {
 	set_Display(result);
 }
 
-/**
- * \brief Convert a integer to a hex value
- * 
- * \param mint the integer value to convert
- * \param result a pointer to store the hex value in 
- */
 void intToHex(uint16_t mint, char *result) {
 	sprintf(result, "%4x", mint);
 }
 
-
-/**
- * \brief Read 4 numbers from remote control
- * 
- * \return the entered number
- */
 uint16_t read_user_input() {
 	char awaitInput[4] = {'-', '-', '-', '-'};
 	set_Display(awaitInput);
@@ -195,14 +151,6 @@ uint16_t read_user_input() {
 	return result;
 }
 
-/**
- * \brief get a list of sensor data
- * 
- * \param nrPackets the number of packets we want to retrieve
- * \param packet_ids
- * \param packet_length are it 1 or 2 bytes
- * \param data a array to return the values
- */
 void getSensorQueryList(uint8_t nrPackets, uint8_t* packet_ids, uint8_t* packet_length, uint16_t* data) {
 	send_byte_roomba(149);
 	send_byte_roomba(nrPackets);
@@ -224,20 +172,12 @@ void getSensorQueryList(uint8_t nrPackets, uint8_t* packet_ids, uint8_t* packet_
 	}
 }
 
-/**
- * \brief Play a stored song with
- * 
- * \param songNr
- */
+
 void playSong(uint8_t songNr) {
 	send_byte_roomba(141);
 	send_byte_roomba(songNr);
 }
 
-/**
- *  \brief Store songs for playing them later
- *  TODO change songs
- */
 void storeSongs() {
 	// Song 1 -- hit
 	// Send optcode
@@ -354,9 +294,6 @@ void storeSongs() {
 	send_byte_roomba(8);
 }
 
-/**
- * \brief Get from remote control if roomba should be nr 1 or 2
- */
 uint8_t getRoombaNrFromRemote() {
 	while (1) {
 		uint8_t result = read_user_input();

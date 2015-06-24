@@ -11,25 +11,14 @@
  */
 uint8_t step = 0;
 
-/**
- * If we are currently driving back to the middle of the line
- */
 uint8_t drive_in = 0;
 
 /**
  * On which side of the road did we drive out
  */
 uint8_t side = 0;
-
-/**
- * Flag if we are inside or outside the course
- */
 uint8_t outsideCourse = 0;
 
-/**
- * \brief Determine if we are driving out of the course,
- * 		and if yes, drive the roomba back into the middle of thecourse
- */
 void handleOutOfCourse(detectedType activeSensorSide) {
 	// Detect side on which we drive out
 	if (activeSensorSide == BORDER_FRONT_LEFT && !drive_in) {
@@ -52,10 +41,10 @@ void handleOutOfCourse(detectedType activeSensorSide) {
 		} else {
 			driveIn(RIGHT_WHEEL);
 		}
-	} else if (activeSensorSide == BORDER_RIGHT && step == 0 && drive_in) {
+	} else if ((activeSensorSide == BORDER_RIGHT || activeSensorSide == BORDER_SIDE_BOTH) && step == 0 && drive_in) {
 		step = 1;
 		driveIn(LEFT_WHEEL);
-	} else if (activeSensorSide == BORDER_LEFT && drive_in && step == 1) {
+	} else if ((activeSensorSide == BORDER_LEFT || activeSensorSide == BORDER_SIDE_BOTH) && drive_in && step == 1) {
 		step = 2;
 		driveIn(RIGHT_WHEEL);
 	} 
@@ -66,11 +55,6 @@ void handleOutOfCourse(detectedType activeSensorSide) {
 	}
 }
 
-/**
- * \brief Drive back in to the course
- * 
- * \param wheel RIGHT_WHEEL or LEFT_WHEEL, with wich we drove out
- */
 void driveIn(uint8_t wheel) {
 	drive_in = 1;
 
@@ -87,11 +71,6 @@ void driveIn(uint8_t wheel) {
 	my_msleep(350);
 }
 
-/**
- * \brief When we are 90 degrees to the border, continue here,
- * 			drive back in the middle of the course and turn 
- * 			roomba by 90 degrees into the right direction
- */
 void driveInContinued(detectedType activeSensorSide) {
 	// Stop when sensor readed line
 	drive_stop();

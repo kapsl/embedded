@@ -10,20 +10,8 @@
 #include "outOfCourseController.h"
 #include "drivecontrol.h"
 
-/**
- * If 1 big roomba power up is active
- */
 uint8_t bigRoombaActive = 0;
-
-/**
- * If 1 mushroom power up is active
- */
 uint8_t mushroomActive = 0;
-
-/**
- * Used for counting which state we have when showing the randomize
- * symbol on the display
- */
 int16_t powerUpDisplayCounter = -1;
 
 /**
@@ -31,13 +19,6 @@ int16_t powerUpDisplayCounter = -1;
  */
 uint16_t tickCountRandGlobal = 1;
 
-/**
- * \brief Get an random power up and show corresponding information 
- * 			on display
- * 
- * \param tickCountRand the tickCount of a wheel, used for initializing
- * 			the random generator
- */
 void getPowerUp(uint16_t tickCountRand) {
 	if (currentPowerUp != NO_POWERUP) {
 		return;
@@ -54,9 +35,6 @@ void getPowerUp(uint16_t tickCountRand) {
 	showRandomizeSign();
 }
 
-/**
- * \brief Perform actions corresponding to shoot a specific power up
- */
 void shootPowerUp() {
 	if (currentPowerUp == NO_POWERUP) {
 		return;
@@ -88,10 +66,6 @@ void shootPowerUp() {
 	currentPowerUp = NO_POWERUP;
 }
 
-/**
- * \brief Called from the timer, when 
- * 		the time for a power up to be active is over
- */
 void powerUpIsOver() {
 	sendString("Power up is over...");
 	
@@ -108,11 +82,6 @@ void powerUpIsOver() {
 	mushroomActive = 0;
 }
 
-/**
- * \brief Used for setting the display,
- * 			when power up is generated and steering must not be blocked
- * 			and to finish the process of getting a power up
- */
 void showRandomizeSign() {
 	if (powerUpDisplayCounter == -1) {
 		return;

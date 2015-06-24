@@ -77,11 +77,6 @@ uint8_t receive_byte() {
 	return UDR0;
 }
 
-/**
- * \brief Sends a string to the screen terminal
- * 
- * \param string the string to write on the output
- */
 void sendString(char * string) {
 	uint8_t a = 0;
 	
