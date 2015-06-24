@@ -7,12 +7,6 @@
 #include "roomba.h"
 #include "radio.h"
 
-/**
- * \brief This function receives a signal from the remote control which is used to stear the roomba. 
- *        Depending on the signal the roomba will drive forward, backwards, right or left 
- * 
- * \param type
- */
 
 int16_t  actVel_right=0; 
 int16_t  actVel_left=0;
@@ -22,81 +16,49 @@ uint8_t  bump_active=0;
 
 void roomba_drive(remoteSignal type) {
 	
-		if(type == RACCELERATE && actVel_left<400 && actVel_right < 400) {
-				
-				bump_active=0; 
-				drive_forward(); 
-				actVel_left_old=actVel_left;
-				actVel_right_old=actVel_right; 
-		}
-		else if (type == RBRAKE  && actVel_left>-400 && actVel_right>-400) {
-				
-				bump_active=0; 
-				drive_break_backwards(); 
-				actVel_left_old=actVel_left;
-				actVel_right_old=actVel_right; 
-	
-		} 
-		else if (type == RLEFT) {
-				
-				bump_active=0; 
-				drive_left();
-	
-		}		 
-		else if (type == RRIGHT) {
-				
-				bump_active=0; 
-				drive_right();
-			
-		}
-		else{
-			
-			if(bump_active==0){
-			
-				if ((actVel_left >= actVel_left_old) && (actVel_right < actVel_right_old)){
-					if(actVel_left==actVel_left_old){
-						actVel_right=actVel_right+2*SPEED_CONSTANT;; 
-						set_Display("1---");
-					}
-					else{
+	if(type == RACCELERATE && actVel_left<400 && actVel_right < 400) {
+		bump_active=0; 
+		drive_forward(); 
+		actVel_left_old=actVel_left;
+		actVel_right_old=actVel_right; 
+	}
+	else if (type == RBRAKE  && actVel_left>-400 && actVel_right>-400) {
+		bump_active=0; 
+		drive_break_backwards(); 
+		actVel_left_old=actVel_left;
+		actVel_right_old=actVel_right; 
+	} else if (type == RLEFT) {
+		bump_active=0; 
+		drive_left();
+	} else if (type == RRIGHT) {
+		bump_active=0; 
+		drive_right();
+	} else{
+		if(bump_active==0){
+			if ((actVel_left >= actVel_left_old) && (actVel_right < actVel_right_old)){
+				if(actVel_left==actVel_left_old){
+					actVel_right=actVel_right+2*SPEED_CONSTANT;; 
+				} else{
 					actVel_left=actVel_left-SPEED_CONSTANT;
 					actVel_right=actVel_right+SPEED_CONSTANT; 
-					set_Display("1---");
-					}
 				}
-				else if ((actVel_left < actVel_left_old) && (actVel_right >= actVel_right_old)){
-					if(actVel_right==actVel_right_old){
-						actVel_left=actVel_left+2*SPEED_CONSTANT; 
-						set_Display("2---");
-					}
-					else{
+			} else if ((actVel_left < actVel_left_old) && (actVel_right >= actVel_right_old)){
+				if(actVel_right==actVel_right_old){
+					actVel_left=actVel_left+2*SPEED_CONSTANT; 
+				} else{
 					actVel_left=actVel_left+SPEED_CONSTANT;
 					actVel_right=actVel_right-SPEED_CONSTANT;
-					set_Display("2---");  
-					}
 				}
-				else{
-					actVel_left=actVel_left_old;
-					actVel_right=actVel_right_old;
-					set_Display("3---"); 
-				}
-			
+			} else{
+				actVel_left=actVel_left_old;
+				actVel_right=actVel_right_old;
 			}
+			
 		}
-				
-	
-		if(bump_active==0){
-				drive_direction(actVel_left, actVel_right);
-		}
-		
-
-		/*sprintf(str, "%d",
-				bump_active); 
-		set_Display(str);*/ 
-		
-
-		//my_msleep(150);
-
+	}
+	if(bump_active==0){
+		drive_direction(actVel_left, actVel_right);
+	}
 }
 
 void drive_stop(){
@@ -108,150 +70,80 @@ void drive_stop(){
 	drive_direction(actVel_right, actVel_left); 
 }	
 
-/**
- * \brief This Function changes actVel_right and actVel_left so roomba can drive forward
- * 
- * \param velocity_right
- * \param velocity_left
- */
-
 void drive_forward (){
-	
-		if(actVel_left>actVel_right){
-				
-				actVel_right=actVel_left;
-		} 
-		else if (actVel_left<actVel_right){
-				
-				actVel_left=actVel_right; 
-		}
-		else if (actVel_right<400&&actVel_left<400) {
-				
-				actVel_right=actVel_right+SPEED_CONSTANT; 
-				actVel_left=actVel_left+SPEED_CONSTANT; 
-		}
+	if(actVel_left>actVel_right){
+		actVel_right=actVel_left;
+	} else if (actVel_left<actVel_right){
+		actVel_left=actVel_right; 
+	} else if (actVel_right<400&&actVel_left<400) {
+		actVel_right=actVel_right+SPEED_CONSTANT; 
+		actVel_left=actVel_left+SPEED_CONSTANT; 
+	}
 }
-
-/**
- * \brief This Function changes actVel_right and actVel_left so roomba can drive backwards
- * 
- * \param velocity_right
- * \param velocity_left
- */
 
 void drive_break_backwards (){
-	
-		if(actVel_left>actVel_right){
-				
-				actVel_right=actVel_left;
-				actVel_right=actVel_right-SPEED_CONSTANT; 
-				actVel_left=actVel_left-SPEED_CONSTANT; 
-		} 
-		else if (actVel_left<actVel_right){
-			
-				actVel_left=actVel_right; 
-				actVel_right=actVel_right-SPEED_CONSTANT; 
-				actVel_left=actVel_left-SPEED_CONSTANT; 
-		}
-		else{
-		
-				actVel_right=actVel_right-SPEED_CONSTANT; 
-				actVel_left=actVel_left-SPEED_CONSTANT; 
-		}
+	if(actVel_left>actVel_right){
+		actVel_right=actVel_left;
+		actVel_right=actVel_right-SPEED_CONSTANT; 
+		actVel_left=actVel_left-SPEED_CONSTANT; 
+	} else if (actVel_left<actVel_right){	
+		actVel_left=actVel_right; 
+		actVel_right=actVel_right-SPEED_CONSTANT; 
+		actVel_left=actVel_left-SPEED_CONSTANT; 
+	} else{
+		actVel_right=actVel_right-SPEED_CONSTANT; 
+		actVel_left=actVel_left-SPEED_CONSTANT; 
+	}
 }	
 
-/**
- * \brief This Function changes actVel_right and actVel_left so roomba can turn left
- * 
- * \param velocity_right
- * \param velocity_left
- */
-
 void drive_left (){
-	
-		if (actVel_right>=0){
-			
-				if (actVel_right<400){
-							
-						actVel_left=actVel_left-SPEED_CONSTANT;
-						actVel_right=actVel_right+SPEED_CONSTANT;
-				}
-				else{
-						actVel_left=actVel_left-(2*SPEED_CONSTANT);
-				}
+	if (actVel_right>=0){
+		if (actVel_right<400){
+			actVel_left=actVel_left-SPEED_CONSTANT;
+			actVel_right=actVel_right+SPEED_CONSTANT;
+		} else{
+			actVel_left=actVel_left-(2*SPEED_CONSTANT);
 		}
-		else if (actVel_right<0){
-				
-				if (actVel_right>-400){
-							
-							actVel_left=actVel_left-SPEED_CONSTANT;
-							actVel_right=actVel_right+SPEED_CONSTANT;
-				}
-				else{
-							actVel_left=actVel_left-(2*SPEED_CONSTANT);
-				}
+	} else if (actVel_right<0){	
+		if (actVel_right>-400){		
+			actVel_left=actVel_left-SPEED_CONSTANT;
+			actVel_right=actVel_right+SPEED_CONSTANT;
+		} else{
+			actVel_left=actVel_left-(2*SPEED_CONSTANT);
 		}
+	}
 }
-
-/**
- * \brief This Function changes actVel_right and actVel_left so roomba can turn right
- * 
- * \param velocity_right
- * \param velocity_left
- */
 
 void drive_right (){
-	
-		if (actVel_left>=0){
-		
-				if (actVel_left<400){
-					
-						actVel_left=actVel_left+SPEED_CONSTANT;
-						actVel_right=actVel_right-SPEED_CONSTANT;
-				}
-				else{
-						actVel_right=actVel_right-(2*SPEED_CONSTANT);
-				}
+	if (actVel_left>=0){
+		if (actVel_left<400){
+			actVel_left=actVel_left+SPEED_CONSTANT;
+			actVel_right=actVel_right-SPEED_CONSTANT;
+		} else{
+			actVel_right=actVel_right-(2*SPEED_CONSTANT);
 		}
-		else if (actVel_left<0){
-	
-				if (actVel_left>-400){
-						actVel_left=actVel_left+SPEED_CONSTANT;
-						actVel_right=actVel_right-SPEED_CONSTANT;
-				}
-				else{
-						actVel_right=actVel_right-(2*SPEED_CONSTANT);
-				}
-		}	
+	} else if (actVel_left<0){
+		if (actVel_left>-400){
+			actVel_left=actVel_left+SPEED_CONSTANT;
+			actVel_right=actVel_right-SPEED_CONSTANT;
+		} else{
+			actVel_right=actVel_right-(2*SPEED_CONSTANT);
+		}
+	}	
 }
 
-/**
- * \brief Turn the robot by a certain degree
- * 
- * \param degree 
- */
 void drive_turn(int16_t degree){
 	// In 13 seconds, 360°
 	uint16_t delay = (uint16_t)(abs(degree)*10.45f);
-	
-		if (degree > 0) {
-			driveWithRadius(200, 1);
-		}
-		else{
-			driveWithRadius(200, -1);
-		}
-	
+	if (degree > 0) {
+		driveWithRadius(200, 1);
+	} else{
+		driveWithRadius(200, -1);
+	}
 	my_msleep(delay);
-	
 	drive_stop(); 
 }
 
-/**
- * \brief This Function receives drive commands and sends them to the roomba. The rooba can drive forwards, backwards, left or right. 
- * 
- * \param velocity_right
- * \param velocity_left
- */
 void drive_direction(int16_t left_speed, int16_t right_speed) {
 	send_byte_roomba(145);
 	
@@ -268,13 +160,6 @@ void drive_direction(int16_t left_speed, int16_t right_speed) {
 	send_byte_roomba(low);
 }
 
-/**
- * \brief Lets roomba drive forward for an exact distance
- * 
- * \param distance
- * \param velocity
- */
- 
 void drive_roomba_exact(uint16_t distance, int16_t velocity) {
 	uint16_t start_value = getTicks();
 	
@@ -314,12 +199,6 @@ void drive_roomba_exact(uint16_t distance, int16_t velocity) {
 	drive_stop();
 }
 
-/**
- * \brief This function return the actual number of ticks 
- * 
- * \return number of ticks
- */
- 
 uint16_t getTicks() {
 	
 	uint8_t data[2];
@@ -327,12 +206,6 @@ uint16_t getTicks() {
 	
 	return concat_bytes(data);
 }
-
-/**
- * \brief This function stops the roomba in case drive hits an opstical to prevent damage
- * 
- * \param bump
- */
  
 void bump_handling(uint8_t bump) {
 		
@@ -352,14 +225,6 @@ void bump_handling(uint8_t bump) {
 		}
 }
 
-/**
- * \brief This function makes the roomba drive an circle with a certain radius
- * 
- * \param velocity 
- * \param radius this radius (use DRIVE_STRAIGHT for straight, -1 for 
- * 			clockwise 1 for anticlockwise)
- */
- 
 void driveWithRadius(uint16_t velocity, uint16_t radius) {
 	
 	send_byte_roomba(137);
@@ -377,19 +242,13 @@ void driveWithRadius(uint16_t velocity, uint16_t radius) {
 	send_byte_roomba(rlow);	
 }
 
-/**
- * \brief This function first stops the roomba and then turns it 3 times arround its own axis. Function is a consiquence for player if his roomba was hit by the power up "RED-TANK"
- */
-
 void drive_hit(){
 	bump_active = 1;
-	
 	drive_stop(); 
 	drive_turn(3*360+10); 
 } 
 
 void drive_bump_speed(){
-		bump_active=1; 
-		
-		drive_direction(500, 500);
+	bump_active=1; 
+	drive_direction(500, 500);
 }
