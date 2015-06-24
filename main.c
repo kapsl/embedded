@@ -11,6 +11,7 @@
 #include "outOfCourseController.h"
 #include "timer.h"
 
+// TODO Divide main up in underfunctions
 int main(int argc, const char* argv[]) {
 	usart_init_roomba();
 	usart_init();
@@ -86,6 +87,8 @@ int main(int argc, const char* argv[]) {
 				set_Display(result);
 				
 				playSong(1);
+				
+				my_msleep(1500);
 			} else {
 				char result[4] = {'H', 'I', 'T', ' '};
 				set_Display(result);
@@ -103,3 +106,5 @@ int main(int argc, const char* argv[]) {
     
     return 0;
 }
+
+

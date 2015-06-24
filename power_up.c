@@ -20,7 +20,7 @@ int16_t powerUpDisplayCounter = -1;
 uint16_t tickCountRandGlobal = 1;
 
 void getPowerUp(uint16_t tickCountRand) {
-	if (currentPowerUp != NO_POWERUP || powerUpDisplayCounter != -1) {
+	if (currentPowerUp != NO_POWERUP || powerUpDisplayCounter != -1 || bigRoombaActive || mushroomActive) {
 		return;
 	}
 	
@@ -80,6 +80,7 @@ void powerUpIsOver() {
 	
 	bigRoombaActive = 0;
 	mushroomActive = 0;
+	outsideCourse = 0;
 }
 
 void showRandomizeSign() {

@@ -33,6 +33,8 @@ void handleOutOfCourse(detectedType activeSensorSide) {
 		if (mushroomActive && outsideCourse == 0) {
 			// We drove outside
 			outsideCourse = 1;
+			
+			// Wait a bit to drive over crep
 			my_msleep(1000);
 		} else if (mushroomActive && outsideCourse == 1) {
 			// We are driving back inside
