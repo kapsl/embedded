@@ -80,12 +80,6 @@ void drive_forward (){
 }
 
 void drive_break_backwards (){
-<<<<<<< HEAD
-=======
-	//if (actVel_left<10 && actVel_right<10 && actVel_left+actVel_right!=0){
-	//	drive_stop();
-	//}
->>>>>>> d86f46be7b7b339a4b4a73effc3adb754e78edf5
 	if(actVel_left>actVel_right){
 		actVel_right=actVel_left;
 		actVel_right=actVel_right-SPEED_CONSTANT; 
