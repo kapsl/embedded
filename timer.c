@@ -62,7 +62,7 @@ ISR(TIMER1_COMPA_vect) {
 	if (timer_counter_1 < max_seconds_1 - 1  && timer_counter_1 != 50) {
 		timer_counter_1++;		
 	} else if (timer_counter_1 == max_seconds_1 - 1) {
-		//powerUpIsOver();
+		powerUpIsOver();
 		
 		// Stop timer
 		//TCCR3B &= ~(_BV(CS10) | _BV(CS11) | _BV(CS12)); // Clears all clock selects bits
