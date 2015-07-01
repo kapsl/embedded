@@ -32,7 +32,7 @@ TARGET = main
 
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC = $(TARGET).c tools.c usart.c roomba.c drivecontrol.c remotecontrol.c floorDetection.c power_up.c RFM12B.c radio.c timer.c outOfCourseController.c
+SRC = $(TARGET).c tools.c usart.c roomba.c drivecontrol.c remotecontrol.c floorDetection.c power_up.c RFM12B.c radio.c outOfCourseController.c
 
 # List Assembler source files here.
 # Make them always end in a capital .S.  Files ending in a lowercase .s

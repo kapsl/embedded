@@ -6,13 +6,13 @@
 #include "power_up.h"
 #include "radio.h"
 #include "avr/interrupt.h"
-#include "timer.h"
 #include "outOfCourseController.h"
 #include "drivecontrol.h"
 
 uint8_t bigRoombaActive = 0;
 uint8_t mushroomActive = 0;
 int16_t powerUpDisplayCounter = POWCONST;
+uint64_t powerUpTimer = 0;
 
 /**
  * Hold the tick count of a wheel to calculate a random number
@@ -43,7 +43,7 @@ void shootPowerUp() {
 	sendString("Shoot...\r\n");
 	
 	// Make shooting sound
-	//playSong(0);
+	playSong(0);
 	
 	// If we have a red tank --> send shooting over radio
 	if (currentPowerUp == RED_TANK) {
@@ -56,9 +56,9 @@ void shootPowerUp() {
 		}
 		
 		// If Big roomba or mushroom is active --> set global variable
-		// Initialize timer so we can use the power up for a nr. of seconds
+		// Initialize timer variable so we can use the power up for a nr. of seconds
+		powerUpTimer = 1;
 		//startTimer1(7);
-		powerUpIsOver();
 	}
 	
 	// Delete display
@@ -129,4 +129,19 @@ void showRandomizeSign() {
 		
 		powerUpDisplayCounter = POWCONST;
 	}
+}
+
+void handleTimerVariable() {
+	if (powerUpTimer == 0)
+		return;
+		
+	if (powerUpTimer == 400) {
+		powerUpIsOver();
+		
+		powerUpTimer = 0;
+		
+		return;
+	}
+	
+	powerUpTimer++;
 }

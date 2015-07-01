@@ -7,7 +7,7 @@
 
 void initializeRadio(uint8_t nr) {	
 	node_id = nr;
-	Initialize(nr, NETWORKID);
+	//Initialize(nr, NETWORKID);
 }
 
 void sendRadio(char payload, uint8_t timesToResend) {

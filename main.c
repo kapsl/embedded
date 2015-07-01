@@ -9,17 +9,11 @@
 #include "power_up.h"
 #include "radio.h"
 #include "outOfCourseController.h"
-#include "timer.h"
-#include "avr/interrupt.h"
 
 void initialization(void) {
-	// Set LED port as output
-	DDRF = 0xff;
-	
 	usart_init_roomba();
 	usart_init();
 	initializeRoomba();
-	initializeTimers();
 	
 	my_msleep(20);
 	
@@ -71,7 +65,7 @@ void handleRadioSignal(void) {
 
 int main(int argc, const char* argv[]) {
 	initialization();
-	sei();
+	
 	while (1) {			
 		// Get sensor data
 		// Cliff front left, front right, left, right, remotecontrol, tick_count, bumper, wall sensor
@@ -90,6 +84,9 @@ int main(int argc, const char* argv[]) {
 		// To show the randomize sign at the display and not block
 		// everything else
 		showRandomizeSign();
+		
+		// Count up timer variable
+		handleTimerVariable();
 
 		detectedType dType;
 		floorDetection(&dType, qdata);
