@@ -3,6 +3,8 @@
 
 #include <avr/io.h>
 
+#define POWCONST 999
+
 enum PowerUP{RED_TANK, MUSHROOM, BIG_DADY, NO_POWERUP};  
 typedef enum PowerUP powerUp_type;
 

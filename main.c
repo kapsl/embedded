@@ -11,24 +11,8 @@
 #include "outOfCourseController.h"
 #include "timer.h"
 
-// TODO Divide main up in underfunctions
 int main(int argc, const char* argv[]) {
-	usart_init_roomba();
-	usart_init();
-	initializeRoomba();
-	initializeTimers();
-	
-	my_msleep(20);
-	
-	currentPowerUp = NO_POWERUP;
-	
-	// Get nr. of roomba from remote control
-	uint8_t result = getRoombaNrFromRemote();
-
-	initializeRadio((uint8_t) result);
-	
-	// Wait a bit so the power button is not pressed immediatley afterwards
-	my_msleep(200);
+	initialization();
 
 	while (1) {			
 		// Get sensor data
@@ -71,40 +55,62 @@ int main(int argc, const char* argv[]) {
 			}
 		}
 		
-		// Receive radio
-		// faster when hit by other roomba
-		char radioSignal = receiveRadio();
-		
-		if (radioSignal == BUMP_SPEED && !drive_in){
-			drive_bump_speed();  
-		}
-		// Receive radio
-		// Hit by red tank
-		else if (radioSignal == RED_TANK_SHOT && !drive_in) {
-			// Hit did not work
-			if (bigRoombaActive) {
-				char result[4] = {'N', 'O', 'H', 'T'};
-				set_Display(result);
-				
-				playSong(1);
-				
-				my_msleep(1500);
-			} else {
-				char result[4] = {'H', 'I', 'T', ' '};
-				set_Display(result);
-				
-				playSong(3);
-				drive_hit();
-			}
-			
-			// Delete Power up
-			currentPowerUp = NO_POWERUP;
-			char result[4] = {' ', ' ', ' ', ' '};
-			set_Display(result);
-		}
+		handleRadioSignal();
 	} 
     
     return 0;
 }
 
+void initialization() {
+	usart_init_roomba();
+	usart_init();
+	initializeRoomba();
+	initializeTimers();
+	
+	my_msleep(20);
+	
+	currentPowerUp = NO_POWERUP;
+	
+	// Get nr. of roomba from remote control
+	uint8_t rmResult = getRoombaNrFromRemote();
 
+	initializeRadio((uint8_t) rmResult);
+	
+	// Wait a bit so the power button is not pressed immediatley afterwards
+	my_msleep(200);
+}
+
+void handleRadioSignal() {
+	// Receive radio
+	// faster when hit by other roomba
+	char radioSignal = receiveRadio();
+	
+	if (radioSignal == BUMP_SPEED && !drive_in){
+		drive_bump_speed();  
+	}
+	// Receive radio
+	// Hit by red tank
+	else if (radioSignal == RED_TANK_SHOT && !drive_in) {
+		// Hit did not work
+		if (bigRoombaActive) {
+			char result[4] = {'N', 'O', 'H', 'T'};
+			set_Display(result);
+			
+			playSong(1);
+			
+			my_msleep(1500);
+		} else {
+			char result[4] = {'H', 'I', 'T', ' '};
+			set_Display(result);
+			
+			playSong(3);
+			drive_hit();
+		}
+		
+		// Delete Power up
+		currentPowerUp = NO_POWERUP;
+		
+		char result[4] = {' ', ' ', ' ', ' '};
+		set_Display(result);
+	}
+}

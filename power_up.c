@@ -12,7 +12,7 @@
 
 uint8_t bigRoombaActive = 0;
 uint8_t mushroomActive = 0;
-int16_t powerUpDisplayCounter = -1;
+int16_t powerUpDisplayCounter = POWCONST;
 
 /**
  * Hold the tick count of a wheel to calculate a random number
@@ -20,7 +20,7 @@ int16_t powerUpDisplayCounter = -1;
 uint16_t tickCountRandGlobal = 1;
 
 void getPowerUp(uint16_t tickCountRand) {
-	if (currentPowerUp != NO_POWERUP || powerUpDisplayCounter != -1 || bigRoombaActive || mushroomActive) {
+	if (currentPowerUp != NO_POWERUP || powerUpDisplayCounter != POWCONST || bigRoombaActive || mushroomActive) {
 		return;
 	}
 	
@@ -88,7 +88,7 @@ void powerUpIsOver() {
 }
 
 void showRandomizeSign() {
-	if (powerUpDisplayCounter == -1) {
+	if (powerUpDisplayCounter == 999) {
 		return;
 	}
 	
@@ -126,6 +126,6 @@ void showRandomizeSign() {
 		
 		currentPowerUp = powerup_type;
 		
-		powerUpDisplayCounter = -1;
+		powerUpDisplayCounter = POWCONST;
 	}
 }

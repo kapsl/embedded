@@ -8,7 +8,7 @@
  * How often do we have to let the timer run, till we reached
  * the number of seconds we want
  */
-uint8_t timer_counter_1 = 50;
+uint8_t timer_counter_1 = TIMECONST;
 
 /**
  * After how many seconds should the timer call the callback function
@@ -54,21 +54,21 @@ void startTimer1(uint16_t seconds) {
  * 			support longer times
  */
 ISR(TIMER1_COMPA_vect) {
-	//cli();
+	cli();
 	
 	sendString("Interrupt 1 ...");
 	
 	// Do stuff when timer is triggered
-	if (timer_counter_1 < max_seconds_1 - 1  && timer_counter_1 != 50) {
+	if (timer_counter_1 < max_seconds_1 - 1  && timer_counter_1 != TIMECONST) {
 		timer_counter_1++;		
 	} else if (timer_counter_1 == max_seconds_1 - 1) {
-		//powerUpIsOver();
+		powerUpIsOver();
 		
 		// Stop timer
 		//TCCR3B &= ~(_BV(CS10) | _BV(CS11) | _BV(CS12)); // Clears all clock selects bits
 		
-		timer_counter_1 = 50;
+		timer_counter_1 = TIMECONST;
 	}	
 	
-	//sei();
+	sei();
 }
