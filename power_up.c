@@ -57,7 +57,8 @@ void shootPowerUp() {
 		
 		// If Big roomba or mushroom is active --> set global variable
 		// Initialize timer so we can use the power up for a nr. of seconds
-		startTimer1(7);
+		//startTimer1(7);
+		powerUpIsOver();
 	}
 	
 	// Delete display

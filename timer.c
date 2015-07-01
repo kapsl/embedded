@@ -16,8 +16,10 @@ uint8_t timer_counter_1 = TIMECONST;
 uint8_t max_seconds_1 = 0;
 
 void initializeTimers() {
+	// Set first LED to on
+	PORTF = PORTF | PORTF1;
+	
 	// Initalize timer 1 with CTC and 1024 as divider
-	cli();
 	TCCR1A = 0;
 	TCCR1B = 0;
 	TCNT1  = 0;
@@ -28,13 +30,15 @@ void initializeTimers() {
 	OCR1AH = (timerval & 0xFF00) >> 8;
 	OCR1AL = (timerval & 0x00FF);
   
+	TCCR1B = CTC_1024;
+  
 	// Sets the timer overflow interrupt enable bit 	
 	TIMSK1 |= (1 << OCIE1A);  // enable timer compare interrupt
-	sei();
 	
-	TCCR1B = CTC_1024;
 	//TCCR1B |= _BV(CS12) | _BV(CS10);
 	
+	// Set first LED to off
+	PORTF = 0;
 }
 
 void startTimer1(uint16_t seconds) {
@@ -55,8 +59,9 @@ void startTimer1(uint16_t seconds) {
  */
 ISR(TIMER1_COMPA_vect) {
 	cli();
+	PORTF = PORTF | PORTF2;
 	
-	sendString("Interrupt 1 ...");
+	//sendString("Interrupt 1 ...");
 	
 	// Do stuff when timer is triggered
 	if (timer_counter_1 < max_seconds_1 - 1  && timer_counter_1 != TIMECONST) {
@@ -69,6 +74,8 @@ ISR(TIMER1_COMPA_vect) {
 		
 		timer_counter_1 = TIMECONST;
 	}	
+	
+	PORTF = 0;
 	
 	sei();
 }
