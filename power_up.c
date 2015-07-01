@@ -43,7 +43,7 @@ void shootPowerUp() {
 	sendString("Shoot...\r\n");
 	
 	// Make shooting sound
-	playSong(0);
+	//playSong(0);
 	
 	// If we have a red tank --> send shooting over radio
 	if (currentPowerUp == RED_TANK) {
@@ -75,6 +75,10 @@ void powerUpIsOver() {
 		playSong(3);
 		
 		drive_stop();
+		
+		char result[4] = {'O', 'V', 'E', 'R'};
+		set_Display(result);
+		
 		while(1);
 	}
 	
