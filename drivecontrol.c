@@ -88,12 +88,17 @@ void drive_break_backwards (){
 		actVel_left=actVel_right; 
 		actVel_right=actVel_right-SPEED_CONSTANT; 
 		actVel_left=actVel_left-SPEED_CONSTANT; 
-	} else{
-		actVel_right=actVel_right-SPEED_CONSTANT; 
-		actVel_left=actVel_left-SPEED_CONSTANT; 
+	} else{ 
+		if (actVel_left<50 && actVel_right<50 && actVel_left>0 && actVel_right>0){
+			drive_stop(); 
+			my_msleep(200);
+		} else{
+			actVel_right=actVel_right-SPEED_CONSTANT; 
+			actVel_left=actVel_left-SPEED_CONSTANT; 
+			}	
 	}
-}	
-
+}
+		
 void drive_left (){
 	if (actVel_right>=0){
 		if (actVel_right<400){

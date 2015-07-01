@@ -3,6 +3,13 @@
 
 #include <avr/io.h>
 
+// Constant for the powerupdisplay counter to be inactive
+#define POWCONST 999
+
+// Defines a number that corresponds to 7 seconds if we iterate it in
+// every main loop
+#define POWER_UP_TIME 400
+
 enum PowerUP{RED_TANK, MUSHROOM, BIG_DADY, NO_POWERUP};  
 typedef enum PowerUP powerUp_type;
 
@@ -23,6 +30,11 @@ extern uint8_t mushroomActive;
  * symbol on the display
  */
 extern int16_t powerUpDisplayCounter;
+
+/**
+ * Counter for getting 7 seconds
+ */
+extern uint64_t powerUpTimer;
 
 /**
  * \brief Get an random power up and show corresponding information 
@@ -50,5 +62,11 @@ void powerUpIsOver(void);
  * 			and to finish the process of getting a power up
  */
 void showRandomizeSign(void);
+
+/**
+ * \brief Check if our timer variable should be counted up
+ * 		and if interrupt value is reached
+ */
+void handleTimerVariable(void);
 
 #endif

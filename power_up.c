@@ -5,14 +5,13 @@
 #include <stdlib.h>
 #include "power_up.h"
 #include "radio.h"
-#include "avr/interrupt.h"
-#include "timer.h"
 #include "outOfCourseController.h"
 #include "drivecontrol.h"
 
 uint8_t bigRoombaActive = 0;
 uint8_t mushroomActive = 0;
-int16_t powerUpDisplayCounter = -1;
+int16_t powerUpDisplayCounter = POWCONST;
+uint64_t powerUpTimer = 0;
 
 /**
  * Hold the tick count of a wheel to calculate a random number
@@ -20,7 +19,7 @@ int16_t powerUpDisplayCounter = -1;
 uint16_t tickCountRandGlobal = 1;
 
 void getPowerUp(uint16_t tickCountRand) {
-	if (currentPowerUp != NO_POWERUP || powerUpDisplayCounter != -1 || bigRoombaActive || mushroomActive) {
+	if (currentPowerUp != NO_POWERUP || powerUpDisplayCounter != POWCONST || bigRoombaActive || mushroomActive) {
 		return;
 	}
 	
@@ -40,7 +39,7 @@ void shootPowerUp() {
 		return;
 	}
 	
-	sendString("Shoot...\r\n");
+	//sendString("Shoot...\r\n");
 	
 	// Make shooting sound
 	playSong(0);
@@ -48,16 +47,16 @@ void shootPowerUp() {
 	// If we have a red tank --> send shooting over radio
 	if (currentPowerUp == RED_TANK) {
 		sendRadio(RED_TANK_SHOT, 3);
-	} else {		
+	} else {	
+		// If Big roomba or mushroom is active --> set global variable	
 		if (currentPowerUp == MUSHROOM) {
 			mushroomActive = 1;
 		} else if (currentPowerUp == BIG_DADY) {
 			bigRoombaActive = 1;
 		}
 		
-		// If Big roomba or mushroom is active --> set global variable
-		// Initialize timer so we can use the power up for a nr. of seconds
-		startTimer1(7);
+		// Initialize timer variable so we can use the power up for a nr. of seconds
+		powerUpTimer = 1;
 	}
 	
 	// Delete display
@@ -67,7 +66,7 @@ void shootPowerUp() {
 }
 
 void powerUpIsOver() {
-	sendString("Power up is over...");
+	//sendString("Power up is over...");
 	
 	// When we had a mushroom, check if we are outside the course
 	if (mushroomActive == 1 && outsideCourse == 1) {
@@ -75,6 +74,10 @@ void powerUpIsOver() {
 		playSong(3);
 		
 		drive_stop();
+		
+		char result[4] = {'O', 'V', 'E', 'R'};
+		set_Display(result);
+		
 		while(1);
 	}
 	
@@ -84,7 +87,7 @@ void powerUpIsOver() {
 }
 
 void showRandomizeSign() {
-	if (powerUpDisplayCounter == -1) {
+	if (powerUpDisplayCounter == POWCONST) {
 		return;
 	}
 	
@@ -122,6 +125,21 @@ void showRandomizeSign() {
 		
 		currentPowerUp = powerup_type;
 		
-		powerUpDisplayCounter = -1;
+		powerUpDisplayCounter = POWCONST;
 	}
+}
+
+void handleTimerVariable() {
+	if (powerUpTimer == 0)
+		return;
+		
+	if (powerUpTimer == POWER_UP_TIME) {
+		powerUpIsOver();
+		
+		powerUpTimer = 0;
+		
+		return;
+	}
+	
+	powerUpTimer++;
 }

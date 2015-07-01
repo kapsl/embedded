@@ -7,8 +7,8 @@ power_up.o: power_up.c roomba.h /usr/lib/avr/include/avr/io.h \
  /usr/lib/avr/include/avr/lock.h tools.h usart.h \
  /usr/lib/avr/include/stdio.h /usr/lib/gcc/avr/4.8.2/include/stdarg.h \
  /usr/lib/gcc/avr/4.8.2/include/stddef.h /usr/lib/avr/include/stdlib.h \
- power_up.h radio.h /usr/lib/avr/include/avr/interrupt.h timer.h \
- outOfCourseController.h floorDetection.h drivecontrol.h remotecontrol.h
+ power_up.h radio.h outOfCourseController.h floorDetection.h \
+ drivecontrol.h remotecontrol.h
 
 roomba.h:
 
@@ -51,10 +51,6 @@ usart.h:
 power_up.h:
 
 radio.h:
-
-/usr/lib/avr/include/avr/interrupt.h:
-
-timer.h:
 
 outOfCourseController.h:
 
