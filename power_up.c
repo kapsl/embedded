@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include "power_up.h"
 #include "radio.h"
-#include "avr/interrupt.h"
 #include "outOfCourseController.h"
 #include "drivecontrol.h"
 
@@ -40,7 +39,7 @@ void shootPowerUp() {
 		return;
 	}
 	
-	sendString("Shoot...\r\n");
+	//sendString("Shoot...\r\n");
 	
 	// Make shooting sound
 	playSong(0);
@@ -48,17 +47,16 @@ void shootPowerUp() {
 	// If we have a red tank --> send shooting over radio
 	if (currentPowerUp == RED_TANK) {
 		sendRadio(RED_TANK_SHOT, 3);
-	} else {		
+	} else {	
+		// If Big roomba or mushroom is active --> set global variable	
 		if (currentPowerUp == MUSHROOM) {
 			mushroomActive = 1;
 		} else if (currentPowerUp == BIG_DADY) {
 			bigRoombaActive = 1;
 		}
 		
-		// If Big roomba or mushroom is active --> set global variable
 		// Initialize timer variable so we can use the power up for a nr. of seconds
 		powerUpTimer = 1;
-		//startTimer1(7);
 	}
 	
 	// Delete display
@@ -68,7 +66,7 @@ void shootPowerUp() {
 }
 
 void powerUpIsOver() {
-	sendString("Power up is over...");
+	//sendString("Power up is over...");
 	
 	// When we had a mushroom, check if we are outside the course
 	if (mushroomActive == 1 && outsideCourse == 1) {
@@ -89,7 +87,7 @@ void powerUpIsOver() {
 }
 
 void showRandomizeSign() {
-	if (powerUpDisplayCounter == 999) {
+	if (powerUpDisplayCounter == POWCONST) {
 		return;
 	}
 	
@@ -135,7 +133,7 @@ void handleTimerVariable() {
 	if (powerUpTimer == 0)
 		return;
 		
-	if (powerUpTimer == 400) {
+	if (powerUpTimer == POWER_UP_TIME) {
 		powerUpIsOver();
 		
 		powerUpTimer = 0;

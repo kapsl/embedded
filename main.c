@@ -10,6 +10,9 @@
 #include "radio.h"
 #include "outOfCourseController.h"
 
+/**
+ * \brief Initialize various modules
+ */
 void initialization(void) {
 	usart_init_roomba();
 	usart_init();
@@ -28,6 +31,10 @@ void initialization(void) {
 	my_msleep(200);
 }
 
+/**
+ * \brief See if we received a radio signal and perform corresponding
+ * 			actions
+ */
 void handleRadioSignal(void) {
 	// Receive radio
 	// faster when hit by other roomba

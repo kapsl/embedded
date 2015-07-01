@@ -3,7 +3,12 @@
 
 #include <avr/io.h>
 
+// Constant for the powerupdisplay counter to be inactive
 #define POWCONST 999
+
+// Defines a number that corresponds to 7 seconds if we iterate it in
+// every main loop
+#define POWER_UP_TIME 400
 
 enum PowerUP{RED_TANK, MUSHROOM, BIG_DADY, NO_POWERUP};  
 typedef enum PowerUP powerUp_type;
