@@ -74,7 +74,6 @@ ISR(TIMER1_COMPA_vect) {
 		
 		timer_counter_1 = TIMECONST;
 	}	
-	
 	PORTF = 0;
 	
 	sei();
