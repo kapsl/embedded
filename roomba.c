@@ -9,7 +9,7 @@ void initializeRoomba(void) {
 	send_byte_roomba(128);
 		
 	// Save mode
-	send_byte_roomba(131);
+	send_byte_roomba(132);
 	
 	// Store songs
 	storeSongs();

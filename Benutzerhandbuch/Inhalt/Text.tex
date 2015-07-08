@@ -54,13 +54,23 @@ Taste 5 & Schusstaste: Kart feuert Powerup ab, falls vorhanden \\ \hline
 \vspace{0.5cm}
 
 \section{Regelwerk}
-Ein Rennen zwischen zwei Kontrahenten dauert fünf Runden. Sieger ist derjenige, der den im Embeddedlabor aufgebauten Kurs zuerst fünf mal erfolgreich absolviert hat. Die Richtung spielt hierbei keine Rolle. Das bedeutet, dass der Kurs sowohl in die eine als auch in die andere Richtung gefahren werden kann. Bei Uneinigkeit zwischen den Kontrahenten, muss eine Strafrunde absolviert werden. Falls nachweislich betrogen wurde, erfolgt die sofortige Disqualifikation oder Verlust des Titels und eine dreijährige Sperre. 
+Ein Rennen zwischen zwei Kontrahenten dauert fünf Runden. Sieger ist derjenige, der den im Embeddedlabor aufgebauten Kurs zuerst fünf mal erfolgreich absolviert hat.
+
+
+\begin{figure}[H]
+	\center
+    \subfigure {\includegraphics[width=0.4\textwidth]{Bilder/kurs_links}}
+    \subfigure {\includegraphics[width=0.4\textwidth]{Bilder/kurs_rechts}}
+\end{figure}
+
+
+Die Richtung spielt hierbei keine Rolle. Das bedeutet, dass der Kurs sowohl in die eine als auch in die andere Richtung gefahren werden kann. Bei Uneinigkeit zwischen den Kontrahenten, muss eine Strafrunde absolviert werden. Falls nachweislich betrogen wurde, erfolgt die sofortige Disqualifikation oder Verlust des Titels und eine dreijährige Sperre. 
 
 Ein vorsetzliches oder versehentliches Verlassen des Parcours wird bestraft. Die Bestrafung äußert sich dadurch, dass sich das Kart kurzeitig selbständig fährt und sich zurück in die Mitte der Fahrbahn manövriert. Dieser Vorgang kostet wertvolle Sekunden, die der Gegner zum Überholen bzw. Aufholen nutzen kann. Damit die Erkennung des Streckenrands und das korrekte hereinfahren in die Mitte des Kurses funktioniert, sollte die Streckenbegrenzung drei Lagen Klebeband breit sein. Der Mechanismus des Zurück-Fahrens funktioniert dabei folgendermaßen: Erkennt ein vorderer Cliff-Sensor ein Klebeband, merkt sich der Roboter, ob der linke oder rechte Sensor aktiv wurde, um später entscheiden zu können, in welche Richtung er innerhalb der Strecke drehen muss. Sind beide vorderen Sensoren aktiv, erkennt der Roboter, dass er auf dem Klebeband ist und stoppt. Anschließend fährt das rechte Rad solange rückwärts, bis der seitliche Cliff-Sensor ein Klebeband entdeckt. Da sich die Sensoren nicht auf der Radachse befinden, wird nun jeweils nocheinmal links und rechts nachkorrigiert, bis beide seitlichen Sensoren ein Klebeband erkennen – das heißt, der Roboter im $90^\circ$ Winkel zur Streckenbegrenzung steht. Anschließend fährt der Roomba 30 Zentimeter gerade aus und dreht sich um $90^\circ$, um wieder streckenparallel zu stehen (Richtung abhängig vom zuerst aktiven Sensor s.o.).
 
 Falls ein Spieler den gegnerischen Spieler, das gegnerische Kart oder ein anderes Hindernis rammt (Bump-Sensoren aktiv), fährt das andere Kart solange mit einer erhöhten Geschwindigkeit, bis sein Pilot durch drücken einer Steuertaste eingreift. Dieser Vorgang kann bei riskanten Überholmanövern in der Endphase über Sieg oder Niederlage entscheiden. Diese Information (und der gegnerische Abschuss) wird über das Funkmodul übertragen. Es wird dabei maximal drei mal versucht, die Information zu übertragen und auf ein ACK-Signal zu warten. 
 
-Speziell in Alufolie gekleidete Powerup-Stations am Streckenrand dienen der Generierung von Powerups. Ein Sensor vorne rechts im Kart (Wall-Sensor) registriert diese bei sehr nahem Vorbeifahren. Im Anschluss wird durch einen Zufallsgenerator ein Powerup ausgewählt. Ist bereits ein Powerup aufgesammelt, bzw. gerade aktiv, kann kein neues Powerup gesammelt werden. Powerups können bei sinvollem Gebrauch wertvolle Zeit verschaffen bzw. den Gegner stark beeinträchtigen. Ein Powerup das auf das gegnerische Kart abgefeuert wird, ist nicht wirksam, wenn dieses gerade eine automatische Kurskorrektur vornimmt. Folgende Powerups sind verfügbar: 
+Speziell in Alufolie gekleidete Powerup-Stations am Streckenrand dienen der Generierung von Powerups. Ein Sensor vorne rechts im Kart (Wall-Sensor) registriert diese bei sehr nahem Vorbeifahren. Im Anschluss wird durch einen Zufallsgenerator ein Powerup ausgewählt. Des Weiteren kann dieser Vorgang auch durch das dichte Vorbeifahren am gegnerischen Kart ausgelöst werden. Ist bereits ein Powerup aufgesammelt, bzw. gerade aktiv, kann kein neues Powerup gesammelt werden. Powerups können bei sinvollem Gebrauch wertvolle Zeit verschaffen bzw. den Gegner stark beeinträchtigen. Ein Powerup das auf das gegnerische Kart abgefeuert wird, ist nicht wirksam, wenn dieses gerade eine automatische Kurskorrektur vornimmt. Folgende Powerups sind verfügbar: 
 
 \begin{itemize}
 	\item RED TANK: Wird als kleiner Panzer auf dem Display des Karts angezeigt:
@@ -87,9 +97,13 @@ Speziell in Alufolie gekleidete Powerup-Stations am Streckenrand dienen der Gene
 		\includegraphics[scale=0.2]{Bilder/MUSHROOM}
 	\end{center}
 	
-	Wirkung: Kart kann sieben Sekunden ungestraft die Seitenbegrenzung der Strecke verlassen. 		
-	Wenn der Kurs verlassen wurde, aber nicht rechtzeitig wieder befahren wird, hat dieser 	
-	Spieler das Rennen verloren und das Kart bleibt stehen.
+	Wirkung: Kart kann sieben Sekunden ungestraft die Seitenbegrenzung der Strecke  
+	verlassen. Damit das Powerup richtig funktioniert, muss man deutlich zwei 	
+	Kursbegrenzungen überfahren. Einmal bei Kursaustritt und einmal bei Kurswiedereintritt. 
+	Wenn der Kurs verlassen wurde, aber nicht rechtzeitig wieder befahren wird, 
+	hat dieser Spieler das Rennen verloren und das Kart bleibt stehen. Ein einfaches 
+	überfahren der Kursbegrenzung, ohne den Kurs zu verlassen, führt zum selben Effekt, in 
+	diesem Fall darf der Spieler allerdings seinen Roomba neu starten.    		
 \end{itemize}
 
 Der Gewinner des Spiels bekommt anschließend bei einer feierlichen Zeremonie das goldene Klebeband verliehen. 
