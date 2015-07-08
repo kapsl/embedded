@@ -15,7 +15,11 @@ Das Kart hält selbständig seine Geschwindigkeit. Die Spieler können durch die
 
 \underline{Spieler 1:}
 
-Spieler 1 steuert sein Kart mit dem Steuerkreuz der Fernbedienung und feuert seine Powerups mit der Powertaste ab. Eine detaillierte Beschreibung bietet die folgende Tabelle:
+Spieler 1 steuert sein Kart mit dem Steuerkreuz der Fernbedienung und feuert seine Powerups mit der Powertaste ab. Eine detaillierte Beschreibung bietet die folgende Abbildung bzw. Tabelle:
+
+\begin{center}
+\includegraphics[scale=0.1]{Bilder/Steuerung_Spieler1}
+\end{center}
 
 \vspace{0.5cm}
 \begin{tabular}{|l|l|}
@@ -31,7 +35,11 @@ Powertaste & Schusstaste: Kart feuert Powerup ab, falls vorhanden \\ \hline
 
 \underline{Spieler 2:}
  
-Spieler 2 steuert sein Kart mit den Nummerntasten der Fernbedienung und feuert seine Powerups mit der Taste 5 ab. Eine detaillierte Beschreibung bietet die folgende Tabelle:
+Spieler 2 steuert sein Kart mit den Nummerntasten der Fernbedienung und feuert seine Powerups mit der Taste 5 ab. Eine detaillierte Beschreibung bietet die folgende Abbildung bzw. Tabelle:
+
+\begin{center}
+	\includegraphics[scale=0.1]{Bilder/Steuerung_Spieler2}
+\end{center}
 
 \vspace{0.5cm}
 \begin{tabular}{|l|l|}
@@ -55,12 +63,31 @@ Falls ein Spieler den gegnerischen Spieler, das gegnerische Kart oder ein andere
 Speziell in Alufolie gekleidete Powerup-Stations am Streckenrand dienen der Generierung von Powerups. Ein Sensor vorne rechts im Kart (Wall-Sensor) registriert diese bei sehr nahem Vorbeifahren. Im Anschluss wird durch einen Zufallsgenerator ein Powerup ausgewählt. Ist bereits ein Powerup aufgesammelt, bzw. gerade aktiv, kann kein neues Powerup gesammelt werden. Powerups können bei sinvollem Gebrauch wertvolle Zeit verschaffen bzw. den Gegner stark beeinträchtigen. Ein Powerup das auf das gegnerische Kart abgefeuert wird, ist nicht wirksam, wenn dieses gerade eine automatische Kurskorrektur vornimmt. Folgende Powerups sind verfügbar: 
 
 \begin{itemize}
-	\item RED TANK: Wird als kleiner Panzer auf dem Display des Karts angezeigt.\\Wirkung: Wenn dieses Powerup abgeschossen wird, dreht sich das gegnerische Kart um $1080^\circ$. Ein verfehlen ist nur dann möglich, wenn sich der gegnerische Spieler rechtzeitig durch das Powerup BIG DADY schützt. Ein evtl. gesammeltes Powerup des getroffenen Spielers geht verloren.
-	\item BIG DADY: Wird als großer Panzer auf dem Display des Karts angezeigt.
-	\\Wirkung: Wenn dieses Powerup aktiviert wird, besteht ein sieben Sekunden Schutz vor  
+	\item RED TANK: Wird als kleiner Panzer auf dem Display des Karts angezeigt:
+	
+	\begin{center}
+		\includegraphics[scale=0.3]{Bilder/RED_TANK}
+	\end{center}
+	
+	Wirkung: Wenn dieses Powerup abgeschossen wird, dreht sich das gegnerische Kart um $1080^\circ$. Ein verfehlen ist nur dann möglich, wenn sich der gegnerische Spieler rechtzeitig durch das Powerup BIG DADY schützt. Ein evtl. gesammeltes Powerup des getroffenen Spielers geht verloren und auf dem Display erscheint HIT:
+	\begin{center}
+		\includegraphics[scale=0.3]{Bilder/ROOMBA_HIT}
+	\end{center}
+	\item BIG DADY: Wird als großer Panzer auf dem Display des Karts angezeigt:
+	
+	\begin{center}
+		\includegraphics[scale=0.2]{Bilder/BIG_DADY}
+	\end{center}
+	
+	Wirkung: Wenn dieses Powerup aktiviert wird, besteht ein sieben Sekunden Schutz vor  
 	dem Powerup RED TANK. 
 	\item MUSHROOM: Wird als Pilz auf dem Display des Karts angezeigt. 
-	\\Wirkung: Kart kann sieben Sekunden ungestraft die Seitenbegrenzung der Strecke verlassen. 		
+	
+	\begin{center}
+		\includegraphics[scale=0.2]{Bilder/MUSHROOM}
+	\end{center}
+	
+	Wirkung: Kart kann sieben Sekunden ungestraft die Seitenbegrenzung der Strecke verlassen. 		
 	Wenn der Kurs verlassen wurde, aber nicht rechtzeitig wieder befahren wird, hat dieser 	
 	Spieler das Rennen verloren und das Kart bleibt stehen.
 \end{itemize}
