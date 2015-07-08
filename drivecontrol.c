@@ -19,8 +19,7 @@ void roomba_drive(remoteSignal type) {
 		drive_forward(); 
 		actVel_left_old=actVel_left;
 		actVel_right_old=actVel_right; 
-	}
-	else if (type == RBRAKE  && actVel_left>-400 && actVel_right>-400) {
+	} else if (type == RBRAKE  && actVel_left>-400 && actVel_right>-400) {
 		bump_active=0; 
 		drive_break_backwards(); 
 		actVel_left_old=actVel_left;
