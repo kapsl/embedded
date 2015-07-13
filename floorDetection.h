@@ -9,13 +9,13 @@
  * Threshold for yellow crep
  */
 //#define BORDER_CLIFF_THRESHOLD 2500
-#define BORDER_CLIFF_THRESHOLD 2200
+#define BORDER_CLIFF_THRESHOLD 1800
 
 //#define BORDER_CLIFF_BLACK_THRESHOLD 2040
 /*
  * Threshold when two sensors detect yellow crep
  */
-#define BORDER_BOTH_THRESHOLD 5000
+#define BORDER_BOTH_THRESHOLD 3500
 #define WALL_SIGNAL_THRESHOLD 26
 
 /**

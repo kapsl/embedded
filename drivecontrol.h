@@ -3,10 +3,8 @@
 
 #define SPEED_CONSTANT 5
 
-
 #include <avr/io.h>
 #include "remotecontrol.h"
-
  
 /**
  * \brief This function receives a signal from the remote control which is used to stear the roomba. 

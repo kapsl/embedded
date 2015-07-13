@@ -7,141 +7,144 @@
 #include "roomba.h"
 #include "radio.h"
 
-int16_t  actVel_right=0; 
-int16_t  actVel_left=0;
-int16_t  actVel_right_old=0;
-int16_t  actVel_left_old=0;
-uint8_t  bump_active=0;
+int16_t actVel_right = 0; 
+int16_t actVel_left = 0;
+int16_t actVel_right_old = 0;
+int16_t actVel_left_old = 0;
+uint8_t bump_active = 0;
 
 void roomba_drive(remoteSignal type) {
-	if(type == RACCELERATE && actVel_left<400 && actVel_right < 400) {
-		bump_active=0; 
+	if(type == RACCELERATE && actVel_left < 400 && actVel_right < 400) {
+		bump_active = 0; 
 		drive_forward(); 
-		actVel_left_old=actVel_left;
-		actVel_right_old=actVel_right; 
-	} else if (type == RBRAKE  && actVel_left>-400 && actVel_right>-400) {
-		bump_active=0; 
+		actVel_left_old = actVel_left;
+		actVel_right_old = actVel_right; 
+	} else if (type == RBRAKE  && actVel_left > -400 && actVel_right > -400) {
+		bump_active = 0; 
 		drive_break_backwards(); 
-		actVel_left_old=actVel_left;
-		actVel_right_old=actVel_right; 
+		actVel_left_old = actVel_left;
+		actVel_right_old = actVel_right; 
 	} else if (type == RLEFT) {
 		bump_active=0; 
 		drive_left();
 	} else if (type == RRIGHT) {
 		bump_active=0; 
 		drive_right();
-	} else{
-		if(bump_active==0){
-			if ((actVel_left >= actVel_left_old) && (actVel_right < actVel_right_old)){
-				if(actVel_left==actVel_left_old){
-					actVel_right=actVel_right+2*SPEED_CONSTANT;; 
+	} else {
+		// Drive automatically in straight direction again
+		if(bump_active == 0){
+			if ((actVel_left >= actVel_left_old) && (actVel_right < actVel_right_old)) {
+				if(actVel_left == actVel_left_old) {
+					actVel_right = actVel_right + 2 * SPEED_CONSTANT; 
 				} else{
-					actVel_left=actVel_left-SPEED_CONSTANT;
-					actVel_right=actVel_right+SPEED_CONSTANT; 
+					actVel_left = actVel_left - SPEED_CONSTANT;
+					actVel_right = actVel_right + SPEED_CONSTANT; 
 				}
-			} else if ((actVel_left < actVel_left_old) && (actVel_right >= actVel_right_old)){
-				if(actVel_right==actVel_right_old){
-					actVel_left=actVel_left+2*SPEED_CONSTANT; 
+			} else if ((actVel_left < actVel_left_old) && (actVel_right >= actVel_right_old)) {
+				if(actVel_right == actVel_right_old) {
+					actVel_left = actVel_left + 2 * SPEED_CONSTANT; 
 				} else{
-					actVel_left=actVel_left+SPEED_CONSTANT;
-					actVel_right=actVel_right-SPEED_CONSTANT;
+					actVel_left = actVel_left + SPEED_CONSTANT;
+					actVel_right = actVel_right - SPEED_CONSTANT;
 				}
-			} else{
-				actVel_left=actVel_left_old;
-				actVel_right=actVel_right_old;
+			} else {
+				actVel_left = actVel_left_old;
+				actVel_right = actVel_right_old;
 			}
 		}
 	}
 	
-	if(bump_active==0){
+	if(bump_active == 0) {
 		drive_direction(actVel_left, actVel_right);
 	}
 }
 
 void drive_stop(){
-	actVel_right=0; 
-	actVel_left=0;
+	actVel_right = 0; 
+	actVel_left = 0;
 	actVel_right_old = 0;
 	actVel_left_old = 0;
 	
 	drive_direction(actVel_right, actVel_left); 
 }	
 
-void drive_forward (){
-	if(actVel_left>actVel_right){
-		actVel_right=actVel_left;
-	} else if (actVel_left<actVel_right){
-		actVel_left=actVel_right; 
-	} else if (actVel_right<400&&actVel_left<400) {
-		actVel_right=actVel_right+SPEED_CONSTANT; 
-		actVel_left=actVel_left+SPEED_CONSTANT; 
+void drive_forward() {
+	if(actVel_left > actVel_right) {
+		actVel_right = actVel_left;
+	} else if (actVel_left < actVel_right) {
+		actVel_left = actVel_right; 
+	} else if (actVel_right < 400 && actVel_left < 400) {
+		actVel_right = actVel_right + SPEED_CONSTANT; 
+		actVel_left = actVel_left + SPEED_CONSTANT; 
 	}
 }
 
-void drive_break_backwards (){
-	if(actVel_left>actVel_right){
-		actVel_right=actVel_left;
-		actVel_right=actVel_right-SPEED_CONSTANT; 
-		actVel_left=actVel_left-SPEED_CONSTANT; 
-	} else if (actVel_left<actVel_right){	
-		actVel_left=actVel_right; 
-		actVel_right=actVel_right-SPEED_CONSTANT; 
-		actVel_left=actVel_left-SPEED_CONSTANT; 
-	} else{ 
-		if (actVel_left<50 && actVel_right<50 && actVel_left>0 && actVel_right>0){
+void drive_break_backwards() {
+	if(actVel_left > actVel_right) {
+		actVel_right = actVel_left;
+		actVel_right = actVel_right - SPEED_CONSTANT; 
+		actVel_left = actVel_left - SPEED_CONSTANT; 
+	} else if (actVel_left < actVel_right) {	
+		actVel_left = actVel_right; 
+		actVel_right = actVel_right - SPEED_CONSTANT; 
+		actVel_left = actVel_left - SPEED_CONSTANT; 
+	} else { 
+		if (actVel_left < 50 && actVel_right < 50 && actVel_left > 0 && actVel_right > 0) {
 			drive_stop(); 
 			my_msleep(200);
-		} else{
-			actVel_right=actVel_right-SPEED_CONSTANT; 
-			actVel_left=actVel_left-SPEED_CONSTANT; 
-			}	
+		} else {
+			actVel_right = actVel_right - SPEED_CONSTANT; 
+			actVel_left = actVel_left - SPEED_CONSTANT; 
+		}	
 	}
 }
 		
-void drive_left (){
-	if (actVel_right>=0){
-		if (actVel_right<400){
-			actVel_left=actVel_left-SPEED_CONSTANT;
-			actVel_right=actVel_right+SPEED_CONSTANT;
-		} else{
-			actVel_left=actVel_left-(2*SPEED_CONSTANT);
+void drive_left() {
+	if (actVel_right >= 0) {
+		if (actVel_right < 400) {
+			actVel_left=actVel_left - SPEED_CONSTANT;
+			actVel_right=actVel_right + SPEED_CONSTANT;
+		} else {
+			actVel_left = actVel_left - (2 * SPEED_CONSTANT);
 		}
-	} else if (actVel_right<0){	
-		if (actVel_right>-400){		
-			actVel_left=actVel_left-SPEED_CONSTANT;
-			actVel_right=actVel_right+SPEED_CONSTANT;
+	} else if (actVel_right < 0) {	
+		if (actVel_right > -400) {		
+			actVel_left = actVel_left-SPEED_CONSTANT;
+			actVel_right = actVel_right + SPEED_CONSTANT;
 		} else{
-			actVel_left=actVel_left-(2*SPEED_CONSTANT);
+			actVel_left = actVel_left - (2 * SPEED_CONSTANT);
 		}
 	}
 }
 
-void drive_right (){
-	if (actVel_left>=0){
-		if (actVel_left<400){
-			actVel_left=actVel_left+SPEED_CONSTANT;
-			actVel_right=actVel_right-SPEED_CONSTANT;
-		} else{
-			actVel_right=actVel_right-(2*SPEED_CONSTANT);
+void drive_right() {
+	if (actVel_left  >= 0){
+		if (actVel_left < 400){
+			actVel_left = actVel_left + SPEED_CONSTANT;
+			actVel_right = actVel_right - SPEED_CONSTANT;
+		} else {
+			actVel_right = actVel_right - (2 * SPEED_CONSTANT);
 		}
-	} else if (actVel_left<0){
-		if (actVel_left>-400){
-			actVel_left=actVel_left+SPEED_CONSTANT;
-			actVel_right=actVel_right-SPEED_CONSTANT;
-		} else{
-			actVel_right=actVel_right-(2*SPEED_CONSTANT);
+	} else if (actVel_left < 0) {
+		if (actVel_left > -400) {
+			actVel_left = actVel_left + SPEED_CONSTANT;
+			actVel_right = actVel_right - SPEED_CONSTANT;
+		} else {
+			actVel_right = actVel_right - (2 * SPEED_CONSTANT);
 		}
 	}	
 }
 
-void drive_turn(int16_t degree){
+void drive_turn(int16_t degree) {
 	// In 13 seconds, 360°
-	uint16_t delay = (uint16_t)(abs(degree)*10.45f);
+	uint16_t delay = (uint16_t) (abs(degree) * 10.45f);
+	
 	if (degree > 0) {
 		driveWithRadius(200, 1);
 	} else{
 		driveWithRadius(200, -1);
 	}
+	
 	my_msleep(delay);
 	drive_stop(); 
 }
@@ -167,13 +170,13 @@ void drive_roomba_exact(uint16_t distance, int16_t velocity) {
 	
 	drive_direction(velocity, velocity);
 	
-	char buff[50];
-	sprintf(buff, "Ticks-Start: %u\r\n", start_value);
-	sendString(buff);
+	//char buff[50];
+	//sprintf(buff, "Ticks-Start: %u\r\n", start_value);
+	//sendString(buff);
 	
 	uint16_t maxTicks = (uint16_t) (distance * 2.262);
-	sprintf(buff, "Max: %u\r\n", maxTicks);
-	sendString(buff);
+	//sprintf(buff, "Max: %u\r\n", maxTicks);
+	//sendString(buff);
 	
 	my_msleep(400);
 	
@@ -184,17 +187,14 @@ void drive_roomba_exact(uint16_t distance, int16_t velocity) {
 		// Overflow
 		if (ticks < start_value && velocity > 0) {
 			distanceTicks = 65535 - start_value + ticks;
-		} 
-		else if (ticks > start_value && velocity < 0) {	
+		} else if (ticks > start_value && velocity < 0) {	
 			distanceTicks = start_value + (65535 - ticks);
-		} 
-		else {
+		} else {
 			distanceTicks = abs(ticks - start_value);
 		}
 		
 		if (distanceTicks > maxTicks) {
-		
-				break;
+			break;
 		}
 	}
 	
@@ -202,7 +202,6 @@ void drive_roomba_exact(uint16_t distance, int16_t velocity) {
 }
 
 uint16_t getTicks() {
-	
 	uint8_t data[2];
 	read_values(43, data, 2);
 	
@@ -242,10 +241,10 @@ void driveWithRadius(uint16_t velocity, uint16_t radius) {
 void drive_hit(){
 	bump_active = 1;
 	drive_stop(); 
-	drive_turn(3*360+10); 
+	drive_turn(3 * 360 + 10); 
 } 
 
 void drive_bump_speed(){
-	bump_active=1; 
+	bump_active = 1; 
 	drive_direction(500, 500);
 }
